@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Capítulo 5: A anatomia detalhada da vigilância em Smart Cities. Como sensores invisíveis capturam biometria, movimento e intenção para usurpar a vontade.">
+    <meta name="keywords" content="Smart City, IMSI Catcher, Reconhecimento Facial, Emotion AI, Vigilância Urbana, Soberania de Dados, Adam Greenfield">
+    <title>Capítulo 5 - A Cidade Invisível</title>
+    <style>
+        /* CSS ENGINE v3.0 */
+        :root { --base-font-size: 18px; --transition: 0.3s ease; }
+        :root[data-theme="dark"] { --bg-color: #050505; --text-main: #e5e5e5; --text-muted: #888; --accent-tech: #00f3ff; --accent-bio: #39ff14; --highlight: #f472b6; --border-color: rgba(255, 255, 255, 0.1); --panel-bg: rgba(20, 20, 20, 0.95); --box-bg: rgba(255, 255, 255, 0.03); --table-head: rgba(255,255,255,0.05); --alert: #ef4444; }
+        :root[data-theme="sepia"] { --bg-color: #f4ecd8; --text-main: #5b4636; --text-muted: #8d745e; --accent-tech: #a65825; --accent-bio: #4d7c0f; --highlight: #d94e18; --border-color: rgba(91, 70, 54, 0.15); --panel-bg: #eaddcf; --box-bg: rgba(91, 70, 54, 0.05); --table-head: rgba(91, 70, 54, 0.1); --alert: #be123c; }
+        :root[data-theme="light"] { --bg-color: #ffffff; --text-main: #222222; --text-muted: #666666; --accent-tech: #0056b3; --accent-bio: #15803d; --highlight: #b91c1c; --border-color: rgba(0, 0, 0, 0.1); --panel-bg: #f0f0f0; --box-bg: #f9f9f9; --table-head: rgba(0,0,0,0.05); --alert: #dc2626; }
+        
+        html { font-size: var(--base-font-size); scroll-behavior: smooth; }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Georgia', 'Lora', serif; line-height: 1.8; margin: 0; padding: 80px 20px 60px 20px; transition: background-color var(--transition), color var(--transition); }
+        
+        .reading-toolbar { position: fixed; top: 0; left: 0; right: 0; height: 50px; background: var(--panel-bg); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; gap: 15px; z-index: 1000; backdrop-filter: blur(5px); }
+        .tool-group { display: flex; align-items: center; gap: 5px; padding: 0 10px; border-right: 1px solid var(--border-color); } .tool-group:last-child { border-right: none; }
+        .btn-icon { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); width: 30px; height: 30px; border-radius: 4px; cursor: pointer; font-family: 'Segoe UI', sans-serif; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; }
+        .theme-dot { width: 20px; height: 20px; border-radius: 50%; cursor: pointer; border: 1px solid var(--border-color); }
+        .dot-dark { background: #050505; border: 1px solid #555; } .dot-sepia { background: #f4ecd8; border: 1px solid #8d745e; } .dot-light { background: #fff; border: 1px solid #ccc; }
+        
+        /* Layout */
+        .book-container { max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 2.2rem; text-align: center; text-transform: uppercase; border-bottom: 1px solid var(--accent-tech); padding-bottom: 20px; margin-top: 0; }
+        h2 { font-size: 1.5rem; color: var(--accent-tech); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 2em; }
+        h3 { font-size: 1.2rem; font-weight: bold; margin-top: 1.5em; color: var(--highlight); }
+        p { margin-bottom: 1.5em; text-align: justify; hyphens: auto; cursor: pointer; transition: opacity 0.2s; } p:hover { opacity: 0.9; }
+        
+        /* Components */
+        .chapter-meta { text-align: center; color: var(--text-muted); font-family: 'Consolas', monospace; font-size: 0.8rem; margin-bottom: 2em; }
+        .thesis-box { border-left: 4px solid var(--accent-tech); padding: 15px 20px; margin: 2em 0; color: var(--text-muted); background: var(--box-bg); cursor: pointer; }
+        .antithesis-box { background: rgba(57, 255, 20, 0.05); border: 1px solid var(--accent-bio); border-radius: 8px; padding: 25px; margin: 40px 0; position: relative; cursor: pointer; }
+        .antithesis-tag { position: absolute; top: -12px; right: 20px; background: var(--bg-color); color: var(--accent-bio); border: 1px solid var(--accent-bio); padding: 2px 10px; font-weight: bold; font-family: 'Consolas', monospace; text-transform: uppercase; font-size: 0.75rem; }
+        .deep-dive-box { border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 30px 0; margin: 40px 0; }
+        .action-box { background: linear-gradient(135deg, var(--box-bg) 0%, transparent 100%); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px; margin-top: 50px; text-align: center; cursor: pointer; }
+        .action-title { color: var(--accent-bio); font-family: 'Segoe UI', sans-serif; font-size: 1.2rem; margin-bottom: 15px; }
+
+        /* Layers Visual */
+        .visual-layers-container {
+            background: var(--box-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 30px; margin: 3em 0; position: relative; overflow: hidden;
+            font-family: 'Segoe UI', sans-serif; cursor: pointer;
+        }
+        .layers-title { text-align: center; color: var(--highlight); font-weight: bold; text-transform: uppercase; margin-bottom: 20px; display: block; font-size: 0.8rem; letter-spacing: 1px; }
+        .layer-item { padding: 15px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; transition: transform 0.3s; }
+        .layer-item:hover { transform: scale(1.02); }
+        .layer-3 { background: rgba(244, 114, 182, 0.1); color: var(--highlight); border: 1px solid var(--highlight); }
+        .layer-2 { background: rgba(56, 189, 248, 0.1); color: var(--accent-tech); border: 1px solid var(--accent-tech); }
+        .layer-1 { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px dashed var(--text-muted); }
+        .arrow-down { text-align: center; color: var(--text-muted); font-size: 1.5rem; margin: -5px 0; opacity: 0.5; animation: pulseArrow 2s infinite; }
+        @keyframes pulseArrow { 0% { opacity: 0.2; } 50% { opacity: 0.8; } 100% { opacity: 0.2; } }
+
+        /* Complex Table (Expanded) */
+        .dissection-table-container { margin: 2em 0; overflow-x: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+        .dissection-table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; min-width: 600px; }
+        .dissection-table th, .dissection-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+        .dissection-table th { background: var(--table-head); color: var(--accent-tech); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; }
+        .dissection-table tr:hover { background: rgba(255,255,255,0.02); }
+        .col-impact { color: var(--alert); font-weight: bold; }
+        .tech-tag { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 3px; margin-right: 3px; display: inline-block; margin-top: 5px; }
+
+        .reading-highlight { background: rgba(0, 243, 255, 0.1); border-left: 3px solid var(--accent-tech); padding-left: 10px; margin-left: -13px; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(0,0,0,0.1); border-radius: 0 4px 4px 0; }
+
+        @media (max-width: 600px) { h1 { font-size: 1.6rem; } body { padding-top: 70px; } .dissection-table th, .dissection-table td { font-size: 0.75rem; padding: 8px; } }
+    </style>
+</head>
+<body>
+    <div class="reading-toolbar">
+        <div class="tool-group">
+            <div class="theme-dot dot-dark" onclick="setTheme('dark')"></div>
+            <div class="theme-dot dot-sepia" onclick="setTheme('sepia')"></div>
+            <div class="theme-dot dot-light" onclick="setTheme('light')"></div>
+        </div>
+        <div class="tool-group">
+            <button class="btn-icon" onclick="changeSpeed(-0.25)" title="«">«</button>
+            <span class="speed-display" id="speed-val">1.0x</span>
+            <button class="btn-icon" onclick="changeSpeed(0.25)" title="»">»</button>
+            <button class="btn-icon" id="btn-speak" onclick="toggleSpeech()" title="Play">▶</button>
+        </div>
+        <div class="tool-group">
+            <button class="btn-icon" onclick="changeFontSize(-1)">A-</button>
+            <button class="btn-icon" onclick="changeFontSize(1)">A+</button>
+        </div>
+    </div>
+
+    <div class="book-container" id="content-area">
+        
+        <div class="chapter-meta">Parte II: O Corpo e o Território | Capítulo 05</div>
+        <h1>Smart Cities vs. Tecnologias Ancestrais</h1>
+
+        <p>Você caminha pela avenida. Um poste de luz acende quando você se aproxima – "Que conveniente", você pensa. Mas no topo desse poste, uma câmera de alta resolução registra seu rosto, analisa sua marcha e cruza esses dados com o sinal de GPS do seu celular. Três quarteirões adiante, um outdoor digital muda a propaganda de fraldas para cerveja, porque o algoritmo detectou que homens da sua faixa etária e nível de renda estão passando por ali agora.</p>
+
+        <p>A cidade deixou de ser feita apenas de concreto, vidro e aço. Ela agora é feita de código. A promessa da <strong>Smart City</strong> (Cidade Inteligente) é a eficiência suprema: trânsito sem engarrafamentos, lixo recolhido na hora exata, segurança total. Mas a pesquisadora Shannon Mattern nos alerta em <em>A City Is Not a Computer</em>: quando tratamos a cidade como uma máquina de processamento de dados, transformamos os cidadãos em meros componentes operacionais.</p>
+
+        <p>A "Smart City" é a realização final do Panóptico de Bentham: uma prisão onde a visibilidade é uma armadilha, e não há para onde correr, porque a própria infraestrutura está assistindo.</p>
+
+        <h2>A Tese: O Urbanismo de Vigilância</h2>
+
+        <p>Nas cidades "otimizadas", o acaso é considerado um erro de sistema. O objetivo é a previsibilidade total. Isso gera fenômenos como a <strong>Gentrificação Automatizada</strong>: softwares como o RealPage utilizam algoritmos para coordenar o aumento de aluguéis em bairros inteiros simultaneamente, expulsando moradores locais com uma eficiência fria que nenhum proprietário humano conseguiria sozinho.</p>
+
+        <div class="thesis-box">
+            <strong>A Cidade como Serviço (CaaS):</strong><br>
+            "O cidadão é rebaixado a 'usuário'. E, como qualquer usuário, seu acesso pode ser revogado. Na China, o sistema de Crédito Social já impede que pessoas com 'score baixo' comprem passagens de trem. No Ocidente, a exclusão é financeira e invisível: catracas que só abrem com biometria, parques que rastreiam seu celular, bairros onde a polícia preditiva decide quem abordar antes mesmo do crime acontecer."
+        </div>
+
+        <div class="visual-layers-container">
+            <span class="layers-title">🏙️ RECURSO VISUAL 6: A ANATOMIA DA CIDADE INVISÍVEL</span>
+            
+            <div class="layer-item layer-3">
+                <span>CAMADA 3: O ALGORITMO (Controle)</span>
+                <span style="font-size: 0.7em;">Lógica: Bloquear/Liberar</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            
+            <div class="layer-item layer-2">
+                <span>CAMADA 2: A SENSÓRIA (Vigilância)</span>
+                <span style="font-size: 0.7em;">Câmeras, Sensores, Wi-Fi</span>
+            </div>
+            <div class="arrow-down">↓</div>
+            
+            <div class="layer-item layer-1">
+                <span>CAMADA 1: A CIDADE FÍSICA (Realidade)</span>
+                <span style="font-size: 0.7em;">Pessoas, Ruas, Concreto</span>
+            </div>
+            
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 20px; text-align: center; font-style: italic;">
+                "Na Smart City, a Camada 3 (Virtual) dita as regras da Camada 1 (Física). O código molda o concreto."
+            </p>
+        </div>
+
+        <div class="deep-dive-box">
+            <h3>Dissecção do Controle: A Matriz de Usurpação Urbana</h3>
+            <p>Para entender a profundidade da usurpação, precisamos dissecar a cidade em camadas. Adam Greenfield, em <em>Radical Technologies</em>, argumenta que esses sensores não são neutros; são "agentes políticos" que tomam decisões por nós. Abaixo, detalhamos o que realmente está sendo capturado e como isso anula sua vontade individual.</p>
+
+            <div class="dissection-table-container">
+                <table class="dissection-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Camada</th>
+                            <th style="width: 30%;">Dados Capturados & Tecnologia</th>
+                            <th style="width: 25%;">A "Utilidade" (O Pretexto)</th>
+                            <th style="width: 30%;">A Usurpação (O Custo Real)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Biometria Passiva</strong></td>
+                            <td>
+                                Rosto, Marcha, Íris.<br>
+                                <span class="tech-tag">Reconhecimento Facial</span> <span class="tech-tag">Câmeras Térmicas</span>
+                            </td>
+                            <td>Segurança, Acesso "sem toque", Pagamento rápido.</td>
+                            <td class="col-impact">Fim do direito ao anonimato. Seu corpo se torna uma credencial pública que você não pode "deslogar".</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Rastro Digital (Cinética)</strong></td>
+                            <td>
+                                Localização GPS, MAC Address, Trajeto.<br>
+                                <span class="tech-tag">IMSI Catchers</span> <span class="tech-tag">Wi-Fi Sniffing</span>
+                            </td>
+                            <td>Otimização de Trânsito, Planejamento Urbano.</td>
+                            <td class="col-impact">Previsibilidade forçada. A cidade sabe onde você vai antes de você ir, manipulando fluxos para áreas de consumo.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Inferência Psicométrica</strong></td>
+                            <td>
+                                Micro-expressões, Tom de Voz, Agitação.<br>
+                                <span class="tech-tag">Emotion AI</span> <span class="tech-tag">Microfones</span>
+                            </td>
+                            <td>"Segurança Preditiva", Análise de Satisfação.</td>
+                            <td class="col-impact">Usurpação da Interioridade. A cidade julga sua <em>intenção</em> (ex: nervosismo = culpa) antes de qualquer ato.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Metadados de Consumo</strong></td>
+                            <td>
+                                Lixo gerado, Água, Energia, Compras.<br>
+                                <span class="tech-tag">Smart Meters</span> <span class="tech-tag">RFID</span>
+                            </td>
+                            <td>Sustentabilidade, Eficiência Energética.</td>
+                            <td class="col-impact">Vigilância Doméstica. O que você faz dentro de casa (banhos, horas acordado) é auditado e precificado.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Governança Algorítmica</strong></td>
+                            <td>
+                                Cruzamento de todos os dados acima.<br>
+                                <span class="tech-tag">Black Box Algorithms</span>
+                            </td>
+                            <td>Gestão "Neutra" e Eficiente.</td>
+                            <td class="col-impact">Morte da Política. Decisões morais (quem recebe auxílio, quem é policiado) viram cálculos matemáticos opacos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Rob Kitchin chama isso de "Governança Algorítmica": a substituição do debate político (falho, mas humano e negociável) pela lógica matemática (eficiente, mas rígida e excludente). A sua vontade de transitar livremente é substituída pela permissão do sistema.</p>
+        </div>
+
+        <p>O espaço público, outrora o palco da democracia, do protesto e do encontro inesperado, está sendo reconfigurado como um shopping center a céu aberto, monitorado por olhos de silício que classificam quem é "consumidor legítimo" e quem é "ameaça à ordem".</p>
+
+        <div class="deep-dive-box">
+            <h3>Fator X: O Direito à Cidade</h3>
+            <p>O sociólogo <strong>Henri Lefebvre</strong> argumentou, em 1968, que o "Direito à Cidade" não é apenas o direito de acessar o que já existe, mas o direito de <em>transformar</em> a cidade e transformá-la em algo novo. A Smart City nega esse direito. Ela oferece uma cidade pronta, otimizada e imutável. O cidadão é consumidor de serviços urbanos, não criador do espaço urbano. A luta contemporânea é pelo "Direito à Opacidade": o direito de não ser rastreado para poder ser livre.</p>
+        </div>
+
+        <h2>Antítese: Te Mana Raraunga e a Cidade Soberana</h2>
+
+        <p>Existe alternativa a esse totalitarismo digital? Sim, e ela vem das tradições mais antigas do planeta. Na Nova Zelândia (Aotearoa), o povo Maori desenvolveu o conceito de <strong>Soberania de Dados Indígena</strong>, codificado nos princípios de <em>Te Mana Raraunga</em>.</p>
+
+        <p>Para o Vale do Silício, dados são "o novo petróleo" – um recurso morto para ser extraído e vendido. Para os Maori, dados são <strong>Taonga</strong> (um tesouro sagrado/ancestral). Eles acreditam que os dados têm <em>Whakapapa</em> (genealogia/linhagem). Se um dado vem de uma pessoa ou de uma terra, ele mantém uma conexão espiritual e política com sua origem.</p>
+
+        <div class="antithesis-box">
+            <span class="antithesis-tag">O Contraponto Ancestral</span>
+            <p><strong>Do Controle ao Cuidado (Kaitiakitanga):</strong></p>
+            <p>Imagine uma cidade onde os sensores não vigiam as pessoas, mas vigiam a saúde do rio para garantir que ele não seja poluído. Onde os dados de tráfego não são vendidos para o Google, mas pertencem ao bairro e são usados pelos moradores para decidir onde plantar árvores.</p>
+            <p>Isso não é ficção. Projetos de <strong>Tecnologia Comunitária</strong> usam sensores low-tech para monitorar desmatamento ou qualidade da água, devolvendo o poder aos habitantes. A tecnologia deixa de ser uma arma de extração (de cima para baixo) e se torna uma ferramenta de cuidado (de baixo para cima).</p>
+            <p>A "Cidade Soberana" respeita a opacidade do indivíduo e a transparência do poder. Na "Smart City", é o inverso: o indivíduo é transparente e o poder é opaco.</p>
+        </div>
+
+        <div class="visual-table-container">
+            <div class="visual-header">🗺️ TECNOLOGIA: EXTRAÇÃO VS. RELAÇÃO</div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><strong>Smart City (Ocidental)</strong></td>
+                        <td>Dado como <em>Commodity</em> (Mercadoria). Foco em Eficiência e Controle.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cidade Soberana (Indígena)</strong></td>
+                        <td>Dado como <em>Taonga</em> (Tesouro). Foco em Cuidado e Responsabilidade.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Síntese: O Direito à Deriva</h2>
+
+        <p>A maior rebelião contra a cidade algorítmica é a ineficiência proposital. O algoritmo quer que você vá do ponto A ao ponto B pelo caminho mais rápido (e mais monitorado). Ele quer que você consuma no trajeto.</p>
+
+        <p>Para recuperar o "Direito à Cidade" (Henri Lefebvre), precisamos praticar a <strong>Deriva Situacionista</strong>. Caminhar sem destino. Explorar as "zonas mortas" onde o GPS falha. Habitar os espaços que não foram otimizados para o consumo.</p>
+
+        <p>A cidade real vive nas rachaduras do código. Vive na conversa fiada na esquina que nenhuma câmera gravou áudio. Vive no mercado informal que não aceita pagamento digital. Vive na humanidade que se recusa a ser um ponto de dados em um painel de controle.</p>
+
+        <div class="action-box">
+            <div class="action-title">🚶‍♂️ DESAFIO DE RETOMADA #05</div>
+            <p><strong>A Caminhada Analógica (The Glitch Walk)</strong></p>
+            <p>O algoritmo do Google Maps molda a geografia física da cidade ao direcionar o fluxo de milhões de pessoas para as mesmas ruas.</p>
+            <p><strong>Sua missão hoje:</strong> Saia de casa sem destino e <strong>sem celular</strong> (ou com ele no modo avião, no fundo da mochila). Caminhe guiado apenas pela curiosidade visual. Vire numa rua porque achou a árvore bonita, não porque o Waze mandou.</p>
+            <p>Descubra o que a "Smart City" está escondendo de você. Redescubra a textura da cidade que existe antes de ser convertida em dados. Seja imprevisível.</p>
+        </div>
+
+    </div>
+
+    <script>
+        function setTheme(theme) { document.documentElement.setAttribute('data-theme', theme); }
+        let currentSize = 18;
+        function changeFontSize(amount) {
+            currentSize += amount;
+            if(currentSize < 14) currentSize = 14; if(currentSize > 26) currentSize = 26;
+            document.documentElement.style.setProperty('--base-font-size', currentSize + 'px');
+        }
+        let isSpeaking = false; let speechRate = 1.0; let selectedVoice = null;
+        let speechQueue = []; let currentSpeechIndex = 0; let manualControl = false;
+        function loadVoices() { const voices = window.speechSynthesis.getVoices(); selectedVoice = voices.find(v => v.lang === 'pt-BR' && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices.find(v => v.lang === 'pt-BR'); }
+        if(window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+        function prepareReadingQueue() {
+            const container = document.querySelector('.book-container');
+            const elements = container.querySelectorAll('p, h1, h2, h3, li, .thesis-box, .antithesis-box p, .action-box p, .layer-item, .deep-dive-box p, .deep-dive-box h3, td');
+            speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
+        }
+        function changeSpeed(amount) {
+            speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 3.0) speechRate = 3.0;
+            document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x';
+            if(isSpeaking) { manualControl = true; window.speechSynthesis.cancel(); setTimeout(() => { manualControl = false; speakChunk(); }, 50); }
+        }
+        function toggleSpeech() {
+            if(isSpeaking) { isSpeaking = false; window.speechSynthesis.cancel(); clearHighlights(); document.getElementById('btn-speak').innerText = "▶"; }
+            else { if(speechQueue.length === 0) prepareReadingQueue(); isSpeaking = true; document.getElementById('btn-speak').innerText = "⏹"; speakChunk(); }
+        }
+        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
+        function speakChunk() {
+            if(!isSpeaking) return;
+            if(currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; document.getElementById('btn-speak').innerText = "▶"; return; }
+            const element = speechQueue[currentSpeechIndex];
+            clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"});
+            const utterance = new SpeechSynthesisUtterance(element.innerText);
+            utterance.lang = 'pt-BR'; utterance.rate = speechRate; if(selectedVoice) utterance.voice = selectedVoice;
+            utterance.onend = function() { if(!manualControl && isSpeaking) { currentSpeechIndex++; speakChunk(); } };
+            window.speechSynthesis.speak(utterance);
+        }
+        document.getElementById('content-area').addEventListener('click', function(e) {
+            const target = e.target.closest('p, h1, h2, h3, li, .thesis-box, .antithesis-box, .layer-item, .deep-dive-box, tr');
+            if(target) {
+                if(speechQueue.length === 0) prepareReadingQueue();
+                let index = speechQueue.indexOf(target);
+                if(index === -1) { const sub = target.querySelector('p, td'); if(sub) index = speechQueue.indexOf(sub); }
+                if(index !== -1) { isSpeaking = true; document.getElementById('btn-speak').innerText = "⏹"; manualControl = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; setTimeout(() => { manualControl = false; speakChunk(); }, 50); }
+            }
+        });
+        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
+    </script>
+</body>
+</html>
