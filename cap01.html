@@ -9,7 +9,7 @@
 
     <style>
         :root {
-            /* --- IDENTIDADE VISUAL MESTRA --- */
+            /* --- VARIÁVEIS GLOBAIS --- */
             --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
             --border-color: rgba(255, 255, 255, 0.1);
             --text-primary: #ededed; --text-secondary: #888888;
@@ -18,7 +18,9 @@
             --radius: 8px;
             --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
             --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 18px; 
+            
+            /* REQ: Fonte começa no menor tamanho possível (14px) */
+            --reading-size: 14px; 
         }
 
         body.light-mode {
@@ -31,17 +33,17 @@
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
-        /* --- HUD CLEAN UNIFICADA --- */
+        /* --- HUD ULTRA CLEAN --- */
         .reading-hud {
             height: 60px; flex-shrink: 0;
             background: var(--bg-panel); backdrop-filter: var(--blur);
             border-bottom: 1px solid var(--border-color);
             display: flex; align-items: center; justify-content: center;
-            gap: 10px; z-index: 100; padding: 0 20px;
+            gap: 8px; z-index: 100; padding: 0 15px;
         }
 
         .hud-btn {
-            width: 40px; height: 40px;
+            width: 40px; height: 40px; flex-shrink: 0;
             background: transparent; border: 1px solid transparent;
             color: var(--text-secondary); border-radius: var(--radius);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -50,14 +52,15 @@
         }
 
         .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--accent-bio); background: rgba(16, 185, 129, 0.1); border-color: var(--accent-bio); }
-        .hud-divider { width: 1px; height: 20px; background: var(--border-color); margin: 0 5px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 13px; color: var(--text-secondary); min-width: 45px; text-align: center; letter-spacing: -0.5px; }
+        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
+        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
+        
+        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
 
         @media (max-width: 600px) {
-            .reading-hud { padding: 0 10px; gap: 5px; justify-content: space-between; }
-            .hud-btn { width: 36px; height: 36px; }
-            .hud-divider { display: none; }
+            .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; }
+            .hud-btn { width: 38px; height: 38px; }
+            .hud-divider { display: none; } 
         }
 
         /* --- CONTEÚDO --- */
@@ -71,7 +74,7 @@
         p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
         .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
 
-        /* --- BOXES --- */
+        /* --- ELEMENTOS EXTRAS --- */
         .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
         .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
         .antithesis-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-bio); }
@@ -79,7 +82,6 @@
         .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
         .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
 
-        /* --- TABLE --- */
         .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
         .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; }
@@ -106,8 +108,8 @@
         <span class="speed-indicator" id="speed-val">1.0x</span>
         <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
         
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Ouvir">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
+            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
         </button>
     </div>
 
@@ -209,15 +211,19 @@
     </div>
 
     <script>
-        // --- MOTOR UNIFICADO V6.0 ---
+        // --- CONFIGURAÇÃO INICIAL ---
         function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        let currentSize = 18;
+        
+        // REQ: Inicia em 14px (mínimo)
+        let currentSize = 14; 
         function changeFontSize(amount) {
             currentSize += amount;
-            if(currentSize < 14) currentSize = 14; if(currentSize > 32) currentSize = 32;
+            if(currentSize < 14) currentSize = 14; 
+            if(currentSize > 32) currentSize = 32;
             document.documentElement.style.setProperty('--reading-size', currentSize + 'px');
         }
 
+        // --- AUDIO ENGINE ---
         let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
         
         function changeSpeed(amount) {
@@ -229,20 +235,24 @@
         function toggleSpeech() {
             const btn = document.getElementById('btn-speak');
             if (isSpeaking) {
+                // Pause State
                 isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; 
-                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
                 btn.classList.remove('active');
+                // Ícone Play
+                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
             } else {
+                // Play State
                 prepareQueue();
                 if(speechQueue.length > 0) {
                     isSpeaking = true; btn.classList.add('active');
-                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+                    // Ícone Pause
+                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
                     speakChunk();
                 }
             }
         }
 
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box, .warning-box, .manifesto-text'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
+        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
         function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
 
         function speakChunk() {
@@ -256,12 +266,23 @@
         }
 
         document.getElementById('content-area').addEventListener('click', function(e) {
-            const target = e.target.closest('p, h1, h2, h3, .box, td, li, .warning-box, .manifesto-text');
-            if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
+            const target = e.target.closest('p, h1, h2, h3, .box, td');
+            if (target) { 
+                prepareQueue(); 
+                let index = speechQueue.indexOf(target); 
+                if (index !== -1) { 
+                    isChangingState = true; window.speechSynthesis.cancel(); 
+                    currentSpeechIndex = index; isSpeaking = true; 
+                    document.getElementById('btn-speak').classList.add('active'); 
+                    document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
+                    setTimeout(() => { isChangingState = false; speakChunk(); }, 50); 
+                } 
+            }
         });
         window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
     </script>
 </body>
 </html>
+
 
 
