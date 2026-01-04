@@ -2,350 +2,317 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Capítulo 05: Smart Cities vs Tecnologias Ancestrais. Vigilância urbana, rastreamento passivo e o direito à cidade.">
     <title>Capítulo 05 // A Cidade Invisível</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1605342980481793');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
+    /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* [FÓRMULA X CSS: IDÊNTICO AO CAP 04] */
         :root {
-            --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ededed; --text-secondary: #888888;
-            --accent: #3b82f6; --accent-bio: #10b981; --accent-warn: #d946ef; --accent-alert: #ef4444;
-            --radius: 8px;
-            --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
-            --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 14px; 
+            /* --- DESIGN SYSTEM FATOR 1 --- */
+            --bg-app: #050505;        
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            /* ALMA DO CAPÍTULO: CITY LIGHTS (Âmbar/Laranja) */
+            --accent: #f59e0b;        /* Laranja Alerta/Urbano */
+            --accent-dim: rgba(245, 158, 11, 0.08);
+            --concrete: #737373;
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 19px;
+            --line-height: 1.8;
         }
+
         body.light-mode {
-            --bg-app: #f2f2f7; --bg-panel: rgba(255, 255, 255, 0.98); 
-            --border-color: rgba(0, 0, 0, 0.08);
-            --text-primary: #1c1c1e; --text-secondary: #6c6c70;
-            --accent: #007aff; --accent-bio: #16a34a; --accent-warn: #af52de;
+            --bg-app: #f2f2f7;
+            --text-primary: #1c1c1e;
+            --text-secondary: #4b5563;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent: #d97706;
+            --accent-dim: rgba(217, 119, 6, 0.05);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-        
-        .reading-hud {
-            height: 60px; flex-shrink: 0;
-            background: var(--bg-panel); backdrop-filter: var(--blur);
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- MARGENS OTIMIZADAS --- */
+        .reader-container {
+            width: 100%;
+            max-width: 640px; 
+            margin: 0 auto;
+            padding: 40px 24px 120px 24px;
+        }
+
+        p {
+            margin-bottom: 2em; 
+            text-align: justify; 
+            hyphens: auto; 
+            letter-spacing: -0.01em;
+        }
+
+        strong { color: var(--text-primary); font-weight: 700; }
+
+        /* HUD */
+        .chapter-hud {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(var(--bg-app), 0.95);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; z-index: 100; padding: 0 15px;
+            padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
         }
         .hud-btn {
-            width: 40px; height: 40px; flex-shrink: 0;
-            background: transparent; border: 1px solid transparent;
-            color: var(--text-secondary); border-radius: var(--radius);
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-tech); font-weight: 500; font-size: 14px;
-            transition: var(--transition);
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-secondary); border-radius: 6px;
+            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
         }
-        .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
-        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
-        @media (max-width: 600px) {
-            .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; }
-            .hud-btn { width: 38px; height: 38px; }
-            .hud-divider { display: none; } 
+        .hud-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .hud-ctrls { display: flex; gap: 8px; }
+
+        /* TIPOGRAFIA TECH */
+        .chapter-meta {
+            font-family: var(--font-tech); font-size: 0.75rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
+            border-left: 2px solid var(--accent); padding-left: 10px;
         }
 
-        .content-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px 20px 100px 20px; scroll-behavior: smooth; }
-        .book-container { max-width: 750px; margin: 0 auto; font-size: var(--reading-size); line-height: 1.8; }
-        
-        h1 { font-family: var(--font-tech); font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; text-align: center; }
-        h2 { font-family: var(--font-tech); font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 3em; margin-bottom: 1em; display: flex; align-items: center; gap: 10px; }
+        h1 {
+            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: 50px; 
+            color: var(--text-primary); letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: var(--font-tech); font-size: 1.3rem; color: var(--accent);
+            margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+        }
         h2::before { content: '//'; opacity: 0.5; }
-        h3 { font-family: var(--font-ui); font-size: 1.2em; font-weight: 600; color: var(--accent-warn); margin-top: 2em; text-transform: uppercase; }
-        p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
-        .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
 
-        /* Cap 05 Specifc */
-        .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
-        .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
-        .antithesis-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-bio); position: relative; }
-        .antithesis-tag { position: absolute; top: -12px; right: 20px; background: var(--bg-app); color: var(--accent-bio); border: 1px solid var(--accent-bio); padding: 2px 10px; font-weight: bold; font-family: var(--font-tech); text-transform: uppercase; font-size: 0.7rem; }
-        .deep-dive-box { border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color); padding: 30px 0; }
-        .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
-        .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
-
-        /* Layers Visual */
-        .visual-layers-container {
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
-            border-radius: var(--radius); padding: 30px; margin: 3em 0; position: relative; overflow: hidden;
-            font-family: var(--font-tech); cursor: pointer;
+        /* WIDGETS JUSTIFICADOS */
+        
+        .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
+        
+        .thesis-box {
+            background: var(--accent-dim);
+            border-left: 4px solid var(--accent);
+            text-align: justify;
         }
-        .layers-title { text-align: center; color: var(--accent-warn); font-weight: bold; text-transform: uppercase; margin-bottom: 20px; display: block; font-size: 0.8rem; letter-spacing: 1px; }
-        .layer-item { padding: 15px; margin-bottom: 5px; border-radius: 6px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 2; transition: transform 0.3s; }
-        .layer-item:hover { transform: scale(1.02); }
-        .layer-3 { background: rgba(217, 70, 239, 0.1); color: var(--accent-warn); border: 1px solid var(--accent-warn); }
-        .layer-2 { background: rgba(59, 130, 246, 0.1); color: var(--accent); border: 1px solid var(--accent); }
-        .layer-1 { background: rgba(255, 255, 255, 0.05); color: var(--text-secondary); border: 1px dashed var(--text-secondary); }
-        .arrow-down { text-align: center; color: var(--text-secondary); font-size: 1.2rem; margin: -5px 0; opacity: 0.5; }
+        .thesis-header { color: var(--accent); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; font-size: 0.8rem; }
 
-        /* Table Cap 5 */
-        .dissection-table-container { margin: 2em 0; overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius); }
-        .dissection-table { width: 100%; border-collapse: collapse; font-family: var(--font-ui); font-size: 0.85rem; min-width: 600px; }
-        .dissection-table th, .dissection-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
-        .dissection-table th { background: rgba(255,255,255,0.05); color: var(--accent); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; font-family: var(--font-tech); }
-        .dissection-table tr:hover { background: rgba(255,255,255,0.02); }
-        .col-impact { color: var(--accent-alert); font-weight: bold; }
-        .tech-tag { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 5px; border-radius: 3px; margin-right: 3px; display: inline-block; margin-top: 5px; font-family: var(--font-tech); }
+        .deep-dive-box {
+            border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
+            border-left: none; border-right: none; border-radius: 0;
+        }
 
-        /* Generic Table */
-        .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
-        .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
-        .simple-table { width: 100%; border-collapse: collapse; }
-        .simple-table td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        /* LAYERS VISUAL */
+        .visual-layers {
+            display: flex; flex-direction: column; gap: 5px; margin: 3em 0;
+            font-family: var(--font-tech); font-size: 0.8rem;
+        }
+        .layer-item {
+            padding: 15px; border: 1px solid var(--border-color); border-radius: 4px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.02);
+        }
+        .layer-top { border-color: var(--accent); color: var(--accent); font-weight: bold; background: var(--accent-dim); }
+        .layer-arrow { text-align: center; color: var(--text-secondary); margin: -5px 0; font-size: 1.2rem; }
 
-        .reading-highlight { background: rgba(59, 130, 246, 0.15); border-radius: var(--radius); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); color: #fff; }
+        /* CARD COMPARATIVO */
+        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
+        .comp-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
+            transition: transform 0.2s;
+        }
+        .comp-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .comp-title { 
+            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
+            display: block; margin-bottom: 10px; font-size: 0.8rem;
+        }
+        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Action Box */
+        .action-box {
+            border: 1px dashed var(--accent); background: rgba(var(--bg-app), 0.5);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+        }
+        .action-header { 
+            font-family: var(--font-tech); color: var(--accent); font-weight: bold; 
+            margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .reading-highlight { background: var(--accent-dim); color: var(--text-primary); border-radius: 2px; }
+
+        @media (min-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .reader-container { padding: 30px 20px 100px 20px; }
+            h1 { font-size: 1.7rem; }
+            .chapter-hud { padding: 10px 15px; }
+            .hud-btn span { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="reading-hud">
-        <button class="hud-btn" onclick="toggleTheme()" title="Tema">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
-        <button class="hud-btn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeSpeed(-0.25)" title="Lento">«</button>
-        <span class="speed-indicator" id="speed-val">1.0x</span>
-        <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
-        
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
-            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </button>
+    <div class="chapter-hud">
+        <div class="hud-ctrls">
+            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
+            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
+        </div>
+        <div class="hud-ctrls">
+            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
+                ▶ <span>OUVIR</span>
+            </button>
+        </div>
     </div>
 
-    <div class="content-scroll-area" id="content-area">
-        <div class="book-container">
-            <div class="chapter-meta">Parte II: O Corpo e o Território | Capítulo 05</div>
-            <h1>Smart Cities vs. Tecnologias Ancestrais</h1>
+    <div class="reader-container" id="content-area">
+        <span class="chapter-meta">PARTE II: O CORPO E O TERRITÓRIO | CAPÍTULO 05</span>
+        <h1>Smart Cities vs.<br>Tecnologias Ancestrais</h1>
 
-            <p>Você caminha pela avenida. Um poste de luz acende quando você se aproxima – "Que conveniente", você pensa. Mas no topo desse poste, uma câmera de alta resolução registra seu rosto, analisa sua marcha e cruza esses dados com o sinal de GPS do seu celular. Três quarteirões adiante, um outdoor digital muda a propaganda de fraldas para cerveja, porque o algoritmo detectou que homens da sua faixa etária e nível de renda estão passando por ali agora.</p>
+        <p>Você caminha pela avenida. Um poste de luz acende quando você se aproxima – "Que conveniente", você pensa. Mas no topo desse poste, uma câmera de alta resolução registra seu rosto, analisa sua marcha e cruza esses dados com o sinal de GPS do seu celular. Três quarteirões adiante, um outdoor digital muda a propaganda porque o algoritmo detectou que alguém com seu perfil de consumo está passando.</p>
 
-            <p>A cidade deixou de ser feita apenas de concreto, vidro e aço. Ela agora é feita de código. A promessa da <strong>Smart City</strong> (Cidade Inteligente) é a eficiência suprema: trânsito sem engarrafamentos, lixo recolhido na hora exata, segurança total. Mas a pesquisadora Shannon Mattern nos alerta em <em>A City Is Not a Computer</em>: quando tratamos a cidade como uma máquina de processamento de dados, transformamos os cidadãos em meros componentes operacionais.</p>
+        <p>A cidade deixou de ser feita apenas de concreto, vidro e aço. Ela agora é feita de código. A promessa da <strong>Smart City</strong> (Cidade Inteligente) é a eficiência suprema: trânsito sem engarrafamentos, lixo recolhido na hora exata. Mas a pesquisadora Shannon Mattern nos alerta: quando tratamos a cidade como um computador, transformamos os cidadãos em meros componentes operacionais a serem processados.</p>
 
-            <p>A "Smart City" é a realização final do Panóptico de Bentham: uma prisão onde a visibilidade é uma armadilha, e não há para onde correr, porque a própria infraestrutura está assistindo.</p>
+        <div class="box thesis-box">
+            <span class="thesis-header">// O Urbanismo de Vigilância</span>
+            "Nas cidades 'otimizadas', o acaso é um erro de sistema. O objetivo é a previsibilidade total. Isso gera fenômenos como a Gentrificação Automatizada: softwares que aumentam aluguéis em bairros inteiros simultaneamente, expulsando moradores locais com uma eficiência fria. O cidadão é rebaixado a 'usuário'. E, como qualquer usuário, seu acesso pode ser revogado."
+        </div>
 
-            <h2>A Tese: O Urbanismo de Vigilância</h2>
+        <h2>A Anatomia da Cidade Invisível</h2>
 
-            <p>Nas cidades "otimizadas", o acaso é considerado um erro de sistema. O objetivo é a previsibilidade total. Isso gera fenômenos como a <strong>Gentrificação Automatizada</strong>: softwares como o RealPage utilizam algoritmos para coordenar o aumento de aluguéis em bairros inteiros simultaneamente, expulsando moradores locais com uma eficiência fria que nenhum proprietário humano conseguiria sozinho.</p>
+        <p>A usurpação acontece em camadas que você não vê. Adam Greenfield, em <em>Radical Technologies</em>, descreve isso como "Urbanismo Militar" aplicado à vida civil.</p>
 
-            <div class="box thesis-box">
-                <strong style="color: var(--accent); text-transform: uppercase; font-family: var(--font-tech);">// A Cidade como Serviço (CaaS):</strong><br><br>
-                "O cidadão é rebaixado a 'usuário'. E, como qualquer usuário, seu acesso pode ser revogado. Na China, o sistema de Crédito Social já impede que pessoas com 'score baixo' comprem passagens de trem. No Ocidente, a exclusão é financeira e invisível: catracas que só abrem com biometria, parques que rastreiam seu celular, bairros onde a polícia preditiva decide quem abordar antes mesmo do crime acontecer."
+        <div class="visual-layers">
+            <div class="layer-item layer-top">
+                <span>CAMADA 3: O ALGORITMO</span>
+                <span style="font-size:0.7em;">Lógica: Bloquear/Liberar</span>
             </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer-item">
+                <span>CAMADA 2: A SENSÓRIA (Vigilância)</span>
+                <span style="font-size:0.7em;">Câmeras, Beacons, Sniffers</span>
+            </div>
+            <div class="layer-arrow">↓</div>
+            <div class="layer-item">
+                <span>CAMADA 1: A CIDADE FÍSICA</span>
+                <span style="font-size:0.7em;">Ruas, Corpos, Concreto</span>
+            </div>
+        </div>
 
-            <div class="visual-layers-container">
-                <span class="layers-title">🏙️ RECURSO VISUAL 6: A ANATOMIA DA CIDADE INVISÍVEL</span>
-                
-                <div class="layer-item layer-3">
-                    <span>CAMADA 3: O ALGORITMO (Controle)</span>
-                    <span style="font-size: 0.7em;">Lógica: Bloquear/Liberar</span>
+        <p>Na Smart City, a Camada 3 (Virtual) dita as regras da Camada 1 (Física). Se o seu score de crédito for baixo, a catraca do metrô pode não abrir, ou o aluguel no bairro nobre pode ser negado automaticamente.</p>
+
+        <div class="box deep-dive-box">
+            <h3>Fator X: Rastreamento Passivo (Wi-Fi e Bluetooth)</h3>
+            <p>Você não precisa conectar ao Wi-Fi do shopping para ser rastreado. Lojas e postes usam "Sniffers" que captam o sinal que seu celular emite procurando redes conhecidas. Eles registram o endereço MAC (a placa) do seu aparelho. Cruzando isso com câmeras, eles sabem quanto tempo você parou na vitrine, qual seu trajeto habitual e quem estava com você (aparelhos que andam juntos).</p>
+            <p><strong>A Tática de Defesa:</strong> Higiene de Rádio. Se você não está usando o Wi-Fi ou Bluetooth ativamente, desligue-os. Não apenas desconecte pela central de controle; vá nas configurações e desligue o rádio. Isso torna você um "fantasma" para os sensores passivos.</p>
+        </div>
+
+        <h2>Antítese: Te Mana Raraunga e a Cidade Soberana</h2>
+
+        <p>Existe alternativa a esse totalitarismo digital? Sim, e ela vem das tradições mais antigas do planeta. Na Nova Zelândia, o povo Maori desenvolveu o conceito de <strong>Soberania de Dados Indígena</strong> (<em>Te Mana Raraunga</em>).</p>
+
+        <p>Para o Vale do Silício, dados são "o novo petróleo" – um recurso morto para ser extraído e vendido. Para os Maori, dados são <strong>Taonga</strong> (um tesouro sagrado/ancestral). Eles acreditam que os dados têm <em>Whakapapa</em> (genealogia). Se um dado vem de uma pessoa ou de uma terra, ele mantém uma conexão espiritual e política com sua origem. Ele não pode ser vendido; ele deve ser cuidado.</p>
+
+        <div class="comparison-grid">
+            <div class="comp-card" style="border-left: 2px solid var(--accent);">
+                <span class="comp-title" style="color:var(--accent)">SMART CITY (Ocidental)</span>
+                <div class="comp-content">
+                    O dado é uma <em>Commodity</em> (Mercadoria). O foco é extração, eficiência e controle centralizado. O cidadão é transparente; o poder é opaco.
                 </div>
-                <div class="arrow-down">↓</div>
-                
-                <div class="layer-item layer-2">
-                    <span>CAMADA 2: A SENSÓRIA (Vigilância)</span>
-                    <span style="font-size: 0.7em;">Câmeras, Sensores, Wi-Fi</span>
+            </div>
+            <div class="comp-card" style="border-left: 2px solid var(--concrete);">
+                <span class="comp-title" style="color:var(--concrete)">CIDADE SOBERANA (Ancestral)</span>
+                <div class="comp-content">
+                    O dado é <em>Taonga</em> (Tesouro). O foco é cuidado, relação e responsabilidade comunitária. O poder é transparente; o cidadão tem direito à opacidade.
                 </div>
-                <div class="arrow-down">↓</div>
-                
-                <div class="layer-item layer-1">
-                    <span>CAMADA 1: A CIDADE FÍSICA (Realidade)</span>
-                    <span style="font-size: 0.7em;">Pessoas, Ruas, Concreto</span>
-                </div>
-                
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 20px; text-align: center; font-style: italic;">
-                    "Na Smart City, a Camada 3 (Virtual) dita as regras da Camada 1 (Física). O código molda o concreto."
-                </p>
             </div>
+        </div>
 
-            <div class="box deep-dive-box">
-                <h3>Dissecção do Controle: A Matriz de Usurpação Urbana</h3>
-                <p>Para entender a profundidade da usurpação, precisamos dissecar a cidade em camadas. Adam Greenfield, em <em>Radical Technologies</em>, argumenta que esses sensores não são neutros; são "agentes políticos" que tomam decisões por nós. Abaixo, detalhamos o que realmente está sendo capturado e como isso anula sua vontade individual.</p>
+        <h2>Síntese: O Direito à Deriva</h2>
 
-                <div class="dissection-table-container">
-                    <table class="dissection-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 15%;">Camada</th>
-                                <th style="width: 30%;">Dados Capturados & Tecnologia</th>
-                                <th style="width: 25%;">A "Utilidade" (O Pretexto)</th>
-                                <th style="width: 30%;">A Usurpação (O Custo Real)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>1. Biometria Passiva</strong></td>
-                                <td>
-                                    Rosto, Marcha, Íris.<br>
-                                    <span class="tech-tag">Reconhecimento Facial</span> <span class="tech-tag">Câmeras Térmicas</span>
-                                </td>
-                                <td>Segurança, Acesso "sem toque", Pagamento rápido.</td>
-                                <td class="col-impact">Fim do direito ao anonimato. Seu corpo se torna uma credencial pública que você não pode "deslogar".</td>
-                            </tr>
-                            <tr>
-                                <td><strong>2. Rastro Digital (Cinética)</strong></td>
-                                <td>
-                                    Localização GPS, MAC Address, Trajeto.<br>
-                                    <span class="tech-tag">IMSI Catchers</span> <span class="tech-tag">Wi-Fi Sniffing</span>
-                                </td>
-                                <td>Otimização de Trânsito, Planejamento Urbano.</td>
-                                <td class="col-impact">Previsibilidade forçada. A cidade sabe onde você vai antes de você ir, manipulando fluxos para áreas de consumo.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>3. Inferência Psicométrica</strong></td>
-                                <td>
-                                    Micro-expressões, Tom de Voz, Agitação.<br>
-                                    <span class="tech-tag">Emotion AI</span> <span class="tech-tag">Microfones</span>
-                                </td>
-                                <td>"Segurança Preditiva", Análise de Satisfação.</td>
-                                <td class="col-impact">Usurpação da Interioridade. A cidade julga sua <em>intenção</em> (ex: nervosismo = culpa) antes de qualquer ato.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>4. Metadados de Consumo</strong></td>
-                                <td>
-                                    Lixo gerado, Água, Energia, Compras.<br>
-                                    <span class="tech-tag">Smart Meters</span> <span class="tech-tag">RFID</span>
-                                </td>
-                                <td>Sustentabilidade, Eficiência Energética.</td>
-                                <td class="col-impact">Vigilância Doméstica. O que você faz dentro de casa (banhos, horas acordado) é auditado e precificado.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>5. Governança Algorítmica</strong></td>
-                                <td>
-                                    Cruzamento de todos os dados acima.<br>
-                                    <span class="tech-tag">Black Box Algorithms</span>
-                                </td>
-                                <td>Gestão "Neutra" e Eficiente.</td>
-                                <td class="col-impact">Morte da Política. Decisões morais (quem recebe auxílio, quem é policiado) viram cálculos matemáticos opacos.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <p>Rob Kitchin chama isso de "Governança Algorítmica": a substituição do debate político (falho, mas humano e negociável) pela lógica matemática (eficiente, mas rígida e excludente). A sua vontade de transitar livremente é substituída pela permissão do sistema.</p>
-            </div>
+        <p>A maior rebelião contra a cidade algorítmica é a ineficiência proposital. O algoritmo quer que você vá do ponto A ao ponto B pelo caminho mais rápido (e mais monitorado). Ele quer que você consuma no trajeto.</p>
+        
+        <p>Para recuperar o "Direito à Cidade" (Henri Lefebvre), precisamos praticar a <strong>Deriva Situacionista</strong>. Caminhar sem destino. Explorar as "zonas mortas" onde o GPS falha. Habitar os espaços que não foram otimizados para o consumo.</p>
 
-            <p>O espaço público, outrora o palco da democracia, do protesto e do encontro inesperado, está sendo reconfigurado como um shopping center a céu aberto, monitorado por olhos de silício que classificam quem é "consumidor legítimo" e quem é "ameaça à ordem".</p>
-
-            <div class="box deep-dive-box">
-                <h3>Fator X: O Direito à Cidade</h3>
-                <p>O sociólogo <strong>Henri Lefebvre</strong> argumentou, em 1968, que o "Direito à Cidade" não é apenas o direito de acessar o que já existe, mas o direito de <em>transformar</em> a cidade e transformá-la em algo novo. A Smart City nega esse direito. Ela oferece uma cidade pronta, otimizada e imutável. O cidadão é consumidor de serviços urbanos, não criador do espaço urbano. A luta contemporânea é pelo "Direito à Opacidade": o direito de não ser rastreado para poder ser livre.</p>
-            </div>
-
-            <h2>Antítese: Te Mana Raraunga e a Cidade Soberana</h2>
-
-            <p>Existe alternativa a esse totalitarismo digital? Sim, e ela vem das tradições mais antigas do planeta. Na Nova Zelândia (Aotearoa), o povo Maori desenvolveu o conceito de <strong>Soberania de Dados Indígena</strong>, codificado nos princípios de <em>Te Mana Raraunga</em>.</p>
-
-            <p>Para o Vale do Silício, dados são "o novo petróleo" – um recurso morto para ser extraído e vendido. Para os Maori, dados são <strong>Taonga</strong> (um tesouro sagrado/ancestral). Eles acreditam que os dados têm <em>Whakapapa</em> (genealogia/linhagem). Se um dado vem de uma pessoa ou de uma terra, ele mantém uma conexão espiritual e política com sua origem.</p>
-
-            <div class="box antithesis-box">
-                <span class="antithesis-tag">O Contraponto Ancestral</span>
-                <p><strong>Do Controle ao Cuidado (Kaitiakitanga):</strong></p>
-                <p>Imagine uma cidade onde os sensores não vigiam as pessoas, mas vigiam a saúde do rio para garantir que ele não seja poluído. Onde os dados de tráfego não são vendidos para o Google, mas pertencem ao bairro e são usados pelos moradores para decidir onde plantar árvores.</p>
-                <p>Isso não é ficção. Projetos de <strong>Tecnologia Comunitária</strong> usam sensores low-tech para monitorar desmatamento ou qualidade da água, devolvendo o poder aos habitantes. A tecnologia deixa de ser uma arma de extração (de cima para baixo) e se torna uma ferramenta de cuidado (de baixo para cima).</p>
-                <p>A "Cidade Soberana" respeita a opacidade do indivíduo e a transparência do poder. Na "Smart City", é o inverso: o indivíduo é transparente e o poder é opaco.</p>
-            </div>
-
-            <div class="visual-table-container">
-                <div class="visual-header">🗺️ TECNOLOGIA: EXTRAÇÃO VS. RELAÇÃO</div>
-                <table class="simple-table">
-                    <tbody>
-                        <tr>
-                            <td style="color:var(--accent);"><strong>Smart City (Ocidental)</strong></td>
-                            <td>Dado como <em>Commodity</em> (Mercadoria). Foco em Eficiência e Controle.</td>
-                        </tr>
-                        <tr>
-                            <td style="color:var(--accent-bio);"><strong>Cidade Soberana (Indígena)</strong></td>
-                            <td>Dado como <em>Taonga</em> (Tesouro). Foco em Cuidado e Responsabilidade.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Síntese: O Direito à Deriva</h2>
-
-            <p>A maior rebelião contra a cidade algorítmica é a ineficiência proposital. O algoritmo quer que você vá do ponto A ao ponto B pelo caminho mais rápido (e mais monitorado). Ele quer que você consuma no trajeto.</p>
-
-            <p>Para recuperar o "Direito à Cidade" (Henri Lefebvre), precisamos praticar a <strong>Deriva Situacionista</strong>. Caminhar sem destino. Explorar as "zonas mortas" onde o GPS falha. Habitar os espaços que não foram otimizados para o consumo.</p>
-
-            <p>A cidade real vive nas rachaduras do código. Vive na conversa fiada na esquina que nenhuma câmera gravou áudio. Vive no mercado informal que não aceita pagamento digital. Vive na humanidade que se recusa a ser um ponto de dados em um painel de controle.</p>
-
-            <div class="box action-box">
-                <div class="action-title">🚶‍♂️ DESAFIO DE RETOMADA #05</div>
-                <p><strong>A Caminhada Analógica (The Glitch Walk)</strong></p>
-                <p>O algoritmo do Google Maps molda a geografia física da cidade ao direcionar o fluxo de milhões de pessoas para as mesmas ruas.</p>
-                <p><strong>Sua missão hoje:</strong> Saia de casa sem destino e <strong>sem celular</strong> (ou com ele no modo avião, no fundo da mochila). Caminhe guiado apenas pela curiosidade visual. Vire numa rua porque achou a árvore bonita, não porque o Waze mandou.</p>
-                <p>Descubra o que a "Smart City" está escondendo de você. Redescubra a textura da cidade que existe antes de ser convertida em dados. Seja imprevisível.</p>
-            </div>
-
+        <div class="box action-box">
+            <span class="action-header">🚶‍♂️ DESAFIO DE RETOMADA #05</span>
+            <p><strong>A Caminhada Analógica (The Glitch Walk)</strong></p>
+            <p>O algoritmo do Google Maps molda a geografia física da cidade ao direcionar o fluxo de milhões de pessoas para as mesmas ruas.</p>
+            <p><strong>Sua missão hoje:</strong> Saia de casa sem destino. Antes de sair, desligue o Wi-Fi e o Bluetooth nas configurações profundas do celular (ou coloque em Modo Avião). Caminhe guiado apenas pela curiosidade visual. Vire numa rua porque achou a árvore bonita, não porque o Waze mandou. Torne-se invisível para a malha de sensores passivos.</p>
         </div>
     </div>
 
     <script>
-        // --- FÓRMULA X ENGINE ---
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        
-        let currentSize = 14; 
+        /* Sincronia */
+        window.addEventListener('message', function(event) {
+            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+        });
+        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+
+        /* Fonte */
+        let currentSize = 19;
         function changeFontSize(amount) {
-            currentSize += amount; if(currentSize < 14) currentSize = 14; if(currentSize > 32) currentSize = 32;
-            document.documentElement.style.setProperty('--reading-size', currentSize + 'px');
+            currentSize += amount;
+            if (currentSize < 14) currentSize = 14; 
+            if (currentSize > 26) currentSize = 26;
+            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
         }
 
-        let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
-        
-        function changeSpeed(amount) {
-            speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 2.5) speechRate = 2.5;
-            document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x';
-            if(isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); setTimeout(() => { isChangingState = false; speakChunk(); }, 50); }
-        }
-
+        /* TTS */
+        let isSpeaking = false;
         function toggleSpeech() {
-            const btn = document.getElementById('btn-speak');
             if (isSpeaking) {
-                isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; 
-                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-                btn.classList.remove('active');
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
+                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
             } else {
-                prepareQueue();
-                if(speechQueue.length > 0) {
-                    isSpeaking = true; btn.classList.add('active');
-                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
-                    speakChunk();
-                }
+                const text = document.getElementById('content-area').innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.1;
+                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
+                window.speechSynthesis.speak(utterance);
+                isSpeaking = true;
+                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
             }
         }
-
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box, .layer-item'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
-        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
-
-        function speakChunk() {
-            if (!isSpeaking) return;
-            if (currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; toggleSpeech(); return; }
-            const element = speechQueue[currentSpeechIndex];
-            clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"});
-            const utterance = new SpeechSynthesisUtterance(element.innerText); utterance.lang = 'pt-BR'; utterance.rate = speechRate;
-            utterance.onend = function() { if (isSpeaking && !isChangingState) { currentSpeechIndex++; speakChunk(); } if(isChangingState) isChangingState = false; };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        document.getElementById('content-area').addEventListener('click', function(e) {
-            const target = e.target.closest('p, h1, h2, h3, .box, td, li, .layer-item');
-            if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
-        });
-        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
     </script>
 </body>
 </html>
