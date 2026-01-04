@@ -2,418 +2,383 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Capítulo 03 // A Matriz de Extração</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Capítulo 03: O Eu Inferido. Como algoritmos criam um duplo digital seu, a Matriz de Extração e táticas de ofuscação de dados.">
+    <title>Capítulo 03 // O Eu Inferido</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1605342980481793');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
+    /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- FÓRMULA X: VARIÁVEIS GLOBAIS --- */
-            --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ededed; --text-secondary: #888888;
-            --accent: #3b82f6; --accent-bio: #10b981; --accent-warn: #d946ef; --accent-alert: #ef4444;
-            --radius: 8px;
-            --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
-            --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 14px; 
+            /* --- DESIGN SYSTEM FATOR 1 --- */
+            --bg-app: #050505;        
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            /* ALMA DO CAPÍTULO: DADOS PUROS (Ciano/Verde) */
+            --accent: #00f3ff;        /* Ciano Tech */
+            --accent-dim: rgba(0, 243, 255, 0.08);
+            --bio-green: #39ff14;     /* Verde Matrix */
+            --alert: #ef4444;
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 19px;
+            --line-height: 1.8;
         }
 
         body.light-mode {
-            --bg-app: #f2f2f7; --bg-panel: rgba(255, 255, 255, 0.98); 
-            --border-color: rgba(0, 0, 0, 0.08);
-            --text-primary: #1c1c1e; --text-secondary: #6c6c70;
-            --accent: #007aff; --accent-bio: #16a34a; --accent-warn: #af52de;
+            --bg-app: #f2f2f7;
+            --text-primary: #1c1c1e;
+            --text-secondary: #4b5563;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent: #007aff;
+            --accent-dim: rgba(0, 122, 255, 0.05);
+            --bio-green: #15803d;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
-        /* --- HUD CLEAN --- */
-        .reading-hud {
-            height: 60px; flex-shrink: 0;
-            background: var(--bg-panel); backdrop-filter: var(--blur);
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- MARGENS OTIMIZADAS --- */
+        .reader-container {
+            width: 100%;
+            max-width: 640px; 
+            margin: 0 auto;
+            padding: 40px 24px 120px 24px;
+        }
+
+        p {
+            margin-bottom: 2em; 
+            text-align: justify; 
+            hyphens: auto; 
+            letter-spacing: -0.01em;
+        }
+
+        strong { color: var(--text-primary); font-weight: 700; }
+
+        /* HUD */
+        .chapter-hud {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(var(--bg-app), 0.95);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; z-index: 100; padding: 0 15px;
+            padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         .hud-btn {
-            width: 40px; height: 40px; flex-shrink: 0;
-            background: transparent; border: 1px solid transparent;
-            color: var(--text-secondary); border-radius: var(--radius);
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-tech); font-weight: 500; font-size: 14px;
-            transition: var(--transition);
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-secondary); border-radius: 6px;
+            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .hud-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .hud-ctrls { display: flex; gap: 8px; }
+
+        /* TIPOGRAFIA TECH */
+        .chapter-meta {
+            font-family: var(--font-tech); font-size: 0.75rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
+            border-left: 2px solid var(--accent); padding-left: 10px;
         }
 
-        .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
-        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
+        h1 {
+            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: 50px; 
+            color: var(--text-primary); letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: var(--font-tech); font-size: 1.3rem; color: var(--accent);
+            margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+        }
+        h2::before { content: '//'; opacity: 0.5; }
+
+        h3 {
+            font-family: var(--font-ui); font-size: 1.1em; font-weight: 600;
+            color: var(--bio-green); margin-top: 2.5em; margin-bottom: 1em;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* WIDGETS E GRÁFICOS JUSTIFICADOS */
+        
+        .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
+        
+        .thesis-box {
+            background: var(--accent-dim);
+            border-left: 4px solid var(--accent);
+            text-align: justify;
+        }
+        .thesis-header { color: var(--accent); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; font-size: 0.8rem; }
+
+        .deep-dive-box {
+            border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
+            border-left: none; border-right: none; border-radius: 0;
+        }
+
+        /* Widget: PRISMA DE DADOS */
+        .prism-container {
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
+            padding: 30px; border-radius: 6px; margin: 3em 0;
+        }
+        .prism-stage { width: 100%; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-tech); font-size: 0.8rem; }
+        .prism-triangle {
+            width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent;
+            border-bottom: 80px solid var(--accent); opacity: 0.8; filter: drop-shadow(0 0 15px var(--accent));
+            margin: 20px 0;
+        }
+        .prism-data { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .data-bar { 
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); 
+            padding: 8px 12px; border-radius: 4px; font-family: var(--font-tech); font-size: 0.75rem; 
+            display: flex; justify-content: space-between;
+        }
+        .bar-val { color: var(--bio-green); font-weight: bold; }
+        .bar-risk { color: var(--alert); font-weight: bold; }
+
+        /* Widget: DASHBOARD (Monitor) */
+        .dashboard-widget {
+            background: #0a0a0a; border: 1px solid var(--border-color); border-radius: 6px;
+            overflow: hidden; margin: 3em 0; font-family: var(--font-tech); font-size: 0.75rem;
+        }
+        .dash-header {
+            background: rgba(255,255,255,0.05); padding: 8px 15px; border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; color: var(--text-secondary);
+        }
+        .dash-row {
+            display: grid; grid-template-columns: 0.5fr 2fr 1fr; 
+            padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: center;
+        }
+        .dash-row:last-child { border-bottom: none; }
+        .row-id { color: var(--accent); opacity: 0.7; }
+        .row-data { color: var(--text-primary); }
+        .row-status { text-align: right; color: var(--bio-green); }
+        .status-alert { color: var(--alert); }
+
+        /* Comparação Grid */
+        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
+        .comp-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
+            transition: transform 0.2s;
+        }
+        .comp-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .comp-title { 
+            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
+            display: block; margin-bottom: 10px; font-size: 0.8rem;
+        }
+        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Action Box */
+        .action-box {
+            border: 1px dashed var(--accent); background: rgba(var(--bg-app), 0.5);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+        }
+        .action-header { 
+            font-family: var(--font-tech); color: var(--accent); font-weight: bold; 
+            margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .reading-highlight { background: var(--accent-dim); color: var(--text-primary); border-radius: 2px; }
+
+        @media (min-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
 
         @media (max-width: 600px) {
-            .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; }
-            .hud-btn { width: 38px; height: 38px; }
-            .hud-divider { display: none; } 
+            .reader-container { padding: 30px 20px 100px 20px; }
+            h1 { font-size: 1.7rem; }
+            .prism-stage { flex-direction: column; gap: 10px; }
+            .chapter-hud { padding: 10px 15px; }
+            .hud-btn span { display: none; }
         }
-
-        /* --- CONTEÚDO --- */
-        .content-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px 20px 100px 20px; scroll-behavior: smooth; }
-        .book-container { max-width: 750px; margin: 0 auto; font-size: var(--reading-size); line-height: 1.8; }
-        
-        h1 { font-family: var(--font-tech); font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; text-align: center; }
-        h2 { font-family: var(--font-tech); font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 3em; margin-bottom: 1em; display: flex; align-items: center; gap: 10px; }
-        h2::before { content: '//'; opacity: 0.5; }
-        h3 { font-family: var(--font-ui); font-size: 1.2em; font-weight: 600; color: var(--accent-warn); margin-top: 2em; text-transform: uppercase; }
-        p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
-        .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
-
-        /* --- CAP 03: PRISMA & DASHBOARD --- */
-        .prism-container { 
-            display: flex; align-items: center; justify-content: center; margin: 3em 0; 
-            padding: 30px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); 
-            border-radius: var(--radius); font-family: var(--font-tech); font-size: 0.8rem; position: relative;
-        }
-        .prism-stage { display: flex; align-items: center; gap: 20px; width: 100%; max-width: 500px; flex-wrap: wrap; }
-        .prism-input { text-align: center; width: 30%; font-weight: bold; color: var(--text-primary); }
-        .prism-triangle { 
-            width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; 
-            border-bottom: 80px solid rgba(255,255,255,0.1); margin: 0 10px; backdrop-filter: blur(5px);
-        }
-        .prism-output { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 150px; }
-        .output-bar { 
-            height: 24px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); 
-            border-radius: 4px; display: flex; align-items: center; padding-left: 10px; 
-            color: var(--text-secondary); font-size: 0.7rem; border-left: 3px solid var(--accent);
-        }
-
-        .dashboard-container { 
-            background-color: #0b0b0b; border: 1px solid var(--border-color); border-radius: var(--radius); 
-            padding: 0; margin: 3em 0; cursor: default; overflow: hidden; position: relative; 
-            font-family: var(--font-tech); font-size: 0.8rem;
-            /* Grid Background */
-            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .dash-header { 
-            background: rgba(59, 130, 246, 0.1); border-bottom: 1px solid var(--border-color); 
-            padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; 
-            color: var(--accent); letter-spacing: 1px;
-        }
-        .live-dot { width: 8px; height: 8px; background: var(--accent-alert); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 8px var(--accent-alert); animation: blink 1s infinite; }
-        
-        .matrix-table-container { overflow-x: auto; position: relative; }
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            box-shadow: 0 0 10px var(--accent); opacity: 0.5; 
-            animation: scan 6s linear infinite; pointer-events: none;
-        }
-
-        .matrix-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .matrix-table th { background: rgba(255,255,255,0.05); color: var(--text-secondary); font-size: 0.7rem; padding: 10px 15px; text-align: left; border-bottom: 1px solid var(--accent); }
-        .matrix-table td { padding: 10px 15px; border-bottom: 1px solid var(--border-color); color: var(--text-secondary); }
-        .matrix-table tr:hover { background: rgba(255,255,255,0.03); color: var(--text-primary); }
-        .col-loss { color: var(--accent-alert); font-weight: bold; }
-        .dash-footer { border-top: 1px solid var(--border-color); padding: 8px 15px; font-size: 0.7rem; color: var(--text-secondary); display: flex; gap: 20px; background: rgba(255,255,255,0.02); }
-        .dynamic-val { color: var(--accent-bio); font-weight: bold; }
-        
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-
-        /* --- GENERIC BOXES --- */
-        .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
-        .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
-        .antithesis-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-bio); }
-        .deep-dive-box { border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color); padding: 30px 0; }
-        .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
-        .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
-
-        /* --- TABLE --- */
-        .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
-        .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
-        .simple-table { width: 100%; border-collapse: collapse; }
-        .simple-table th, .simple-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
-        .simple-table th { background: rgba(255,255,255,0.03); font-family: var(--font-tech); color: var(--text-secondary); font-weight: normal; font-size: 0.75rem; }
-
-        .reading-highlight { background: rgba(59, 130, 246, 0.15); border-radius: var(--radius); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="reading-hud">
-        <button class="hud-btn" onclick="toggleTheme()" title="Tema">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
-        <button class="hud-btn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeSpeed(-0.25)" title="Lento">«</button>
-        <span class="speed-indicator" id="speed-val">1.0x</span>
-        <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
-        
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
-            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </button>
+    <div class="chapter-hud">
+        <div class="hud-ctrls">
+            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
+            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
+        </div>
+        <div class="hud-ctrls">
+            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
+                ▶ <span>OUVIR</span>
+            </button>
+        </div>
     </div>
 
-    <div class="content-scroll-area" id="content-area">
-        <div class="book-container">
-            <div class="chapter-meta">Parte I: A Mente | Capítulo 03</div>
-            <h1>O Eu Inferido vs. Cosmotécnica</h1>
+    <div class="reader-container" id="content-area">
+        <span class="chapter-meta">PARTE I: A MENTE | CAPÍTULO 03</span>
+        <h1>O Eu Inferido vs.<br>Cosmotécnica</h1>
 
-            <p>Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Ou, inversamente, já se sentiu insultado por uma recomendação do YouTube que parecia ter uma ideia completamente errada sobre quem você é?</p>
-            
-            <p>Em ambos os casos, você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, composta por fragmentos de dados que você deixou cair: a velocidade do seu cursor, o tempo que você parou naquela foto, o GPS do seu carro. Para o algoritmo, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e muito mais lucrativa para vender.</p>
-            
-            <div class="prism-container">
-                <div class="prism-stage">
-                    <div class="prism-input">VOCÊ</div>
-                    <div class="prism-triangle"></div>
-                    <div class="prism-output">
-                        <div class="output-bar" style="border-left-color: var(--accent);">ID: MALE_35-40_A+</div>
-                        <div class="output-bar" style="border-left-color: var(--accent-warn);">TAG: TECH_ENTHUSIAST</div>
-                        <div class="output-bar" style="border-left-color: var(--accent-alert);">SCORE: HIGH_RISK</div>
-                    </div>
+        <p>Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Talvez um produto para bebê antes de você anunciar a gravidez, ou um remédio para depressão antes de você admitir que está triste. Isso não é telepatia. É inferência estatística.</p>
+        
+        <p>Você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, composta por bilhões de fragmentos de dados que você deixou cair: a velocidade do seu cursor, o tempo que você parou naquela foto, o GPS do seu carro. Para o algoritmo, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e muito mais lucrativa para vender.</p>
+
+        <div class="prism-container">
+            <div class="prism-stage">
+                <span>VOCÊ (Biológico)</span>
+                <span style="opacity:0.5;">Input Caótico</span>
+            </div>
+            <div class="prism-triangle"></div>
+            <div class="prism-data">
+                <div class="data-bar"><span>ID</span> <span class="bar-val">MALE_35-40_A+</span></div>
+                <div class="data-bar"><span>INTEREST</span> <span class="bar-val">TECH_POLITICS</span></div>
+                <div class="data-bar"><span>RISK</span> <span class="bar-risk">HIGH_CONSUMPTION</span></div>
+            </div>
+            <div style="margin-top:15px; font-size:0.7rem; color:var(--text-secondary);">RECURSO VISUAL: A REFRAÇÃO DE DADOS</div>
+        </div>
+
+        <div class="box deep-dive-box">
+            <h3>A Anatomia do Fantasma: Identidades Algorítmicas</h3>
+            <p>O pesquisador <strong>John Cheney-Lippold</strong> argumenta que, para a máquina, você não tem gênero, raça ou idade biológica. Você tem "Identidades Algorítmicas". Você é "homem" não porque tem cromossomos XY, mas porque seu padrão de navegação se assemelha estatisticamente ao de outros usuários classificados como homens.</p>
+            <p>Isso é perigoso porque é uma identidade imposta. Se o algoritmo decide que você é um "consumidor de risco", você pagará juros mais altos, e não há para quem reclamar, pois a identidade foi inferida, não declarada.</p>
+        </div>
+
+        <h2>A Matriz de Extração (10 Camadas)</h2>
+
+        <p>Para entender a profundidade da violação, precisamos dissecar as camadas de dados. A maioria das pessoas se preocupa com a Camada 1 (Dados Cadastrais), mas o verdadeiro perigo reside nas camadas invisíveis, onde o <strong>Excedente Comportamental</strong> descrito por Shoshana Zuboff é capturado.</p>
+
+        <div class="dashboard-widget">
+            <div class="dash-header">
+                <span>SYSTEM_LOG: USER_PROFILE_V4</span>
+                <span>STATUS: TRACKING</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">01</span>
+                <span class="row-data">Cadastral (Nome, CPF)</span>
+                <span class="row-status">VISIBLE</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">02</span>
+                <span class="row-data">Técnica (Device Fingerprint)</span>
+                <span class="row-status">HIDDEN</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">03</span>
+                <span class="row-data">Espacial (GPS, Wi-Fi)</span>
+                <span class="row-status">TRACKED</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">07</span>
+                <span class="row-data">Micro (Toque, Scroll)</span>
+                <span class="row-status">ANALYZED</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">09</span>
+                <span class="row-data">Psicometria (Humor, Ideologia)</span>
+                <span class="row-status status-alert">INFERRED</span>
+            </div>
+            <div class="dash-row">
+                <span class="row-id">10</span>
+                <span class="row-data">Futuro (Ações Prováveis)</span>
+                <span class="row-status status-alert">PREDICTED</span>
+            </div>
+        </div>
+
+        <p>É na Camada 10 que o livre arbítrio morre. O algoritmo não espera você agir; ele prevê sua ação e intervém antes (nudging) para garantir que você faça o que é lucrativo para o sistema.</p>
+
+        <h2>Design Ontológico: A Engenharia do Ser</h2>
+
+        <p>A ideologia dominante hoje é o <strong>Universalismo Tecnológico</strong>. Acreditamos que ferramentas são neutras. Mas Anne-Marie Willis cunhou o termo <strong>Design Ontológico</strong>: "Nós projetamos ferramentas, e depois as ferramentas nos projetam".</p>
+        
+        <p>Ao interagirmos constantemente com o Eu Inferido, começamos a nos comportar como ele. Se o Spotify só recomenda músicas tristes porque você ouviu uma playlist triste num dia ruim, você tende a continuar ouvindo músicas tristes, reforçando a depressão. O algoritmo cria um loop de feedback que estreita sua personalidade, transformando você em uma caricatura de si mesmo.</p>
+
+        <div class="comparison-grid">
+            <div class="comp-card" style="border-left: 2px solid var(--text-secondary);">
+                <span class="comp-title" style="color:var(--text-secondary)">UNIVERSALISMO (Visão Padrão)</span>
+                <div class="comp-content">
+                    A tecnologia é uma ferramenta passiva. Um iPhone é igual em Nova York ou na Amazônia. O usuário está no controle e usa a ferramenta para seus fins.
                 </div>
             </div>
-
-            <div class="box deep-dive-box">
-                <h3>A Anatomia do Fantasma: De que é feito o Eu Inferido?</h3>
-                <p>Para entender como esse "duplo" afeta a sua biologia, precisamos dissecá-lo. Shoshana Zuboff, em <em>A Era do Capitalismo de Vigilância</em>, explica que o Eu Inferido não é feito apenas do que você posta (isso é a ponta do iceberg). Ele é construído sobre o "excedente comportamental".</p>
-                
-                <p>O pesquisador John Cheney-Lippold chama isso de "Identidades Algorítmicas". Você não é definido pelo seu gênero biológico ou suas crenças declaradas, mas por padrões estatísticos. Abaixo, o sistema exibe em tempo real as <strong>10 Camadas de Extração</strong> que compõem sua identidade para a máquina.</p>
-
-                <div class="dashboard-container">
-                    <div class="dash-header">
-                        <span><span class="live-dot"></span>LIVE MONITORING: FULL SPECTRUM</span>
-                        <span>STATUS: EXPOSURE 100%</span>
-                    </div>
-                    
-                    <div class="matrix-table-container">
-                        <div class="scan-line"></div>
-                        <table class="matrix-table">
-                            <thead>
-                                <tr>
-                                    <th class="col-id">#</th>
-                                    <th>Camada</th>
-                                    <th>O que é Capturado?</th>
-                                    <th>Tecnologia (Input)</th>
-                                    <th>O Preço (Output)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td class="col-id">01</td><td>Cadastral</td><td>Nome, CPF, E-mail.</td><td>Formulários, Cookies.</td><td class="col-loss">Anonimato.</td></tr>
-                                <tr><td class="col-id">02</td><td>Técnica</td><td>Modelo do Celular, Bateria.</td><td>Device Fingerprinting.</td><td class="col-loss">Identidade Única.</td></tr>
-                                <tr><td class="col-id">03</td><td>Espacial</td><td>Trajeto, Localização GPS.</td><td>Triangulação, Wi-Fi.</td><td class="col-loss">Lugar Secreto.</td></tr>
-                                <tr><td class="col-id">04</td><td>Temporal</td><td>Rotina de sono, Latência.</td><td>Logs de Acesso.</td><td class="col-loss">Hábitos Previsíveis.</td></tr>
-                                <tr><td class="col-id">05</td><td>Relacional</td><td>Quem você conhece.</td><td>Agenda, Grafo Social.</td><td class="col-loss">Rede de Influência.</td></tr>
-                                <tr><td class="col-id">06</td><td>Financeira</td><td>Poder de compra, Dívidas.</td><td>Open Banking, Score.</td><td class="col-loss">Exclusão Econômica.</td></tr>
-                                <tr><td class="col-id">07</td><td>Micro</td><td>Pressão de toque, Scroll.</td><td>Acelerômetro, Heatmap.</td><td class="col-loss">Engenharia do Vício.</td></tr>
-                                <tr><td class="col-id">08</td><td>Biométrica</td><td>Rosto, Voz, Íris.</td><td>Câmeras, Microfones.</td><td class="col-loss">Corpo como Senha.</td></tr>
-                                <tr><td class="col-id">09</td><td>Psicometria</td><td>Ideologia, Emoções.</td><td>Análise Semântica (IA).</td><td class="col-loss">Manipulação Mental.</td></tr>
-                                <tr><td class="col-id">10</td><td>Inferida</td><td>Futuro provável.</td><td>Black Box Algorithms.</td><td class="col-loss">Livre Arbítrio.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="dash-footer">
-                        <span>DATA FLOW: <span id="val-pkt" class="dynamic-val">Loading...</span></span>
-                        <span>PROFILE COMPLETE: <span id="val-risk" class="dynamic-val">CALCULATING...</span></span>
-                    </div>
-                </div>
-                
-                <p>É na décima camada que a mágica (e o terror) acontece. O algoritmo não precisa que você diga que está grávida, deprimido ou pensando em mudar de emprego. Ele infere isso antes de você verbalizar, analisando micro-mudanças nas nove camadas anteriores.</p>
-            </div>
-
-            <p>O problema não é apenas a vigilância. O problema é a <strong>redução ontológica</strong>. Ao tentar encaixar a complexidade infinita da experiência humana em categorias de banco de dados ("Masculino", "Interesse em Viagens", "Risco de Crédito Alto"), a tecnologia moderna está cometendo um crime silencioso: ela está padronizando a alma humana.</p>
-
-            <h2>A Tese: A Monocultura do Vale do Silício</h2>
-
-            <p>A ideologia dominante hoje é o <strong>Universalismo Tecnológico</strong>. É a crença de que a tecnologia é neutra e funciona da mesma maneira para todos, em qualquer lugar. Um iPhone é um iPhone em Nova York ou em uma aldeia Yanomami. O Facebook tem os mesmos botões "Like" e "Share" para um monge budista e para um corretor de Wall Street.</p>
-            
-            <p>Mas essa neutralidade é uma mentira. A tecnologia carrega o DNA cultural de seus criadores.</p>
-
-            <div class="box thesis-box">
-                <strong style="color: var(--accent); text-transform: uppercase; font-family: var(--font-tech);">// O Padrão Californiano:</strong><br><br>
-                "A arquitetura digital atual foi desenhada por homens brancos, ocidentais, engenheiros, focados em eficiência, individualismo e consumo. Quando usamos suas ferramentas, somos forçados a pensar dentro dessas caixas. Somos colonizados não por exércitos, mas por interfaces."
-            </div>
-
-            <div class="box deep-dive-box">
-                <h3>Impacto Ontológico: A Engenharia do Ser</h3>
-                <p>Anne-Marie Willis cunhou o termo <strong>Design Ontológico</strong>: "Nós projetamos ferramentas, e depois as ferramentas nos projetam". Ao interagirmos constantemente com o Eu Inferido, começamos a nos comportar como ele.</p>
-                
-                <p>Isso gera um ciclo de feedback perigoso. Se o algoritmo infere que você gosta de conteúdo polarizado e lhe mostra apenas isso, você se torna mais radical. Se ele infere que você é inseguro e lhe vende soluções estéticas, sua insegurança aumenta. Karen Yeung chama isso de "Hypernudge": uma cutucada comportamental constante, dinâmica e personalizada que reconfigura sua vontade sem que você perceba.</p>
-
-                <h3>Biopolítica Algorítmica: O Corpo e a Sociedade</h3>
-                <p>O filósofo Byung-Chul Han argumenta que passamos da Biopolítica (controle dos corpos) para a <strong>Psicopolítica</strong> (controle das mentes). Mas o impacto retorna ao corpo: a ansiedade gerada pela necessidade de performar para o algoritmo altera níveis de cortisol e afeta o sono. O Eu Inferido está, literalmente, reescrevendo sua biologia.</p>
-                
-                <p>Socialmente, o impacto é devastador. Cathy O'Neil, em <em>Weapons of Math Destruction</em>, mostra como o Eu Inferido cria profecias autorrealizáveis. Se o algoritmo infere (erroneamente) que um jovem da periferia é perigoso, ele nega crédito, nega emprego e aumenta o policiamento na área dele, criando as condições para que ele se torne marginalizado. O algoritmo não apenas lê a realidade; ele a produz.</p>
-            </div>
-
-            <div class="box deep-dive-box">
-                <h3>A Convergência: O Algoritmo como Arquétipo</h3>
-                <p>Para entender a profundidade desse sequestro, precisamos conectar a sociologia moderna à psicologia analítica de <strong>Carl Gustav Jung</strong>. O que Cathy O'Neil descreve como uma "profecia matemática" e Anne-Marie Willis como "design ontológico", Jung previu décadas antes como o perigo da <strong>possessão arquetípica</strong>.</p>
-                
-                <p>Jung alertava que, quando o Ego (a consciência individual) se desconecta do Self (a totalidade), ele se torna vulnerável a ser "possuído" por arquétipos — padrões universais, impessoais e autônomos de comportamento. Antigamente, esses arquétipos eram deuses ou demônios. Hoje, eles são perfis de usuário.</p>
-                
-                <p>Quando você entra em um loop de rolagem infinita, agindo de forma reativa e previsível, você não está mais "em casa". Você foi sequestrado por um arquétipo digital (O Consumidor, O Hater, O Seguidor) desenhado no Vale do Silício. O algoritmo industrializou a possessão. Ele invoca esses padrões latentes em nós e nos recompensa com dopamina cada vez que nos comportamos não como indivíduos únicos, mas como caricaturas estatísticas.</p>
-
-                <div class="visual-table-container">
-                    <div class="visual-header">⛓️ A MECÂNICA DO SEQUESTRO DO EU</div>
-                    <table class="simple-table">
-                        <thead>
-                            <tr>
-                                <th>Autor / Conceito</th>
-                                <th>A Ideia Central</th>
-                                <th>A Tradução Digital</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="color:var(--accent-warn); font-weight:bold;">Cathy O'Neil<br>(Matemática)</td>
-                                <td><strong>Profecia Autorrealizável:</strong><br>O modelo prevê o fracasso, retira recursos e <em>causa</em> o fracasso.</td>
-                                <td>O algoritmo define quem você é (ex: "deprimido") e lhe alimenta com conteúdo que cristaliza essa identidade.</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--accent); font-weight:bold;">Anne-Marie Willis<br>(Design)</td>
-                                <td><strong>Design Ontológico:</strong><br>Ferramentas não são passivas; elas retroagem e redesenham o usuário.</td>
-                                <td>Você molda o algoritmo com seus cliques; o algoritmo molda você com as sugestões. É um espelho que distorce.</td>
-                            </tr>
-                            <tr>
-                                <td style="color:var(--accent-bio); font-weight:bold;">Carl Jung<br>(Psicologia)</td>
-                                <td><strong>Possessão Arquetípica:</strong><br>O indivíduo perde o controle para um padrão coletivo inconsciente.</td>
-                                <td>O "Eu Inferido" atua como um espírito autônomo. Você perde sua vontade individual e obedece ao padrão do cluster.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="comp-card" style="border-left: 2px solid var(--accent);">
+                <span class="comp-title" style="color:var(--accent)">COSMOTÉCNICA (Yuk Hui)</span>
+                <div class="comp-content">
+                    Toda tecnologia carrega uma cosmologia (visão de mundo). A tecnologia ocidental carrega a visão de extração e eficiência. Precisamos criar tecnologias que carreguem valores locais e humanos.
                 </div>
             </div>
+        </div>
 
-            <p>Isso gera uma <strong>Monocultura da Mente</strong>. Assim como uma plantação de soja (monocultura) destrói a biodiversidade do solo, tornando-o estéril e suscetível a pragas, a imposição de uma única lógica digital destrói a diversidade de pensamentos e modos de vida. O "Eu Inferido" é sempre um consumidor racional. Ele nunca é um ser espiritual, comunitário ou contraditório.</p>
+        <h2>Síntese: O Glitch e o Ruído</h2>
 
-            <h2>Antítese: Yuk Hui e a Cosmotécnica</h2>
+        <p>Como escapar de um sistema que te prevê? Tornando-se imprevisível. A maior ameaça ao capitalismo de vigilância não é a privacidade (esconder-se), mas o <strong>Ruído</strong> (confundir-se).</p>
+        
+        <p>A estratégia de <strong>Ofuscação</strong> (Obfuscation), proposta por Brunton e Nissenbaum, sugere que devemos poluir nossos dados. Se você é vegetariano, clique em anúncios de churrasco. Se você odeia futebol, busque resultados de jogos. Crie um "Data Double" esquizofrênico e incoerente. Quando o algoritmo não consegue te classificar, ele não consegue te manipular.</p>
 
-            <p>Para escapar dessa caixa, precisamos viajar filosoficamente para o Oriente. O filósofo de Hong Kong, <strong>Yuk Hui</strong>, propõe um conceito que explode a ideia de tecnologia universal: a <strong>Cosmotécnica</strong>.</p>
-            
-            <p>Hui argumenta que não existe "A Tecnologia" (com T maiúsculo). Existem <em>tecnologias</em>, no plural, e cada uma delas deve ser entendida dentro da <strong>cosmologia</strong> (a visão de mundo, moral e espiritualidade) da cultura que a criou.</p>
-
-            <div class="box antithesis-box">
-                <p><strong style="color: var(--accent-bio); font-family: var(--font-tech); text-transform: uppercase;">// O Contraponto Filosófico:</strong></p>
-                <p>Na Grécia Antiga, a <em>Techne</em> era uma forma de revelar a verdade (Poiesis). Na China Antiga, a tecnologia estava ligada ao <em>Dao</em> (o caminho) e ao <em>Qi</em> (energia vital) – era uma forma de harmonizar o céu e a terra, não de dominar a natureza.</p>
-                <p>O problema atual é que abandonamos nossas cosmotécnicas locais para adotar cegamente a cosmotécnica ocidental moderna, que vê o mundo apenas como recurso para ser explorado. Yuk Hui nos pergunta: <strong>É possível construir uma Inteligência Artificial que não seja baseada na lógica ocidental de dominação?</strong> Uma IA taoísta? Uma rede social indígena?</p>
-                <p>Isso é <strong>Tecniodiversidade</strong>. A ideia de que diferentes culturas podem e devem desenvolver tecnologias diferentes, baseadas em seus próprios valores, em vez de importar passivamente o modelo do Vale do Silício.</p>
-            </div>
-
-            <p>Quando você aceita o "Eu Inferido" do Google, você está aceitando ser definido pela cosmologia deles (você é um dado). Quando você reivindica sua Cosmotécnica, você define a tecnologia pelos seus termos (você é um mistério).</p>
-
-            <div class="dashboard-container" style="text-align: center; padding: 20px;">
-                <span style="display:block; margin-bottom:15px; color:var(--text-secondary); letter-spacing:1px; font-family:var(--font-tech);">🗺️ RECURSO VISUAL 4: MAPA DA TECNIODIVERSIDADE</span>
-                <div style="display:flex; justify-content:space-around; flex-wrap:wrap; gap:20px;">
-                    <div style="flex:1; min-width:200px;">
-                        <span style="color:var(--accent); font-weight:bold;">SISTEMA A: MONOCULTURA</span>
-                        <div style="margin-top:10px; font-size:0.75rem; color:var(--text-secondary);">ORIGEM: Vale do Silício<br>LÓGICA: Extração<br>OBJETIVO: Escala</div>
-                    </div>
-                    <div style="flex:1; min-width:200px;">
-                        <span style="color:var(--accent-bio); font-weight:bold;">SISTEMA B: O PLURIVERSO</span>
-                        <div style="margin-top:10px; font-size:0.75rem; color:var(--text-secondary);">ORIGEM: Locais<br>LÓGICA: Cuidado<br>OBJETIVO: Viver Bem</div>
-                    </div>
-                </div>
-            </div>
-
-            <h2>Síntese: O Glitch no Sistema</h2>
-
-            <p>Como aplicar a Cosmotécnica na sua segunda-feira de manhã? Percebendo que ser "inclassificável" é a maior forma de resistência.</p>
-            
-            <p>O algoritmo odeia o contraditório. Se você gosta de ópera <em>e</em> de funk, se você é religioso <em>e</em> cientista, se você compra itens de luxo <em>e</em> defende o minimalismo, você cria um "ruído" nos dados. Você se torna difícil de prever. Você se torna um <strong>Glitch</strong>.</p>
-            
-            <p>Recuperar sua cosmotécnica pessoal significa usar a tecnologia de acordo com seus valores morais, não os do aplicativo. Se sua cosmologia valoriza a família, o celular deve ser desligado no jantar, não importa o quanto ele vibre. Se sua cosmologia valoriza a natureza, você deve questionar o custo energético da sua nuvem.</p>
-            
-            <p>Não precisamos jogar fora a tecnologia. Precisamos, como sugere Yuk Hui, <strong>fragmentar</strong> a hegemonia digital para permitir que mil futuros diferentes floresçam.</p>
-
-            <div class="box action-box">
-                <div class="action-title">👾 DESAFIO DE RETOMADA #03</div>
-                <p><strong>Envenenamento de Dados (Data Poisoning Light)</strong></p>
-                <p>Os algoritmos aprendem com seus padrões. Quebre o padrão.</p>
-                <p><strong>Sua missão hoje:</strong> Faça três buscas no Google sobre assuntos que você odeia ou que não têm nada a ver com você. Clique em anúncios que você jamais compraria. Assista a um vídeo inteiro de um tema oposto à sua bolha.</p>
-                <p>Confunda o "Eu Inferido". Diga ao algoritmo: "Eu não sou quem você pensa que eu sou. Eu sou vasto, eu contenho multidões." Torne-se ilegível para a máquina.</p>
-            </div>
+        <div class="box action-box">
+            <span class="action-header">👾 DESAFIO DE RETOMADA #03</span>
+            <p><strong>Envenenamento de Dados (Data Poisoning Light)</strong></p>
+            <p>Os algoritmos aprendem com seus padrões. Quebre o padrão deliberadamente.</p>
+            <p><strong>Sua missão hoje:</strong> Use uma extensão de navegador como o <em>AdNauseam</em> (que clica silenciosamente em todos os anúncios para confundir o perfilamento) ou faça manualmente: realize 3 buscas no Google completamente aleatórias e desconexas da sua identidade real. Diga ao algoritmo: "Eu sou vasto, eu contenho multidões".</p>
         </div>
     </div>
 
     <script>
-        // --- ENGINE FÓRMULA X ---
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        
-        let currentSize = 14; 
+        /* Sincronia */
+        window.addEventListener('message', function(event) {
+            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+        });
+        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+
+        /* Fonte */
+        let currentSize = 19;
         function changeFontSize(amount) {
             currentSize += amount;
-            if(currentSize < 14) currentSize = 14; if(currentSize > 32) currentSize = 32;
-            document.documentElement.style.setProperty('--reading-size', currentSize + 'px');
+            if (currentSize < 14) currentSize = 14; 
+            if (currentSize > 26) currentSize = 26;
+            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
         }
 
-        let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
-        
-        function changeSpeed(amount) {
-            speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 2.5) speechRate = 2.5;
-            document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x';
-            if(isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); setTimeout(() => { isChangingState = false; speakChunk(); }, 50); }
-        }
-
+        /* TTS */
+        let isSpeaking = false;
         function toggleSpeech() {
-            const btn = document.getElementById('btn-speak');
             if (isSpeaking) {
-                isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; 
-                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-                btn.classList.remove('active');
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
+                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
             } else {
-                prepareQueue();
-                if(speechQueue.length > 0) {
-                    isSpeaking = true; btn.classList.add('active');
-                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
-                    speakChunk();
-                }
+                const text = document.getElementById('content-area').innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.1;
+                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
+                window.speechSynthesis.speak(utterance);
+                isSpeaking = true;
+                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
             }
         }
-
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
-        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
-
-        function speakChunk() {
-            if (!isSpeaking) return;
-            if (currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; toggleSpeech(); return; }
-            const element = speechQueue[currentSpeechIndex];
-            clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"});
-            const utterance = new SpeechSynthesisUtterance(element.innerText); utterance.lang = 'pt-BR'; utterance.rate = speechRate;
-            utterance.onend = function() { if (isSpeaking && !isChangingState) { currentSpeechIndex++; speakChunk(); } if(isChangingState) isChangingState = false; };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        document.getElementById('content-area').addEventListener('click', function(e) {
-            const target = e.target.closest('p, h1, h2, h3, .box, td');
-            if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
-        });
-        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
-
-        // --- DASHBOARD DINÂMICO ---
-        function updateDashboard() {
-            const risk = Math.floor(Math.random() * (99 - 40 + 1) + 40);
-            const packets = Math.floor(Math.random() * 20000 + 5000);
-            const elRisk = document.getElementById('val-risk');
-            const elPkt = document.getElementById('val-pkt');
-            if(elRisk) elRisk.innerText = risk + "% COMPLETE";
-            if(elPkt) elPkt.innerText = packets.toLocaleString() + " pts/s";
-            setTimeout(updateDashboard, 1500);
-        }
-        updateDashboard();
     </script>
 </body>
 </html>
-
