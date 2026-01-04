@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="A Versão de Você que os Algoritmos Acreditam que Você É. Uma autópsia da vigilância digital, manipulação algorítmica e o fim da privacidade.">
     <title>Introdução // O Espelho Negro</title>
     
     <script>
@@ -26,25 +27,25 @@
         :root {
             /* --- DESIGN SYSTEM FATOR 1 (OTIMIZADO) --- */
             --bg-app: #050505;        
-            --text-primary: #e5e5e5; /* Levemente off-white para menos cansaço */
-            --text-secondary: #888888;
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
             --border-color: rgba(255, 255, 255, 0.12);
             
-            /* ALMA: DIAGNÓSTICO (Magenta) */
+            /* ALMA: DIAGNÓSTICO (Magenta/Alerta) */
             --accent: #d946ef;
             --accent-dim: rgba(217, 70, 239, 0.08);
             --highlight: #f5d0fe;
             
             --font-ui: 'Inter', sans-serif;
             --font-tech: 'JetBrains Mono', monospace;
-            --base-size: 19px; /* Leitura mais confortável */
+            --base-size: 19px;
             --line-height: 1.8;
         }
 
         body.light-mode {
             --bg-app: #f2f2f7;
             --text-primary: #1c1c1e;
-            --text-secondary: #575757;
+            --text-secondary: #4b5563;
             --border-color: rgba(0, 0, 0, 0.1);
             --accent: #a21caf;
             --accent-dim: rgba(162, 28, 175, 0.05);
@@ -62,20 +63,22 @@
             overflow-x: hidden;
         }
 
-        /* --- MARGENS E LAYOUT REVISADOS --- */
+        /* --- LAYOUT DE LEITURA (FATOR 1) --- */
         .reader-container {
             width: 100%;
-            max-width: 640px; /* Largura ideal para leitura humana */
+            max-width: 640px; /* Padrão ouro para leitura */
             margin: 0 auto;
-            padding: 40px 24px 120px 24px; /* Margens laterais seguras */
+            padding: 40px 24px 120px 24px;
         }
 
         p {
             margin-bottom: 2em; 
-            text-align: justify; 
+            text-align: justify; /* Texto justificado no corpo */
             hyphens: auto; 
             letter-spacing: -0.01em;
         }
+
+        strong { color: var(--text-primary); font-weight: 700; }
 
         /* HUD */
         .chapter-hud {
@@ -115,9 +118,8 @@
         }
         h2::before { content: '//'; opacity: 0.5; }
 
-        /* WIDGETS VISUAIS MELHORADOS */
+        /* WIDGETS VISUAIS (Com Texto Justificado conforme pedido) */
         
-        /* Alerta de Sistema */
         .warning-widget {
             background: var(--accent-dim);
             border: 1px solid var(--accent);
@@ -128,13 +130,13 @@
             font-family: var(--font-tech); 
             font-size: 0.85rem;
             line-height: 1.6;
+            text-align: justify; /* Justificado */
         }
         .warning-header {
             color: var(--accent); font-weight: bold; text-transform: uppercase;
-            letter-spacing: 1px; margin-bottom: 8px; display: block;
+            letter-spacing: 1px; margin-bottom: 8px; display: block; text-align: left;
         }
 
-        /* Citação Manifesto */
         .manifesto-widget {
             position: relative;
             padding: 0 20px;
@@ -143,19 +145,15 @@
             color: var(--text-secondary); 
             font-size: 1.1em;
             border-left: 2px solid var(--border-color);
+            text-align: justify; /* Justificado */
         }
 
-        /* GRID DE DADOS (Substituindo a lista simples) */
-        .data-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin: 2em 0;
-        }
+        /* GRID DE DADOS */
+        .data-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 2em 0; }
         .data-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-color);
-            padding: 15px;
+            padding: 20px;
             border-radius: 6px;
             transition: transform 0.2s;
         }
@@ -163,20 +161,25 @@
         .data-label {
             font-family: var(--font-tech); color: var(--accent); 
             font-size: 0.75rem; text-transform: uppercase; 
-            display: block; margin-bottom: 5px; font-weight: bold;
+            display: block; margin-bottom: 8px; font-weight: bold;
         }
-        .data-content { font-size: 0.95rem; color: var(--text-primary); }
+        .data-content { 
+            font-size: 0.9rem; color: var(--text-primary); 
+            text-align: justify; /* Justificado */
+            line-height: 1.6;
+        }
 
         .glitch-text { color: var(--accent); font-weight: bold; font-family: var(--font-tech); text-shadow: 0 0 5px var(--accent-dim); }
         .reading-highlight { background: var(--accent-dim); color: var(--text-primary); border-radius: 2px; }
 
         @media (min-width: 600px) {
-            .data-grid { grid-template-columns: 1fr 1fr; } /* Duas colunas no PC */
+            .data-grid { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 600px) {
             .reader-container { padding: 30px 20px 100px 20px; }
             h1 { font-size: 1.7rem; }
+            .chapter-hud { padding: 10px 15px; }
             .hud-btn span { display: none; }
         }
     </style>
@@ -200,50 +203,56 @@
         <h1>Introdução:<br>O Espelho Negro</h1>
 
         <div class="warning-widget">
-            <span class="warning-header">⚠ SYSTEM_ALERT</span>
-            Este não é um livro sobre tecnologia. É um livro sobre o que a tecnologia está fazendo com a sua biologia, sua alma e sua liberdade enquanto você lê este aviso.
+            <span class="warning-header">⚠ SYSTEM_ALERT: VIGILÂNCIA ATIVA</span>
+            Este texto não é uma ficção. Enquanto seus olhos escaneiam estas linhas, dezenas de rastreadores invisíveis estão dissecando seu comportamento, medindo seu tempo de leitura e triangulando sua posição para alimentar um banco de dados que sabe mais sobre você do que você mesmo.
         </div>
 
-        <p>Pare por um segundo. Sinta o peso do dispositivo em sua mão. Sinta a textura do vidro, o calor da bateria. Agora, tente lembrar: quando foi a última vez que você tomou uma decisão que foi <em>inteiramente</em> sua?</p>
+        <p>Pare por um segundo. Sinta o peso frio do dispositivo em sua mão. Observe a tela brilhante que ilumina seu rosto. Agora, pergunte-se: quem está realmente no comando? Quando foi a última vez que você tomou uma decisão que foi <em>inteiramente, puramente</em> sua, sem a influência sutil de uma notificação, de uma sugestão de busca ou de um anúncio preditivo?</p>
         
-        <p>A música que você ouviu hoje cedo: você a escolheu ou o algoritmo a sugeriu? O vídeo que te fez rir: você o buscou ou ele foi injetado na sua retina? A opinião política que você defendeu no jantar: ela nasceu da sua reflexão ou foi moldada pela arquitetura invisível do seu feed?</p>
-        
-        <p>Se a resposta for desconfortável, é porque deveria ser. Você está vivendo dentro de uma máquina de previsão.</p>
+        <p>A verdade desconfortável é que a sua mente foi transformada em um campo de batalha. Não estamos falando apenas de "vício em celular". Estamos falando de uma engenharia social em escala global, desenhada para capturar, moldar e vender a experiência humana.</p>
 
-        <p>Você não é mais apenas um corpo biológico. Você foi duplicado. Existe uma versão de você feita de carne e osso, e existe uma versão feita de dados estatísticos — o <strong>Data Double</strong>.</p>
+        <p>Você não é mais apenas um corpo biológico. Você foi duplicado. Existe a versão de carne e osso, que respira e sente, e existe o <strong>Data Double</strong> — uma versão estatística sua, composta por bilhões de fragmentos de dados, que vive nos servidores de corporações privadas e governos. E o sistema prefere o Duplo.</p>
 
         <div class="manifesto-widget">
-            "O problema é que o sistema prefere o Duplo. Ele é mais previsível. Ele é mais lucrativo. Ele não cansa, não dorme e não reclama. O sistema remodelou o mundo real para acomodar o Duplo, deixando a sua versão biológica para trás como um resíduo obsoleto."
+            "A ruptura sociológica do nosso tempo é silenciosa: passamos de cidadãos para usuários, e de usuários para produtos. A filosofia e a sociologia clássicas estão em colapso, pois não conseguem explicar uma sociedade onde a intimidade foi abolida e o pensamento foi terceirizado para máquinas de previsão."
         </div>
 
-        <h2>A Autópsia do Invisível</h2>
+        <h2>A Autópsia do Controle</h2>
 
-        <p>Eles nos disseram que a tecnologia era neutra. Disseram que a "Nuvem" era leve e imaterial. Mentiram. Nas páginas a seguir, vamos realizar uma autópsia desse sistema:</p>
+        <p>Como chegamos aqui? Como permitimos que nossas casas, nossos carros e nossas cidades se tornassem agentes de espionagem? A tecnologia moderna não é neutra; ela é uma ferramenta de extração. O que vamos dissecar nas próximas páginas é a anatomia desse sequestro:</p>
 
         <div class="data-grid">
             <div class="data-card">
-                <span class="data-label">Componente 01</span>
-                <div class="data-content">A <strong>Dopamina</strong> foi militarizada contra sua vontade.</div>
+                <span class="data-label">01. O Rastreador de Bolso</span>
+                <div class="data-content">
+                    Seu smartphone é um espião perfeito. Ele ouve, vê e sente. Acelerômetros medem seu nervosismo pelo tremor das mãos; o GPS revela seus segredos geográficos.
+                </div>
             </div>
             <div class="data-card">
-                <span class="data-label">Componente 02</span>
-                <div class="data-content">O <strong>Cansaço</strong> não é falha pessoal, é projeto econômico.</div>
+                <span class="data-label">02. O Lar Panóptico</span>
+                <div class="data-content">
+                    Geladeiras inteligentes, assistentes de voz e aspiradores-robô mapeiam a planta da sua casa e rotina doméstica. Sua privacidade acabou na porta de entrada.
+                </div>
             </div>
             <div class="data-card">
-                <span class="data-label">Componente 03</span>
-                <div class="data-content">A <strong>Nuvem</strong> é feita de pedras escavadas e água potável.</div>
+                <span class="data-label">03. O Dinheiro Vigiado</span>
+                <div class="data-content">
+                    Cada transação de cartão de crédito e pagamento digital constrói um perfil psicológico de consumo. O sistema financeiro sabe seus desejos antes de você.
+                </div>
             </div>
             <div class="data-card">
-                <span class="data-label">Componente 04</span>
-                <div class="data-content">Um <strong>Tribunal Invisível</strong> julga seu valor social agora.</div>
+                <span class="data-label">04. O Governo Onisciente</span>
+                <div class="data-content">
+                    A fusão entre dados privados e estatais criou um aparato de controle sem precedentes. Câmeras de reconhecimento facial nas ruas julgam você em tempo real.
+                </div>
             </div>
         </div>
 
-        <h2>O Caminho da Retomada</h2>
+        <h2>O Mapa de Fuga</h2>
 
-        <p>Mas este livro não é um obituário da humanidade. É um mapa de fuga. Não para uma caverna (fugir é inútil), mas para uma nova forma de existir <em>dentro</em> e <em>apesar</em> da máquina.</p>
+        <p>Se você sente um desconforto crescente, uma sensação de que algo fundamental foi quebrado na experiência humana, você não está louco. Você está acordando. O que está em jogo aqui não é apenas a "privacidade", mas o próprio <strong>Livre Arbítrio</strong>.</p>
         
-        <p>Vamos aprender a usar a <strong>Ofuscação</strong> para nos tornarmos invisíveis em plena luz do dia. Vamos reivindicar nossos <strong>Neuro-direitos</strong> para que nossos pensamentos continuem sendo privados. Vamos explorar o <strong>Solarpunk</strong> para imaginar um futuro onde a tecnologia sirva à vida, e não ao lucro.</p>
+        <p>Este livro é uma investigação profunda sobre como recuperar a soberania sobre sua própria mente. Vamos mergulhar na neurociência da manipulação, na economia da atenção e na filosofia da tecnologia para entender como o sistema funciona — e como quebrá-lo.</p>
         
         <p>A era da inocência digital acabou. A era da <span class="glitch-text">Resistência Ontológica</span> começa agora.</p>
         
@@ -290,7 +299,3 @@
     </script>
 </body>
 </html>
-
-
-
-
