@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Capítulo 03: O Eu Inferido. Como algoritmos criam um duplo digital seu, a Matriz de Extração e táticas de ofuscação de dados.">
+    <meta name="description" content="Capítulo 03: O Eu Inferido. A Matriz de Extração detalhada, o modelo OCEAN e como auditar o seu Data Double via LGPD.">
     <title>Capítulo 03 // O Eu Inferido</title>
     
     <script>
@@ -31,7 +31,7 @@
             --text-secondary: #9ca3af;
             --border-color: rgba(255, 255, 255, 0.12);
             
-            /* ALMA DO CAPÍTULO: DADOS PUROS (Ciano/Verde) */
+            /* ALMA DO CAPÍTULO: DADOS & MATRIZ (Ciano/Verde) */
             --accent: #00f3ff;        /* Ciano Tech */
             --accent-dim: rgba(0, 243, 255, 0.08);
             --bio-green: #39ff14;     /* Verde Matrix */
@@ -163,25 +163,21 @@
         .bar-val { color: var(--bio-green); font-weight: bold; }
         .bar-risk { color: var(--alert); font-weight: bold; }
 
-        /* Widget: DASHBOARD (Monitor) */
-        .dashboard-widget {
-            background: #0a0a0a; border: 1px solid var(--border-color); border-radius: 6px;
-            overflow: hidden; margin: 3em 0; font-family: var(--font-tech); font-size: 0.75rem;
+        /* Widget: DASHBOARD DETALHADO (NOVO) */
+        .matrix-table {
+            width: 100%; border-collapse: collapse; font-family: var(--font-tech); font-size: 0.75rem;
+            margin: 3em 0; border: 1px solid var(--border-color);
         }
-        .dash-header {
-            background: rgba(255,255,255,0.05); padding: 8px 15px; border-bottom: 1px solid var(--border-color);
-            display: flex; justify-content: space-between; color: var(--text-secondary);
+        .matrix-table th { 
+            text-align: left; padding: 12px; background: rgba(255,255,255,0.05); 
+            color: var(--accent); border-bottom: 2px solid var(--border-color);
         }
-        .dash-row {
-            display: grid; grid-template-columns: 0.5fr 2fr 1fr; 
-            padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
-            align-items: center;
+        .matrix-table td { 
+            padding: 12px; border-bottom: 1px solid var(--border-color); 
+            color: var(--text-secondary); vertical-align: top;
         }
-        .dash-row:last-child { border-bottom: none; }
-        .row-id { color: var(--accent); opacity: 0.7; }
-        .row-data { color: var(--text-primary); }
-        .row-status { text-align: right; color: var(--bio-green); }
-        .status-alert { color: var(--alert); }
+        .matrix-table tr:last-child td { border-bottom: none; }
+        .detail-highlight { color: var(--text-primary); font-weight: bold; display: block; margin-bottom: 4px; }
 
         /* Comparação Grid */
         .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
@@ -216,7 +212,7 @@
         @media (max-width: 600px) {
             .reader-container { padding: 30px 20px 100px 20px; }
             h1 { font-size: 1.7rem; }
-            .prism-stage { flex-direction: column; gap: 10px; }
+            .matrix-table { display: block; overflow-x: auto; } /* Scroll na tabela */
             .chapter-hud { padding: 10px 15px; }
             .hud-btn span { display: none; }
         }
@@ -238,107 +234,100 @@
 
     <div class="reader-container" id="content-area">
         <span class="chapter-meta">PARTE I: A MENTE | CAPÍTULO 03</span>
-        <h1>O Eu Inferido vs.<br>Cosmotécnica</h1>
+        <h1>O Eu Inferido vs.<br>Soberania de Dados</h1>
 
-        <p>Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Talvez um produto para bebê antes de você anunciar a gravidez, ou um remédio para depressão antes de você admitir que está triste. Isso não é telepatia. É inferência estatística.</p>
+        <p>Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Talvez um produto para bebê antes de você anunciar a gravidez, ou um remédio para depressão antes de você admitir que está triste. Isso não é telepatia. É inferência estatística de alta precisão.</p>
         
-        <p>Você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, composta por bilhões de fragmentos de dados que você deixou cair: a velocidade do seu cursor, o tempo que você parou naquela foto, o GPS do seu carro. Para o algoritmo, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e muito mais lucrativa para vender.</p>
+        <p>Você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, composta por bilhões de fragmentos de dados. Para o algoritmo, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e muito mais lucrativa para vender. O "Eu Biológico" é apenas o hospedeiro que gera os dados para o "Eu Inferido".</p>
 
         <div class="prism-container">
             <div class="prism-stage">
-                <span>VOCÊ (Biológico)</span>
-                <span style="opacity:0.5;">Input Caótico</span>
+                <span>VOCÊ (Caótico)</span>
+                <span style="opacity:0.5;">Filtro de Extração</span>
             </div>
             <div class="prism-triangle"></div>
             <div class="prism-data">
                 <div class="data-bar"><span>ID</span> <span class="bar-val">MALE_35-40_A+</span></div>
-                <div class="data-bar"><span>INTEREST</span> <span class="bar-val">TECH_POLITICS</span></div>
-                <div class="data-bar"><span>RISK</span> <span class="bar-risk">HIGH_CONSUMPTION</span></div>
+                <div class="data-bar"><span>OCEAN</span> <span class="bar-val">NEUROTICISM_HIGH</span></div>
+                <div class="data-bar"><span>VALUE</span> <span class="bar-risk">$120/YEAR (ADS)</span></div>
             </div>
-            <div style="margin-top:15px; font-size:0.7rem; color:var(--text-secondary);">RECURSO VISUAL: A REFRAÇÃO DE DADOS</div>
         </div>
 
         <div class="box deep-dive-box">
-            <h3>A Anatomia do Fantasma: Identidades Algorítmicas</h3>
-            <p>O pesquisador <strong>John Cheney-Lippold</strong> argumenta que, para a máquina, você não tem gênero, raça ou idade biológica. Você tem "Identidades Algorítmicas". Você é "homem" não porque tem cromossomos XY, mas porque seu padrão de navegação se assemelha estatisticamente ao de outros usuários classificados como homens.</p>
-            <p>Isso é perigoso porque é uma identidade imposta. Se o algoritmo decide que você é um "consumidor de risco", você pagará juros mais altos, e não há para quem reclamar, pois a identidade foi inferida, não declarada.</p>
+            <h3>Psicometria e o Modelo OCEAN</h3>
+            <p>O sistema não quer apenas saber "o que" você compra, mas "quem" você é. Para isso, utiliza o modelo <strong>OCEAN (Big Five)</strong>: Abertura, Conscienciosidade, Extroversão, Amabilidade e Neuroticismo.</p>
+            <p>Seus likes no Facebook não são aleatórios. Eles alimentam uma matriz que determina, por exemplo, que você tem "Alto Neuroticismo" (ansiedade). Com esse dado, a IA não te vende apenas um produto; ela te vende um alívio para a ansiedade que ela sabe que você sente, no momento exato em que você está mais vulnerável (madrugada de domingo).</p>
         </div>
 
-        <h2>A Matriz de Extração (10 Camadas)</h2>
+        <h2>A Matriz de Extração Detalhada</h2>
 
-        <p>Para entender a profundidade da violação, precisamos dissecar as camadas de dados. A maioria das pessoas se preocupa com a Camada 1 (Dados Cadastrais), mas o verdadeiro perigo reside nas camadas invisíveis, onde o <strong>Excedente Comportamental</strong> descrito por Shoshana Zuboff é capturado.</p>
+        <p>Muitos acham que a privacidade acabou porque "nós damos nossos dados". Isso é uma meia verdade. O problema real é o <strong>Excedente Comportamental</strong>: dados que você nunca deu, mas que foram inferidos ou capturados sem consentimento. Veja abaixo a dissecação técnica do que realmente ocorre:</p>
 
-        <div class="dashboard-widget">
-            <div class="dash-header">
-                <span>SYSTEM_LOG: USER_PROFILE_V4</span>
-                <span>STATUS: TRACKING</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">01</span>
-                <span class="row-data">Cadastral (Nome, CPF)</span>
-                <span class="row-status">VISIBLE</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">02</span>
-                <span class="row-data">Técnica (Device Fingerprint)</span>
-                <span class="row-status">HIDDEN</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">03</span>
-                <span class="row-data">Espacial (GPS, Wi-Fi)</span>
-                <span class="row-status">TRACKED</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">07</span>
-                <span class="row-data">Micro (Toque, Scroll)</span>
-                <span class="row-status">ANALYZED</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">09</span>
-                <span class="row-data">Psicometria (Humor, Ideologia)</span>
-                <span class="row-status status-alert">INFERRED</span>
-            </div>
-            <div class="dash-row">
-                <span class="row-id">10</span>
-                <span class="row-data">Futuro (Ações Prováveis)</span>
-                <span class="row-status status-alert">PREDICTED</span>
-            </div>
-        </div>
+        <table class="matrix-table">
+            <thead>
+                <tr>
+                    <th width="30%">DADO BRUTO (O que você faz)</th>
+                    <th width="40%">INFERÊNCIA (O que eles sabem)</th>
+                    <th width="30%">APLICAÇÃO (O impacto)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="detail-highlight">Cadastral e Shadow Profiles</span><br>Nome, CPF, Agenda de Contatos.</td>
+                    <td>Sua rede social completa, mesmo que você não tenha conta na plataforma (via agenda de amigos).</td>
+                    <td>Mapeamento de relações e influência social.</td>
+                </tr>
+                <tr>
+                    <td><span class="detail-highlight">Micro-Comportamento</span><br>Velocidade do scroll, pressão do toque, hesitação do mouse.</td>
+                    <td>Estado emocional atual (ansiedade, tédio, embriaguez). Sinais precoces de Parkinson.</td>
+                    <td>Engenharia de vício personalizada e gatilhos de compra por impulso.</td>
+                </tr>
+                <tr>
+                    <td><span class="detail-highlight">Geolocalização Passiva</span><br>GPS, Wi-Fi Handshake, Bluetooth.</td>
+                    <td>Onde você dorme (casa), onde trabalha, com quem dorme (cruzamento de celulares).</td>
+                    <td>Predição de rotina e "cerco digital" (Geofencing).</td>
+                </tr>
+                <tr>
+                    <td><span class="detail-highlight">Biometria e Voz</span><br>FaceID, Comandos de Voz.</td>
+                    <td>Estado de saúde, humor pela entonação, reações subconscientes.</td>
+                    <td><strong>Identidade Imutável.</strong> Se vazar, você não pode trocar seu rosto.</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <p>É na Camada 10 que o livre arbítrio morre. O algoritmo não espera você agir; ele prevê sua ação e intervém antes (nudging) para garantir que você faça o que é lucrativo para o sistema.</p>
+        <h2>A Falácia da Ofuscação</h2>
 
-        <h2>Design Ontológico: A Engenharia do Ser</h2>
-
-        <p>A ideologia dominante hoje é o <strong>Universalismo Tecnológico</strong>. Acreditamos que ferramentas são neutras. Mas Anne-Marie Willis cunhou o termo <strong>Design Ontológico</strong>: "Nós projetamos ferramentas, e depois as ferramentas nos projetam".</p>
+        <p>Antigamente, sugeria-se "confundir o algoritmo" fazendo buscas aleatórias (Data Poisoning). Embora seja um ato poético de resistência, tecnicamente é uma batalha perdida. As IAs modernas são excelentes em filtrar ruído (Noise Reduction). Elas sabem distinguir seu padrão orgânico do seu padrão de "sabotagem".</p>
         
-        <p>Ao interagirmos constantemente com o Eu Inferido, começamos a nos comportar como ele. Se o Spotify só recomenda músicas tristes porque você ouviu uma playlist triste num dia ruim, você tende a continuar ouvindo músicas tristes, reforçando a depressão. O algoritmo cria um loop de feedback que estreita sua personalidade, transformando você em uma caricatura de si mesmo.</p>
+        <p>A solução não pode ser apenas tática (esconder-se); ela precisa ser <strong>Estrutural e Política</strong>.</p>
 
         <div class="comparison-grid">
             <div class="comp-card" style="border-left: 2px solid var(--text-secondary);">
-                <span class="comp-title" style="color:var(--text-secondary)">UNIVERSALISMO (Visão Padrão)</span>
+                <span class="comp-title" style="color:var(--text-secondary)">MODELO ATUAL (Extração)</span>
                 <div class="comp-content">
-                    A tecnologia é uma ferramenta passiva. Um iPhone é igual em Nova York ou na Amazônia. O usuário está no controle e usa a ferramenta para seus fins.
+                    Os dados residem nos servidores das empresas. Você é um "usuário" com permissão precária de acesso. A empresa lucra com a opacidade.
                 </div>
             </div>
             <div class="comp-card" style="border-left: 2px solid var(--accent);">
-                <span class="comp-title" style="color:var(--accent)">COSMOTÉCNICA (Yuk Hui)</span>
+                <span class="comp-title" style="color:var(--accent)">MODELO SOLID (Soberania)</span>
                 <div class="comp-content">
-                    Toda tecnologia carrega uma cosmologia (visão de mundo). A tecnologia ocidental carrega a visão de extração e eficiência. Precisamos criar tecnologias que carreguem valores locais e humanos.
+                    Proposto por Tim Berners-Lee. Seus dados residem em um "Pod" pessoal (cofre). Você concede acesso temporário a apps específicos e revoga quando quiser.
                 </div>
             </div>
         </div>
 
-        <h2>Síntese: O Glitch e o Ruído</h2>
+        <h2>Vigiando o Vigilante: A Retomada Legal</h2>
 
-        <p>Como escapar de um sistema que te prevê? Tornando-se imprevisível. A maior ameaça ao capitalismo de vigilância não é a privacidade (esconder-se), mas o <strong>Ruído</strong> (confundir-se).</p>
+        <p>Enquanto a tecnologia "Solid" ainda engatinha, temos uma arma poderosa e subutilizada: a Lei. A LGPD (Brasil) e a GDPR (Europa) garantem o <strong>Direito de Acesso</strong>.</p>
         
-        <p>A estratégia de <strong>Ofuscação</strong> (Obfuscation), proposta por Brunton e Nissenbaum, sugere que devemos poluir nossos dados. Se você é vegetariano, clique em anúncios de churrasco. Se você odeia futebol, busque resultados de jogos. Crie um "Data Double" esquizofrênico e incoerente. Quando o algoritmo não consegue te classificar, ele não consegue te manipular.</p>
+        <p>As empresas apostam na sua preguiça. Elas escondem o que sabem porque acreditam que você nunca vai perguntar. O ato mais revolucionário que você pode fazer hoje não é deletar sua conta, mas exigir ver o que eles têm sobre você. Isso inverte a dinâmica de poder: você passa de objeto observado para auditor do sistema.</p>
 
         <div class="box action-box">
-            <span class="action-header">👾 DESAFIO DE RETOMADA #03</span>
-            <p><strong>Envenenamento de Dados (Data Poisoning Light)</strong></p>
-            <p>Os algoritmos aprendem com seus padrões. Quebre o padrão deliberadamente.</p>
-            <p><strong>Sua missão hoje:</strong> Use uma extensão de navegador como o <em>AdNauseam</em> (que clica silenciosamente em todos os anúncios para confundir o perfilamento) ou faça manualmente: realize 3 buscas no Google completamente aleatórias e desconexas da sua identidade real. Diga ao algoritmo: "Eu sou vasto, eu contenho multidões".</p>
+            <span class="action-header">📜 DESAFIO DE RETOMADA #03</span>
+            <p><strong>A Auditoria Radical (DSAR)</strong></p>
+            <p>Não tente apenas se esconder. Olhe o monstro nos olhos.</p>
+            <p><strong>Sua missão hoje:</strong> Entre nas configurações de privacidade do Google ("Google Takeout") ou do Instagram ("Baixar suas informações") e solicite o download completo dos seus dados. Quando o arquivo chegar, abra-o. Veja o histórico de localização, as buscas de 2015, os áudios gravados.</p>
+            <p>Essa experiência visceral de ver o seu "Eu Inferido" em uma planilha é o combustível necessário para mudar seu comportamento e exigir soberania.</p>
         </div>
     </div>
 
