@@ -2,283 +2,330 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Capítulo 04 // O Corpo Vigiado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Capítulo 04: Necropolítica Digital. Como algoritmos decidem quem vive e quem morre, o racismo codificado e a defesa da soberania somática.">
+    <title>Capítulo 04 // Necropolítica Digital</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1605342980481793');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
+    /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- FÓRMULA X: VARIÁVEIS GLOBAIS --- */
-            --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ededed; --text-secondary: #888888;
-            --accent: #3b82f6; --accent-bio: #10b981; --accent-warn: #d946ef; --accent-alert: #ef4444;
-            --radius: 8px;
-            --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
-            --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 14px; 
+            /* --- DESIGN SYSTEM FATOR 1 --- */
+            --bg-app: #050505;        
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            /* ALMA DO CAPÍTULO: SANGUE vs BUROCRACIA */
+            --accent: #ef4444;        /* Vermelho Necro */
+            --accent-dim: rgba(239, 68, 68, 0.08);
+            --cold-blue: #3b82f6;     /* Azul Burocrático */
+            --cold-dim: rgba(59, 130, 246, 0.08);
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 19px;
+            --line-height: 1.8;
         }
 
         body.light-mode {
-            --bg-app: #f2f2f7; --bg-panel: rgba(255, 255, 255, 0.98); 
-            --border-color: rgba(0, 0, 0, 0.08);
-            --text-primary: #1c1c1e; --text-secondary: #6c6c70;
-            --accent: #007aff; --accent-bio: #16a34a; --accent-warn: #af52de;
+            --bg-app: #f2f2f7;
+            --text-primary: #1c1c1e;
+            --text-secondary: #4b5563;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --accent: #dc2626;
+            --accent-dim: rgba(220, 38, 38, 0.05);
+            --cold-blue: #2563eb;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
-        /* --- HUD CLEAN --- */
-        .reading-hud {
-            height: 60px; flex-shrink: 0;
-            background: var(--bg-panel); backdrop-filter: var(--blur);
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- MARGENS OTIMIZADAS --- */
+        .reader-container {
+            width: 100%;
+            max-width: 640px; 
+            margin: 0 auto;
+            padding: 40px 24px 120px 24px;
+        }
+
+        p {
+            margin-bottom: 2em; 
+            text-align: justify; 
+            hyphens: auto; 
+            letter-spacing: -0.01em;
+        }
+
+        strong { color: var(--text-primary); font-weight: 700; }
+
+        /* HUD */
+        .chapter-hud {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(var(--bg-app), 0.95);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: center;
-            gap: 8px; z-index: 100; padding: 0 15px;
+            padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-
         .hud-btn {
-            width: 40px; height: 40px; flex-shrink: 0;
-            background: transparent; border: 1px solid transparent;
-            color: var(--text-secondary); border-radius: var(--radius);
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-tech); font-weight: 500; font-size: 14px;
-            transition: var(--transition);
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-secondary); border-radius: 6px;
+            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .hud-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .hud-ctrls { display: flex; gap: 8px; }
+
+        /* TIPOGRAFIA TECH */
+        .chapter-meta {
+            font-family: var(--font-tech); font-size: 0.75rem; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
+            border-left: 2px solid var(--accent); padding-left: 10px;
         }
 
-        .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
-        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
-
-        @media (max-width: 600px) {
-            .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; }
-            .hud-btn { width: 38px; height: 38px; }
-            .hud-divider { display: none; } 
+        h1 {
+            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: 50px; 
+            color: var(--text-primary); letter-spacing: -1px;
         }
 
-        /* --- CONTEÚDO --- */
-        .content-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px 20px 100px 20px; scroll-behavior: smooth; }
-        .book-container { max-width: 750px; margin: 0 auto; font-size: var(--reading-size); line-height: 1.8; }
-        
-        h1 { font-family: var(--font-tech); font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; text-align: center; }
-        h2 { font-family: var(--font-tech); font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 3em; margin-bottom: 1em; display: flex; align-items: center; gap: 10px; }
+        h2 {
+            font-family: var(--font-tech); font-size: 1.3rem; color: var(--accent);
+            margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+        }
         h2::before { content: '//'; opacity: 0.5; }
-        h3 { font-family: var(--font-ui); font-size: 1.2em; font-weight: 600; color: var(--accent-warn); margin-top: 2em; text-transform: uppercase; }
-        p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
-        li { margin-bottom: 0.8em; color: var(--text-primary); opacity: 0.9; }
-        .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
 
-        /* --- ELEMENTOS ESPECÍFICOS CAP 04 --- */
-        .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
-        .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
-        .antithesis-box { background: rgba(239, 68, 68, 0.05); border: 1px solid var(--accent-alert); border-radius: 8px; padding: 25px; margin: 40px 0; position: relative; }
-        .antithesis-tag { position: absolute; top: -12px; right: 20px; background: var(--bg-app); color: var(--accent-alert); border: 1px solid var(--accent-alert); padding: 2px 10px; font-weight: bold; font-family: var(--font-tech); text-transform: uppercase; font-size: 0.7rem; }
-        .deep-dive-box { border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color); padding: 30px 0; }
-        
-        /* Funil Visual Adaptado */
-        .visual-funnel-container { 
-            background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius); 
-            padding: 30px; margin: 3em 0; text-align: center; display: flex; flex-direction: column; align-items: center; 
+        h3 {
+            font-family: var(--font-ui); font-size: 1.1em; font-weight: 600;
+            color: var(--cold-blue); margin-top: 2.5em; margin-bottom: 1em;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .funnel-title { display: block; color: var(--accent-alert); font-weight: bold; text-transform: uppercase; margin-bottom: 20px; font-size: 0.8rem; letter-spacing: 1px; font-family: var(--font-tech); }
-        .funnel-step { 
-            height: 35px; margin-bottom: 2px; display: flex; align-items: center; justify-content: center;
-            color: #fff; font-weight: bold; font-size: 0.7rem; font-family: var(--font-tech);
+
+        /* WIDGETS JUSTIFICADOS */
+        
+        .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
+        
+        .thesis-box {
+            background: var(--accent-dim);
+            border-left: 4px solid var(--accent);
+            text-align: justify;
+        }
+        .thesis-header { color: var(--accent); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; font-size: 0.8rem; }
+
+        .deep-dive-box {
+            border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
+            border-left: none; border-right: none; border-radius: 0;
+        }
+
+        /* FUNIL DE EXCLUSÃO (Visual) */
+        .funnel-container {
+            display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 3em 0;
+        }
+        .funnel-step {
+            width: 100%; text-align: center; padding: 12px; color: #fff;
+            font-family: var(--font-tech); font-size: 0.8rem; font-weight: bold;
+            background: var(--cold-blue); 
+            clip-path: polygon(2% 0, 98% 0, 95% 100%, 5% 100%);
+            display: flex; justify-content: space-between; padding-left: 20px; padding-right: 20px;
+        }
+        .step-1 { width: 100%; opacity: 0.5; }
+        .step-2 { width: 90%; opacity: 0.6; }
+        .step-3 { width: 80%; opacity: 0.7; }
+        .step-4 { width: 70%; opacity: 0.85; }
+        .step-5 { 
+            width: 60%; background: var(--accent); opacity: 1; 
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); 
+            border-radius: 4px; justify-content: center;
+            box-shadow: 0 0 15px var(--accent-dim);
+        }
+
+        /* CARD COMPARATIVO */
+        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
+        .comp-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
             transition: transform 0.2s;
         }
-        .step-1 { width: 90%; background: #3b82f6; }
-        .step-2 { width: 80%; background: #6366f1; }
-        .step-3 { width: 70%; background: #8b5cf6; }
-        .step-4 { width: 60%; background: #d946ef; }
-        .step-5 { width: 50%; background: #ef4444; height: 45px; }
+        .comp-card:hover { transform: translateY(-3px); }
+        .comp-title { 
+            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
+            display: block; margin-bottom: 10px; font-size: 0.8rem;
+        }
+        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
 
-        .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
-        .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        /* Action Box */
+        .action-box {
+            border: 1px dashed var(--accent); background: rgba(var(--bg-app), 0.5);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+        }
+        .action-header { 
+            font-family: var(--font-tech); color: var(--accent); font-weight: bold; 
+            margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
+        }
 
-        /* Tabela */
-        .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
-        .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        .reading-highlight { background: var(--accent-dim); color: var(--text-primary); border-radius: 2px; }
 
-        .reading-highlight { background: rgba(59, 130, 246, 0.15); border-radius: var(--radius); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); color: #fff; }
+        @media (min-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .reader-container { padding: 30px 20px 100px 20px; }
+            h1 { font-size: 1.7rem; }
+            .chapter-hud { padding: 10px 15px; }
+            .hud-btn span { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="reading-hud">
-        <button class="hud-btn" onclick="toggleTheme()" title="Tema">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
-        <button class="hud-btn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
-
-        <div class="hud-divider"></div>
-
-        <button class="hud-btn" onclick="changeSpeed(-0.25)" title="Lento">«</button>
-        <span class="speed-indicator" id="speed-val">1.0x</span>
-        <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
-        
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
-            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </button>
+    <div class="chapter-hud">
+        <div class="hud-ctrls">
+            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
+            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
+        </div>
+        <div class="hud-ctrls">
+            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
+                ▶ <span>OUVIR</span>
+            </button>
+        </div>
     </div>
 
-    <div class="content-scroll-area" id="content-area">
-        <div class="book-container">
-            <div class="chapter-meta">Parte II: O Corpo e o Território | Capítulo 04</div>
-            <h1>Biopolítica vs. Necropolítica Digital</h1>
+    <div class="reader-container" id="content-area">
+        <span class="chapter-meta">PARTE II: O CORPO E O TERRITÓRIO | CAPÍTULO 04</span>
+        <h1>Biopolítica vs.<br>Necropolítica Digital</h1>
 
-            <p>Durante décadas, você foi ensinado que seu corpo termina onde sua pele termina. Hoje, essa fronteira foi dissolvida. Seu corpo agora se estende por servidores em nuvem, bancos de dados de seguradoras e algoritmos de triagem hospitalar.</p>
-            
-            <p>O filósofo Michel Foucault descreveu o nascimento da <strong>Biopolítica</strong> como o momento em que o Estado moderno começou a gerenciar a vida biológica da população como um recurso: vacinação, higiene, natalidade. O objetivo era "fazer viver". Era uma forma de poder focada na otimização da vida para a produção econômica.</p>
-            
-            <p>No século XXI, esse gerenciamento saiu das mãos do Estado e migrou para a <strong>Internet dos Corpos (IoB)</strong>. Seu relógio inteligente não está apenas "contando passos"; ele está auditando sua existência. Ele transforma seu batimento cardíaco, seu sono e seus níveis de glicose em ativos financeiros.</p>
+        <p>Durante décadas, você foi ensinado que seu corpo termina onde sua pele termina. Essa fronteira foi dissolvida. Hoje, seu corpo se estende por servidores em nuvem, bancos de dados de seguradoras e algoritmos de triagem hospitalar. Seus batimentos cardíacos, seu nível de glicose e sua expressão facial não são mais privados; são ativos financeiros negociados em milissegundos.</p>
+        
+        <p>O filósofo Michel Foucault descreveu o nascimento da <strong>Biopolítica</strong> como o momento em que o Estado começou a gerenciar a vida da população ("fazer viver") para otimizar a produção. Mas no século XXI, sob a lógica do lucro algorítmico, a gestão da vida deu lugar à gestão do risco de morte. Entramos na era da <strong>Necropolítica Digital</strong>.</p>
 
-            <div class="box deep-dive-box">
-                <h3>Fator X: Da Disciplina ao Controle</h3>
-                <p>O filósofo <strong>Gilles Deleuze</strong> previu essa transição em seu <em>Post-Scriptum sobre as Sociedades de Controle</em>. Foucault descreveu uma sociedade de confinamento (escola, fábrica, prisão), onde o corpo era moldado por paredes. Deleuze viu o futuro: uma sociedade a céu aberto, onde não há paredes, mas sim códigos e senhas. O controle não é mais físico; é digital e contínuo. Você é livre para ir aonde quiser, desde que seu "Data Double" tenha as credenciais certas.</p>
-                
-                <div class="visual-table-container">
-                    <div class="visual-header">⛓️ MUDANÇA DE PARADIGMA: FOUCAULT VS. DELEUZE</div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><strong>Modelo Foucault</strong></td>
-                                <td>Fábrica, Relógio de Ponto, Confinamento. O indivíduo é um corpo moldável.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Modelo Deleuze</strong></td>
-                                <td>Empresa, Senha, Dívida. O indivíduo é um "divíduo" (amostra de dados).</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="box thesis-box">
+            <span class="thesis-header">// A Lógica do Abate Automático</span>
+            "A Necropolítica, termo cunhado por Achille Mbembe, define o poder soberano de ditar quem pode viver e quem deve ser deixado para morrer. No mundo digital, essa decisão não é tomada por um general, mas por um código opaco. O algoritmo decide quem recebe o empréstimo para a cirurgia, quem tem a liberdade condicional negada e quem é alvo da polícia preditiva. É a morte social, financeira e física, administrada sem rosto humano e sem culpa moral."
+        </div>
+
+        <h2>O Albergue Digital (Digital Poorhouse)</h2>
+
+        <p>A pesquisadora Virginia Eubanks, em <em>Automating Inequality</em>, revela uma verdade brutal: a tecnologia de vigilância invasiva é sempre testada primeiro nos pobres. Antes de termos assistentes virtuais em casas de luxo, tivemos sistemas biométricos obrigatórios para moradores de rua receberem abrigo e para mães solteiras receberem auxílio-alimentação.</p>
+        
+        <p>Isso cria o <strong>Albergue Digital</strong>. Para os ricos, a tecnologia oferece conveniência e invisibilidade (criptografia paga, advogados). Para os pobres, a tecnologia exige transparência total. O preço da sobrevivência é a entrega da privacidade. Se você é pobre, o algoritmo assume que você é uma fraude até que se prove o contrário. Se você é rico, o algoritmo assume que você é um cliente VIP.</p>
+
+        <div class="funnel-container">
+            <span style="font-family:var(--font-tech); font-size:0.7rem; color:var(--text-secondary); margin-bottom:10px;">DIAGRAMA: O FUNIL DA EXCLUSÃO</span>
+            <div class="funnel-step step-1"><span>1. COLETA DE DADOS</span><span>(IoB / Wearables)</span></div>
+            <div class="funnel-step step-2"><span>2. VIÉS HISTÓRICO</span><span>(Racismo nos Dados)</span></div>
+            <div class="funnel-step step-3"><span>3. PERFILAMENTO</span><span>(Score de Risco)</span></div>
+            <div class="funnel-step step-4"><span>4. NEGAÇÃO AUTOMÁTICA</span><span>(Crédito/Saúde)</span></div>
+            <div class="funnel-step step-5">MORTE SOCIAL / FÍSICA</div>
+        </div>
+
+        <h2>Antítese: O Novo Código Jim Crow</h2>
+
+        <p>A socióloga Ruha Benjamin chama isso de "O Novo Código Jim Crow". A tecnologia parece neutra, limpa e objetiva, mas ela codifica e esconde preconceitos históricos profundos.</p>
+        
+        <div class="box" style="background: rgba(239,68,68,0.05); border: 1px solid var(--accent);">
+            <strong style="color: var(--accent); display:block; margin-bottom:10px;">ESTUDO DE CASO: O ALGORITMO DA DOR</strong>
+            <p>Em 2019, descobriu-se que um algoritmo usado por hospitais nos EUA para priorizar pacientes para cuidados intensivos discriminava sistematicamente pessoas negras. O motivo? O algoritmo usava o "custo histórico de saúde" como proxy para "gravidade da doença".</p>
+            <p>Como o sistema de saúde historicamente negligenciava pacientes negros (gastando menos com eles), a máquina "aprendeu" que eles eram "menos doentes" do que brancos com as mesmas condições biológicas. Resultado: milhares de pessoas tiveram atendimento negado por uma decisão matemática "neutra".</p>
+        </div>
+
+        <h2>O Risco das Credenciais Imutáveis</h2>
+
+        <p>A promessa da biometria é a segurança: "Seu rosto é sua senha". Mas isso esconde um perigo tático existencial. Se sua senha alfanumérica vaza, você a troca. Se o banco de dados com a biometria da sua íris ou o mapa do seu rosto vaza, <strong>você não pode trocar de rosto</strong>.</p>
+        
+        <p>Você se torna "hackeado" para sempre. Uma credencial imutável é uma falha de segurança permanente. Governos autoritários ou criminosos podem usar esse dado para rastrear você por toda a vida, em qualquer câmera pública, sem que você possa fazer nada a respeito.</p>
+
+        <div class="comparison-grid">
+            <div class="comp-card" style="border-left: 2px solid var(--cold-blue);">
+                <span class="comp-title" style="color:var(--cold-blue)">BIOPOLÍTICA (Séc. XX)</span>
+                <div class="comp-content">
+                    Gestão da população em massa. Vacinação, higiene, controle de natalidade. Foco na saúde coletiva para a produção industrial.
                 </div>
             </div>
-
-            <h2>A Tese: O Corpo Quantificado como Mercadoria</h2>
-
-            <p>Vivemos sob a promessa sedutora da "Medicina de Precisão" e do bem-estar gamificado. Se você ceder seus dados biométricos, diz a propaganda, receberá descontos no seguro, diagnósticos antecipados e uma vida mais longa.</p>
-
-            <div class="box thesis-box">
-                <strong style="color: var(--accent); text-transform: uppercase; font-family: var(--font-tech);">// A Lógica do Seguro:</strong><br><br>
-                "O corpo que não gera dados é um corpo suspeito. A opacidade é tratada como risco. Em breve, recusar-se a usar um monitor de saúde será financeiramente punitivo, tornando a vigilância biométrica não uma escolha, mas uma imposição econômica para quem não pode pagar pelo luxo da privacidade."
+            <div class="comp-card" style="border-left: 2px solid var(--accent);">
+                <span class="comp-title" style="color:var(--accent)">NECROPOLÍTICA DIGITAL (Séc. XXI)</span>
+                <div class="comp-content">
+                    Gestão individualizada do risco. Triagem algorítmica para exclusão. Foco na eliminação de "custos" (pessoas) improdutivos.
+                </div>
             </div>
+        </div>
 
-            <p>Essa é a face "limpa" da biopolítica algorítmica: uma jaula de ouro onde sua obediência biológica é recompensada com descontos. Mas o que acontece quando o algoritmo decide que seu corpo não é lucrativo? O que acontece quando a lógica de "fazer viver" encontra a lógica de "deixar morrer"?</p>
+        <h2>Síntese: Soberania Somática e Compartimentalização</h2>
 
-            <h2>Antítese: A Necropolítica do Código</h2>
+        <p>A resistência à necropolítica começa com a <strong>Soberania Somática</strong>. É a recusa em tratar o próprio corpo como uma fonte de dados públicos. É entender que "saúde" é um estado de bem-estar, não uma pontuação num app.</p>
+        
+        <p>A tática prática não é abandonar a tecnologia, mas aplicar a <strong>Compartimentalização de Dados</strong>. Nunca permita que seus dados de saúde (DNA, frequência cardíaca) sejam cruzados com seus dados financeiros ou sociais. Um teste de ancestralidade "divertido" pode vender seu código genético para uma seguradora que, no futuro, negará cobertura aos seus filhos baseada em predisposição genética.</p>
 
-            <p>Aqui, a discussão escurece. O filósofo camaronês <strong>Achille Mbembe</strong> cunhou o termo <strong>Necropolítica</strong> para descrever o poder soberano de ditar quem pode viver e quem deve morrer (ou ser deixado à morte). No mundo digital, essa decisão é terceirizada para códigos opacos.</p>
-
-            <p>A socióloga <strong>Ruha Benjamin</strong> chama isso de "O Novo Código Jim Crow": a tecnologia que parece neutra e benevolente, mas que codifica e amplifica preconceitos raciais e sociais históricos.</p>
-
-            <div class="box antithesis-box">
-                <span class="antithesis-tag">O Contraponto Necropolítico</span>
-                <p><strong>Estudo de Caso: O Algoritmo da Dor</strong></p>
-                <p>Em 2019, um estudo revelou que um algoritmo usado por hospitais nos EUA para priorizar pacientes para cuidados extras discriminava sistematicamente pessoas negras. O algoritmo usava o "custo histórico de saúde" como proxy para "gravidade da doença".</p>
-                <p>Como o sistema de saúde historicamente negligenciava pacientes negros (gastando menos com eles), o algoritmo "aprendeu" que eles eram "menos doentes" do que pacientes brancos com as mesmas condições biológicas. Resultado: milhares de pessoas negras tiveram atendimento negado por uma decisão matemática "neutra".</p>
-                <p>Isso não é um erro (glitch). É a <strong>Necropolítica Algorítmica</strong>: a automação da desigualdade, onde o "Data Double" de uma pessoa pobre ou racializada é marcado para a exclusão antes mesmo de ela entrar no consultório.</p>
-            </div>
-
-            <p>Virginia Eubanks chama isso de "Albergue Digital" (<em>Digital Poorhouse</em>): um sistema de vigilância invasiva reservado aos pobres, onde cada pedido de auxílio ou serviço público exige a entrega total da privacidade, enquanto os ricos pagam para serem invisíveis.</p>
-
-            <div class="visual-funnel-container">
-                <span class="funnel-title">📉 RECURSO VISUAL 5: O FUNIL DA EXCLUSÃO ALGORÍTMICA</span>
-                
-                <div class="funnel-step step-1">1. COLETA DE DADOS (IoB)</div>
-                <div class="funnel-step step-2">2. VIÉS HISTÓRICO</div>
-                <div class="funnel-step step-3">3. PERFILAMENTO (Score)</div>
-                <div class="funnel-step step-4">4. NEGAÇÃO AUTOMÁTICA</div>
-                <div class="funnel-step step-5">MORTE SOCIAL</div>
-                
-                <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 20px; font-style: italic;">
-                    "O funil mostra como dados brutos, processados por vieses, resultam em exclusão real."
-                </p>
-            </div>
-
-            <div class="box deep-dive-box">
-                <h3>Fator X: Instrumentarismo</h3>
-                <p>Shoshana Zuboff expande esse conceito com o termo <strong>Poder Instrumentarista</strong>. Diferente do totalitarismo (que queria sua alma) ou da biopolítica clássica (que queria seu corpo), o poder atual não se importa com quem você é. Ele só quer moldar seu comportamento para fins de mercado. Ele trata a humanidade como matéria-prima para ser extraída e descartada.</p>
-            </div>
-
-            <h2>Síntese: O Corpo Soberano</h2>
-
-            <p>A lição brutal deste capítulo é que a tecnologia não é apenas uma ferramenta de conveniência; é uma ferramenta de triagem. Para alguns, ela é um assistente pessoal. Para outros, é um oficial de condicional automatizado.</p>
-            
-            <p>A resistência à Biopolítica e à Necropolítica começa com a <strong>Soberania Somática</strong>. É a recusa em tratar o próprio corpo como uma fonte de dados públicos. É entender que "saúde" é um estado de bem-estar completo, não uma pontuação em um aplicativo.</p>
-
-            <p>Não caia na armadilha de achar que "quem não deve, não teme". Em um sistema necropolítico, o simples fato de habitar um corpo "fora do padrão" (doente, negro, pobre, divergente) já é considerado uma dívida.</p>
-
-            <div class="box action-box">
-                <div class="action-title">🛑 DESAFIO DE RETOMADA #04</div>
-                <p><strong>A Auditoria do Espelho Negro</strong></p>
-                <p>Pegue seu dispositivo wearable ou seu aplicativo de saúde agora.</p>
-                <p><strong>Pergunte-se:</strong> Para onde vão esses dados? Leia (realmente leia) a política de privacidade. Se você encontrar termos como "compartilhamento com parceiros terceiros" ou "análise de risco", desligue a sincronização.</p>
-                <p>Seu coração bate por você, não pelo valor das ações da sua seguradora. Retome a posse da sua biologia. Se possível, use tecnologias "burras" (analógicas) para monitorar o que é íntimo.</p>
-            </div>
-
+        <div class="box action-box">
+            <span class="action-header">🛑 DESAFIO DE RETOMADA #04</span>
+            <p><strong>A Auditoria de Sangue e Dados</strong></p>
+            <p>Pegue seu dispositivo wearable ou app de saúde agora. Vá em "Privacidade" e "Compartilhamento".</p>
+            <p><strong>Sua missão:</strong> Revogue o acesso de terceiros. Se o app de corrida quer compartilhar dados com o "Facebook" ou "Parceiros", bloqueie. Se o app de farmácia pede seu CPF em troca de desconto, recuse. O desconto de R$ 5,00 custa a venda do seu perfil de saúde para o mercado. Mantenha seu corpo em um silo isolado.</p>
         </div>
     </div>
 
     <script>
-        // --- FÓRMULA X ENGINE ---
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        
-        let currentSize = 14; 
+        /* Sincronia */
+        window.addEventListener('message', function(event) {
+            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+        });
+        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+
+        /* Fonte */
+        let currentSize = 19;
         function changeFontSize(amount) {
-            currentSize += amount; if(currentSize < 14) currentSize = 14; if(currentSize > 32) currentSize = 32;
-            document.documentElement.style.setProperty('--reading-size', currentSize + 'px');
+            currentSize += amount;
+            if (currentSize < 14) currentSize = 14; 
+            if (currentSize > 26) currentSize = 26;
+            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
         }
 
-        let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
-        
-        function changeSpeed(amount) {
-            speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 2.5) speechRate = 2.5;
-            document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x';
-            if(isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); setTimeout(() => { isChangingState = false; speakChunk(); }, 50); }
-        }
-
+        /* TTS */
+        let isSpeaking = false;
         function toggleSpeech() {
-            const btn = document.getElementById('btn-speak');
             if (isSpeaking) {
-                isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; 
-                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-                btn.classList.remove('active');
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
+                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
             } else {
-                prepareQueue();
-                if(speechQueue.length > 0) {
-                    isSpeaking = true; btn.classList.add('active');
-                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
-                    speakChunk();
-                }
+                const text = document.getElementById('content-area').innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.1;
+                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
+                window.speechSynthesis.speak(utterance);
+                isSpeaking = true;
+                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
             }
         }
-
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box, .funnel-step'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
-        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
-
-        function speakChunk() {
-            if (!isSpeaking) return;
-            if (currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; toggleSpeech(); return; }
-            const element = speechQueue[currentSpeechIndex];
-            clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"});
-            const utterance = new SpeechSynthesisUtterance(element.innerText); utterance.lang = 'pt-BR'; utterance.rate = speechRate;
-            utterance.onend = function() { if (isSpeaking && !isChangingState) { currentSpeechIndex++; speakChunk(); } if(isChangingState) isChangingState = false; };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        document.getElementById('content-area').addEventListener('click', function(e) {
-            const target = e.target.closest('p, h1, h2, h3, .box, td, li, .funnel-step');
-            if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
-        });
-        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
     </script>
 </body>
 </html>
