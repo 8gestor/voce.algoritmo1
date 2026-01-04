@@ -2,281 +2,368 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Capítulo 02: O Sequestro da Atenção. A neurociência do vício em dopamina, os Loops de Skinner e a engenharia de fricção como defesa.">
     <title>Capítulo 02 // O Sequestro da Atenção</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1605342980481793');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
+    /></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- FÓRMULA X GLOBAIS --- */
-            --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ededed; --text-secondary: #888888;
-            --accent: #3b82f6; --accent-bio: #10b981; --accent-warn: #d946ef;
-            --accent-glow: 0 0 15px rgba(59, 130, 246, 0.2);
-            --radius: 8px;
-            --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
-            --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 14px; /* Start Small */
+            /* --- DESIGN SYSTEM FATOR 1 --- */
+            --bg-app: #050505;        
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            /* ALMA DO CAPÍTULO: VÍCIO (Magenta) vs FOCO (Ciano) */
+            --dopamine: #d946ef;      /* Magenta Neon */
+            --flow: #06b6d4;          /* Ciano Tech */
+            --dim-dopamine: rgba(217, 70, 239, 0.08);
+            --dim-flow: rgba(6, 182, 212, 0.08);
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 19px;
+            --line-height: 1.8;
         }
 
         body.light-mode {
-            --bg-app: #f2f2f7; --bg-panel: rgba(255, 255, 255, 0.98); 
-            --border-color: rgba(0, 0, 0, 0.08);
-            --text-primary: #1c1c1e; --text-secondary: #6c6c70;
-            --accent: #007aff; --accent-bio: #16a34a; --accent-warn: #af52de;
+            --bg-app: #f2f2f7;
+            --text-primary: #1c1c1e;
+            --text-secondary: #4b5563;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --dopamine: #c026d3;
+            --flow: #0891b2;
+            --dim-dopamine: rgba(192, 38, 211, 0.05);
+            --dim-flow: rgba(8, 145, 178, 0.05);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
-        /* HUD CLEAN */
-        .reading-hud { height: 60px; flex-shrink: 0; background: var(--bg-panel); backdrop-filter: var(--blur); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; gap: 8px; z-index: 100; padding: 0 15px; }
-        .hud-btn { width: 40px; height: 40px; flex-shrink: 0; background: transparent; border: 1px solid transparent; color: var(--text-secondary); border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--font-tech); font-weight: 500; font-size: 14px; transition: var(--transition); }
-        .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
-        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
-        @media (max-width: 600px) { .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; } .hud-btn { width: 38px; height: 38px; } .hud-divider { display: none; } }
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: background 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
 
-        /* CONTENT */
-        .content-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px 20px 100px 20px; scroll-behavior: smooth; }
-        .book-container { max-width: 750px; margin: 0 auto; font-size: var(--reading-size); line-height: 1.8; }
-        h1 { font-family: var(--font-tech); font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; text-align: center; }
-        h2 { font-family: var(--font-tech); font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 3em; margin-bottom: 1em; display: flex; align-items: center; gap: 10px; }
+        /* --- MARGENS OTIMIZADAS --- */
+        .reader-container {
+            width: 100%;
+            max-width: 640px; 
+            margin: 0 auto;
+            padding: 40px 24px 120px 24px;
+        }
+
+        p {
+            margin-bottom: 2em; 
+            text-align: justify; 
+            hyphens: auto; 
+            letter-spacing: -0.01em;
+        }
+
+        strong { color: var(--text-primary); font-weight: 700; }
+
+        /* HUD */
+        .chapter-hud {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(var(--bg-app), 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .hud-btn {
+            background: transparent; border: 1px solid var(--border-color);
+            color: var(--text-secondary); border-radius: 6px;
+            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        .hud-btn:hover { border-color: var(--dopamine); color: var(--dopamine); background: var(--dim-dopamine); }
+        .hud-ctrls { display: flex; gap: 8px; }
+
+        /* TIPOGRAFIA TECH */
+        .chapter-meta {
+            font-family: var(--font-tech); font-size: 0.75rem; color: var(--dopamine);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
+            border-left: 2px solid var(--dopamine); padding-left: 10px;
+        }
+
+        h1 {
+            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: 50px; 
+            color: var(--text-primary); letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: var(--font-tech); font-size: 1.3rem; color: var(--flow);
+            margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+        }
         h2::before { content: '//'; opacity: 0.5; }
-        h3 { font-family: var(--font-ui); font-size: 1.2em; font-weight: 600; color: var(--accent-warn); margin-top: 2em; text-transform: uppercase; }
-        p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
-        .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
 
-        /* RECURSOS VISUAIS ESPECÍFICOS CAP 02 */
-        .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
-        .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
-        .antithesis-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-bio); }
-        .deep-dive-box { border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color); padding: 30px 0; }
-        .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
-        .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        h3 {
+            font-family: var(--font-ui); font-size: 1.1em; font-weight: 600;
+            color: var(--dopamine); margin-top: 2.5em; margin-bottom: 1em;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
 
-        /* Loop Skinner & Flow */
-        .skinner-loop-container { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 25px; margin: 3em 0; text-align: center; }
-        .loop-grid { display: flex; justify-content: space-around; margin-top: 15px; gap: 10px; flex-wrap: wrap; }
-        .loop-step { border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 20px; background: rgba(0,0,0,0.2); font-size: 0.8rem; font-family: var(--font-tech); text-transform: uppercase; cursor: pointer; }
-        .step-reward { border-color: var(--accent-warn); color: var(--accent-warn); font-weight: bold; }
+        /* WIDGETS E GRÁFICOS JUSTIFICADOS */
+        
+        .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
+        
+        .thesis-box {
+            background: var(--dim-dopamine);
+            border-left: 4px solid var(--dopamine);
+            text-align: justify;
+        }
+        .thesis-header { color: var(--dopamine); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 10px; font-size: 0.8rem; }
 
-        .flow-graph { width: 100%; height: 150px; position: relative; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin: 20px 0; border-radius: var(--radius); }
-        .flow-channel { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent 40%, rgba(16, 185, 129, 0.15) 50%, transparent 60%); }
-        .axis-label { position: absolute; font-size: 0.65rem; color: var(--text-secondary); font-family: var(--font-tech); }
-        .label-y { top: 5px; left: 5px; } .label-x { bottom: 5px; right: 5px; }
+        .deep-dive-box {
+            border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
+            border-left: none; border-right: none; border-radius: 0;
+        }
 
-        /* Tabela */
-        .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
-        .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
-        th { background: rgba(255,255,255,0.03); text-align: left; padding: 12px; color: var(--text-secondary); font-family: var(--font-tech); font-size: 0.75rem; border-bottom: 1px solid var(--border-color); }
+        /* Widget: Loop de Skinner (Diagrama) */
+        .skinner-widget {
+            display: flex; flex-direction: column; gap: 10px;
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
+            padding: 25px; border-radius: 6px; margin: 3em 0;
+        }
+        .skinner-header { font-family: var(--font-tech); font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 10px; display: block; }
+        .loop-row { display: flex; gap: 10px; align-items: stretch; }
+        .loop-step { 
+            flex: 1; text-align: center; padding: 15px 10px; 
+            border: 1px solid var(--border-color); border-radius: 4px; 
+            font-size: 0.85rem; background: var(--bg-app);
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .step-reward { border-color: var(--dopamine); color: var(--dopamine); box-shadow: 0 0 15px var(--dim-dopamine); font-weight: bold; }
+        .loop-arrow { align-self: center; color: var(--text-secondary); font-size: 1.2rem; }
 
-        .reading-highlight { background: rgba(59, 130, 246, 0.15); border-radius: var(--radius); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); color: #fff; }
+        /* Widget: Flow Chart */
+        .flow-chart {
+            width: 100%; height: 220px; 
+            border-left: 2px solid var(--text-secondary); border-bottom: 2px solid var(--text-secondary);
+            position: relative; margin: 3em 0; 
+            background: linear-gradient(to top right, transparent 0%, rgba(6, 182, 212, 0.05) 50%, transparent 100%);
+        }
+        .axis-label { position: absolute; font-family: var(--font-tech); font-size: 0.7rem; color: var(--text-secondary); }
+        .y-label { top: -25px; left: -10px; }
+        .x-label { bottom: -25px; right: 0; }
+        
+        .flow-zone {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(6, 182, 212, 0.3) 50%, transparent 60%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .flow-text {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
+            color: var(--flow); font-family: var(--font-tech); font-weight: bold; 
+            background: var(--bg-app); padding: 5px 10px; border: 1px solid var(--flow); border-radius: 4px;
+        }
+
+        /* Comparação Grid (Substitui Tabela) */
+        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
+        .comp-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
+            transition: transform 0.2s;
+        }
+        .comp-card:hover { transform: translateY(-3px); }
+        .comp-title { 
+            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
+            display: block; margin-bottom: 10px; font-size: 0.8rem;
+        }
+        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Action Box */
+        .action-box {
+            border: 1px dashed var(--flow); background: rgba(var(--bg-app), 0.5);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+        }
+        .action-header { 
+            font-family: var(--font-tech); color: var(--flow); font-weight: bold; 
+            margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .reading-highlight { background: var(--dim-dopamine); color: var(--text-primary); border-radius: 2px; }
+
+        @media (min-width: 600px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .reader-container { padding: 30px 20px 100px 20px; }
+            h1 { font-size: 1.7rem; }
+            .skinner-widget { gap: 5px; }
+            .loop-row { flex-direction: column; align-items: center; }
+            .loop-step { width: 100%; }
+            .loop-arrow { transform: rotate(90deg); margin: 5px 0; }
+            .chapter-hud { padding: 10px 15px; }
+            .hud-btn span { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="reading-hud">
-        <button class="hud-btn" onclick="toggleTheme()" title="Tema">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-        <div class="hud-divider"></div>
-        <button class="hud-btn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
-        <button class="hud-btn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
-        <div class="hud-divider"></div>
-        <button class="hud-btn" onclick="changeSpeed(-0.25)" title="Lento">«</button>
-        <span class="speed-indicator" id="speed-val">1.0x</span>
-        <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
-            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </button>
+    <div class="chapter-hud">
+        <div class="hud-ctrls">
+            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
+            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
+        </div>
+        <div class="hud-ctrls">
+            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
+                ▶ <span>OUVIR</span>
+            </button>
+        </div>
     </div>
 
-    <div class="content-scroll-area" id="content-area">
-        <div class="book-container">
-            <div class="chapter-meta">Parte I: A Mente | Capítulo 02</div>
-            <h1>Dopamina vs. Sincronia</h1>
+    <div class="reader-container" id="content-area">
+        <span class="chapter-meta">PARTE I: A MENTE | CAPÍTULO 02</span>
+        <h1>Dopamina vs.<br>Sincronia</h1>
 
-            <p>Você desbloqueia a tela. O polegar desliza para baixo, arrastando o feed como quem puxa a alavanca de um caça-níqueis em Las Vegas. Há uma fração de segundo de suspensão – a tela carrega, o ícone gira – e então: <em>bingo</em>. Uma nova foto, uma nova manchete, três curtidas vermelhas brilhantes.</p>
-            
-            <p>Se nada novo aparece, você sente uma pontada sutil de decepção e puxa a alavanca de novo. Se algo aparece, você sente um alívio momentâneo, seguido imediatamente pela necessidade de mais.</p>
-            
-            <p>Esse ciclo não é acidental. Você não é "viciado em celular" por falta de força de vontade. Você está lutando contra um exército de psicólogos comportamentais e engenheiros de dados que sequestraram o sistema de aprendizado mais primitivo do seu cérebro para transformá-lo em lucro. Eles hackearam seu sistema de recompensa.</p>
+        <p>Você desbloqueia a tela. O polegar desliza para baixo, arrastando o feed como quem puxa a alavanca de um caça-níqueis em Las Vegas. Há uma fração de segundo de suspensão proposital — a tela carrega, o ícone gira — e então: <em>bingo</em>. Uma nova foto, uma nova manchete, três curtidas vermelhas brilhantes.</p>
+        
+        <p>Se nada novo aparece, você sente uma pontada sutil de decepção e puxa a alavanca de novo. Se algo aparece, você sente um alívio momentâneo, seguido imediatamente pela necessidade de mais. Isso não é uma "escolha". Isso é um reflexo condicionado que foi implantado em você.</p>
+        
+        <p>Esse ciclo não é acidental. Você não é "viciado em celular" por falta de força de vontade. Você está lutando contra um exército de psicólogos comportamentais e engenheiros de dados que sequestraram o sistema de aprendizado mais primitivo do seu cérebro para transformá-lo em lucro. Eles hackearam seu sistema de recompensa.</p>
 
-            <h2>A Engenharia da Inquietude</h2>
+        <h2>A Neurociência do "Querer" (Wanting)</h2>
 
-            <p>Para entender como a captura funciona, precisamos olhar para a década de 1950 e para os laboratórios de B.F. Skinner. Ele descobriu que ratos pressionavam uma alavanca para obter comida. Mas o comportamento mudava drasticamente dependendo de <em>como</em> a comida era entregue.</p>
-            
-            <p>Se a comida saísse <strong>toda vez</strong> que a alavanca fosse pressionada, o rato comia até se saciar e parava. Mas, se a comida saísse de forma <strong>aleatória</strong> (às vezes sim, às vezes não, às vezes muita, às vezes pouca), o rato entrava em um estado de obsessão frenética. Ele pressionava a alavanca compulsivamente, ignorando o cansaço e até a dor.</p>
-            
-            <p>Isso é chamado de <strong>Recompensa Variável Intermitente</strong>. E é exatamente assim que o algoritmo do Instagram, do TikTok e do Twitter funciona.</p>
+        <p>Para entender a profundidade desse sequestro, precisamos distinguir dois sistemas cerebrais que muitas vezes confundimos: o sistema de <strong>Querer (Dopamina)</strong> e o sistema de <strong>Gostar (Opioides)</strong>. O neurocientista Kent Berridge provou que eles são circuitos separados.</p>
+        
+        <p>A dopamina não gera prazer; ela gera a <em>antecipação</em> do prazer. Ela é a molécula da busca, da caça, da inquietação. Quando você rola o feed, você não está sentindo prazer; você está em um estado de busca perpétua. O algoritmo sabe disso. Ele nunca te dá a satisfação completa (o "Gostar"), ele apenas te alimenta com promessas de que a próxima rolagem trará algo melhor (o "Querer"). Você se torna um rato correndo numa roda, movido não pela alegria, mas pela ansiedade da falta.</p>
 
-            <div class="skinner-loop-container">
-                <span style="font-weight:bold; color:var(--text-secondary); display:block; margin-bottom:15px; font-size:0.8rem; text-transform:uppercase; font-family:var(--font-tech);">🔄 O LOOP DE SKINNER</span>
-                <div class="loop-grid">
-                    <div class="loop-step">1. GATILHO (Notificação)</div>
-                    <div class="loop-step">2. AÇÃO (Scroll/Toque)</div>
-                    <div class="loop-step step-reward">3. RECOMPENSA? (Incerta)</div>
+        <div class="skinner-widget">
+            <span class="skinner-header">DIAGRAMA: O LOOP DE COMPULSÃO</span>
+            <div class="loop-row">
+                <div class="loop-step">1. GATILHO<br>(Notificação Visual)</div>
+                <div class="loop-arrow">→</div>
+                <div class="loop-step">2. AÇÃO<br>(Pull-to-Refresh)</div>
+                <div class="loop-arrow">→</div>
+                <div class="loop-step step-reward">3. RECOMPENSA<br>(Variável/Incerta)</div>
+            </div>
+        </div>
+
+        <p>O conceito chave aqui é a <strong>Recompensa Variável Intermitente</strong>, descoberta por B.F. Skinner. Se a recompensa fosse garantida, você ficaria entediado. Se ela nunca viesse, você desistiria. Mas se ela vem de forma aleatória, o cérebro entra em modo de obsessão máxima. O "Refresh" é a alavanca do cassino.</p>
+
+        <div class="box thesis-box">
+            <span class="thesis-header">// Tática de Defesa: Engenharia de Fricção e Grayscale</span>
+            <p>O Vale do Silício projeta interfaces "sem fricção" (frictionless) para que você aja sem pensar. Cores vibrantes (vermelho nas notificações) são gatilhos evolutivos de "fruta madura" ou "sangue/perigo".</p>
+            <p><strong>A Tática Real:</strong> Injete fricção no sistema. Use o modo <strong>"Grayscale" (Escala de Cinza)</strong> nas configurações de acessibilidade do seu celular. Ao remover a cor, você remove a "saliência" do estímulo. O Instagram em preto e branco perde seu poder químico. O cérebro deixa de ver a tela como um objeto de desejo e passa a vê-la como uma ferramenta utilitária e sem graça. É o equivalente digital a transformar um bolo de chocolate em um bloco de cimento.</p>
+        </div>
+
+        <div class="box deep-dive-box">
+            <h3>Fator X: A Colonização do Sono e o Flow</h3>
+            <p>O teórico Jonathan Crary, em <em>24/7</em>, argumenta que o capitalismo moderno busca eliminar a última barreira para o consumo: o sono. O loop de Skinner serve a esse propósito: manter a mente em um estado de "vigília zumbi", onde não estamos nem descansando nem focados.</p>
+            <p>A antítese biológica para esse estado fragmentado é o <strong>Flow (Estado de Fluxo)</strong>. O Flow ocorre quando a dificuldade do desafio encontra o nível da sua habilidade. É o oposto do scroll passivo. Enquanto o scroll gera ansiedade (muito estímulo, nenhuma ação), o Flow gera êxtase através da ação focada.</p>
+            
+            <div class="flow-chart">
+                <span class="axis-label y-label">DESAFIO</span>
+                <div class="flow-zone"></div>
+                <span class="flow-text">CANAL DE FLUXO</span>
+                <span class="axis-label x-label">HABILIDADE</span>
+            </div>
+        </div>
+
+        <div class="box deep-dive-box">
+            <h3>O Custo Oculto: O Assassinato do Tédio</h3>
+            <p>Existe um sistema crucial que nos conecta a nós mesmos: a <strong>Rede de Modo Padrão (DMN)</strong>. Essa rede só é ativada quando <em>não</em> estamos focados em nada específico — sonhando acordados, encarando o teto.</p>
+            <p>O "tédio" não é um vazio; é o momento de processamento em background do cérebro. É onde a memória de longo prazo é consolidada e onde a criatividade nasce. O uso constante do smartphone está aniquilando a DMN. Sempre que sentimos um segundo de tédio (no elevador, no banheiro), sacamos o celular para preencher o vazio. Ao fazer isso, impedimos o processamento interno. Estamos criando uma geração incapaz de autoconexão, dependente de estímulo externo para sentir que existe.</p>
+        </div>
+
+        <h2>Antítese: Brainets e Sincronia</h2>
+
+        <p>Se a dopamina é a moeda do vício individual e isolacionista, a evolução nos dotou de uma tecnologia muito mais poderosa: a <strong>Sincronia</strong>.</p>
+        
+        <p>Retomamos aqui o trabalho de Miguel Nicolelis. Em seus laboratórios, ele conectou cérebros a <em>outros cérebros</em>, criando <strong>Brainets</strong>. Ele provou que quando cérebros se sincronizam para resolver uma tarefa (seja numa conversa profunda, num coro musical ou num jogo cooperativo), eles entram em ressonância. A atividade neural se alinha. Isso libera um coquetel de <strong>Ocitocina</strong> e endorfinas, que gera confiança, pertencimento e calma.</p>
+
+        <div class="comparison-grid">
+            <div class="comp-card" style="border-left: 2px solid var(--dopamine);">
+                <span class="comp-title" style="color:var(--dopamine)">HIPERATENÇÃO (Modo Rede Social)</span>
+                <div class="comp-content">
+                    Focos múltiplos e curtos (clips de 15s). Busca constante de novidade. Estimula o circuito de "Wanting". Gera agilidade reativa, mas causa ansiedade crônica e fragmentação do Eu.
                 </div>
             </div>
-
-            <div class="box thesis-box">
-                <strong style="color: var(--accent); text-transform: uppercase; font-family: var(--font-tech);">// O Modelo de Negócios da Ansiedade:</strong><br><br>
-                "A incerteza é o motor do engajamento. Se o usuário souber o que vai encontrar, ele perde o interesse. Precisamos injetar 'ruído' e aleatoriedade no feed para manter o sistema dopaminérgico em estado de alerta perpétuo. Um usuário ansioso é um usuário lucrativo."
-            </div>
-
-            <div class="box deep-dive-box">
-                <h3>Fator X: A Colonização do Sono e o Estado de Fluxo</h3>
-                <p>O teórico <strong>Jonathan Crary</strong>, em <em>24/7</em>, argumenta que o capitalismo moderno busca eliminar a última barreira para o consumo: o sono. O tempo biológico, que deveria ser cíclico (dia/noite, atividade/descanso), foi substituído pelo tempo maquínico (24/7, sempre ligado). O loop de Skinner serve a esse propósito: manter a mente em um estado de "vigília zumbi" produtiva para os dados.</p>
-                <p>A antítese psicológica para esse estado fragmentado é o <strong>Flow (Estado de Fluxo)</strong>, descrito por <strong>Mihaly Csikszentmihalyi</strong>. O Flow ocorre quando a dificuldade do desafio encontra o nível da sua habilidade. É o oposto do scroll passivo. Enquanto o scroll gera ansiedade (muito estímulo, nenhuma ação) ou tédio, o Flow gera êxtase através da ação focada. A batalha de hoje é entre o algoritmo que quer sua fragmentação e sua biologia que anseia pelo fluxo.</p>
-                
-                <div class="flow-graph">
-                    <div class="axis-label label-y">DESAFIO</div>
-                    <div class="axis-label label-x">HABILIDADE</div>
-                    <div class="flow-channel" title="Canal de Fluxo"></div>
-                    <div style="position:absolute; top:40%; left:30%; color:var(--accent-bio); font-weight:bold; font-size:0.75rem; font-family:var(--font-tech);">CANAL DE FLUXO</div>
+            <div class="comp-card" style="border-left: 2px solid var(--flow);">
+                <span class="comp-title" style="color:var(--flow)">ATENÇÃO PROFUNDA (Modo Brainet)</span>
+                <div class="comp-content">
+                    Foco único e longo. Inibição de estímulos externos. Estimula a Sincronia Neural. Gera compreensão complexa, empatia real e consolidação de memória.
                 </div>
             </div>
+        </div>
 
-            <div class="box deep-dive-box">
-                <h3>Aprofundamento: A Economia da Atenção</h3>
-                <p>O conceito de que sua atenção é uma mercadoria não é apenas uma metáfora moderna. Em 1971, o economista e Nobel <strong>Herbert Simon</strong> previu a crise atual: "A riqueza de informação cria a pobreza de atenção".</p>
-                <p>Simon entendeu, décadas antes do iPhone, que em um mundo rico em dados, o recurso escasso não é mais a informação, mas a capacidade cognitiva de processá-la. Hoje, vivemos a industrialização dessa escassez. O "Eu Inferido" mencionado anteriormente é usado para calcular exatamente o preço de cada segundo do seu olhar. Seus olhos não estão vendo o mundo; eles estão minerando valor para terceiros.</p>
-                <p>Guy Debord, em <em>A Sociedade do Espetáculo</em>, argumentava que havíamos passado do "ser" para o "ter", e do "ter" para o "parecer". No capitalismo de vigilância, damos um passo além: do "parecer" para o "engajar". Não somos mais apenas espectadores passivos do espetáculo; somos seus operários não remunerados, trabalhando a cada <em>scroll</em> para manter a máquina girando.</p>
-            </div>
+        <h2>Síntese: Escolhendo sua Química</h2>
 
-            <p>A molécula protagonista aqui é a <strong>Dopamina</strong>. Ao contrário do senso comum, ela não é a molécula do "prazer", mas a molécula do "desejo" e da "procura". Ela nos motiva a buscar o que está fora do nosso alcance. O Vale do Silício criou um loop infinito de procura sem encontro, de desejo sem saciedade. Eles nos venderam a promessa de conexão, mas nos entregaram a biologia do vício.</p>
+        <p>A "Versão de Você" criada pelos algoritmos é um drogado em dopamina. O modelo matemático deles pressupõe que você sempre escolherá o prazer imediato em vez da construção lenta. Eles apostam na sua fragilidade biológica.</p>
+        
+        <p>A resistência é trocar o <em>feed</em> (alimentação passiva) pelo <em>flow</em> (fluxo ativo). A tecnologia pode ser usada para sincronia, mas exige intenção deliberada. Jogos cooperativos, chamadas de vídeo focadas (sem multitarefa) e escrita colaborativa são formas digitais de Brainets. A diferença não está na tela, mas na intenção: você está usando a máquina para se isolar em um loop de recompensa ou para se conectar em uma rede de inteligência?</p>
 
-            <div class="box deep-dive-box">
-                <h3>O Custo Oculto: A Morte da Rede de Modo Padrão (DMN)</h3>
-                <p>Enquanto a sincronia nos conecta aos outros, existe um sistema crucial que nos conecta a nós mesmos: a <strong>Rede de Modo Padrão (DMN)</strong>. Descrita pelo neurologista Marcus Raichle, essa rede só é ativada quando <em>não</em> estamos focados em nada específico — ou seja, quando estamos sonhando acordados, refletindo ou em repouso mental.</p>
-                <p>Nicholas Carr, em <em>The Shallows</em>, alerta que o uso constante do smartphone está aniquilando a DMN. Sempre que sentimos um segundo de tédio (na fila, no elevador), sacamos o celular. Ao fazer isso, impedimos que o cérebro entre nesse modo introspectivo. O resultado? Perdemos a capacidade de consolidar memórias, de criar narrativas autobiográficas complexas e de ter ideias originais. Matamos o tédio, mas enterramos a criatividade junto com ele.</p>
-            </div>
-
-            <h2>Antítese: Brainets e a Supercomputação Orgânica</h2>
-
-            <p>Mas existe outra forma de operar. Se a dopamina é a moeda do vício individual, a evolução nos dotou de uma tecnologia muito mais poderosa e sofisticada: a <strong>Sincronia</strong>.</p>
-            
-            <p>Retomamos aqui o trabalho de <strong>Miguel Nicolelis</strong>. Em seus laboratórios, ele foi além de conectar um cérebro a uma máquina. Ele conectou cérebros a <em>outros cérebros</em>. Ele criou o que chamou de <strong>Brainets</strong> (Redes Cerebrais).</p>
-
-            <div class="box antithesis-box">
-                <p><strong style="color: var(--accent-bio); font-family: var(--font-tech); text-transform: uppercase;">// O Contraponto Científico:</strong></p>
-                <p>Em experimentos revolucionários, Nicolelis conectou os cérebros de três macacos a um computador. Nenhum deles conseguia controlar um braço virtual sozinho. Mas, quando aprenderam a <strong>sincronizar</strong> sua atividade neural – pensando juntos, em uníssono – eles formaram uma "supermente" capaz de realizar tarefas complexas que nenhum indivíduo conseguiria isoladamente.</p>
-                <p>Isso prova uma tese biológica fundamental: o cérebro humano evoluiu para entrar em ressonância com outros cérebros. Quando você conversa profundamente com alguém, quando canta em um coro, ou quando trabalha em equipe com foco total, seus ritmos cerebrais se alinham. Isso não libera apenas dopamina, mas um coquetel de <strong>Ocitocina</strong> e endorfinas que gera confiança, bem-estar duradouro e uma sensação de propósito.</p>
-            </div>
-
-            <p>A tecnologia atual (redes sociais) simula conexão, mas impede a sincronia. Ela nos atomiza. Ela nos faz gritar sozinhos em quartos digitais, esperando likes (dopamina), em vez de nos permitir construir juntos (sincronia). A "internet morta" é uma internet de indivíduos viciados. A internet viva, a que Nicolelis vislumbra, seria uma extensão da nossa capacidade natural de formar Brainets: colaborar, sentir junto, resolver problemas complexos através da união mental, não da distração mútua.</p>
-
-            <h2>Síntese: Escolhendo sua Química</h2>
-
-            <p>A "Versão de Você" criada pelos algoritmos é um drogado em dopamina. O modelo matemático deles pressupõe que você sempre escolherá o prazer imediato em vez da construção lenta. Eles apostam na sua fragilidade.</p>
-            
-            <p>A resistência, portanto, não é apenas deletar o app. É substituir a fonte de nutrição neural. É trocar o <em>feed</em> (alimentação passiva) pelo <em>flow</em> (fluxo ativo e compartilhado).</p>
-            
-            <p>A tecnologia pode ser usada para sincronia. Jogos cooperativos, chamadas de vídeo focadas (sem multitarefa), escrita colaborativa, projetos de código aberto – tudo isso são formas digitais de Brainets. A diferença não está na tela, mas na intenção: você está usando a máquina para se isolar em um loop de recompensa ou para se conectar em uma rede de inteligência?</p>
-
-            <div class="visual-table-container">
-                <div class="visual-header">📊 ATENÇÃO VS. HIPERATENÇÃO</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Parâmetro</th>
-                            <th>Atenção Profunda</th>
-                            <th>Hiperatenção</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="color:var(--accent)"><strong>Foco</strong></td>
-                            <td>Único objeto, longa duração.</td>
-                            <td>Múltiplos focos, curta duração.</td>
-                        </tr>
-                        <tr>
-                            <td style="color:var(--accent)"><strong>Mecanismo</strong></td>
-                            <td>Inibição de estímulos externos.</td>
-                            <td>Busca constante de estímulos novos.</td>
-                        </tr>
-                        <tr>
-                            <td style="color:var(--accent)"><strong>Resultado</strong></td>
-                            <td>Compreensão complexa, Sincronia.</td>
-                            <td>Agilidade reativa, Dopamina rápida.</td>
-                        </tr>
-                        <tr>
-                            <td style="color:var(--accent)"><strong>Custo</strong></td>
-                            <td>Exige tempo e "tédio" inicial.</td>
-                            <td>Atrofia a memória e a DMN.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="box action-box">
-                <div class="action-title">⚡ DESAFIO DE RETOMADA #02</div>
-                <p><strong>O Protocolo do Olhar (Eye Contact Protocol)</strong></p>
-                <p>A sincronia neural começa pelos olhos. Estudos mostram que o contato visual prolongado é o gatilho mais rápido para alinhar atividades cerebrais entre dois humanos.</p>
-                <p><strong>Sua missão hoje:</strong> Em sua próxima interação presencial, mantenha contato visual por 5 segundos a mais do que o confortável. Sinta a "estranheza" inicial se dissipar e dar lugar a uma sintonia real. Quebre o loop da dopamina com uma dose de ocitocina analógica.</p>
-            </div>
+        <div class="box action-box">
+            <span class="action-header">⚡ DESAFIO DE RETOMADA #02</span>
+            <p><strong>O Protocolo do Olhar (Eye Contact Protocol)</strong></p>
+            <p>A sincronia neural começa pelos olhos. Estudos mostram que o contato visual prolongado é o gatilho mais rápido para alinhar atividades cerebrais entre dois humanos.</p>
+            <p><strong>Sua missão hoje:</strong> Use a tecnologia para marcar um encontro presencial. Quando estiver lá, deixe o celular no modo avião (ou em casa). Mantenha contato visual por 5 segundos a mais do que o confortável. Sinta a "estranheza" inicial se dissipar e dar lugar a uma sintonia real. Quebre o loop da dopamina com uma dose de ocitocina analógica.</p>
         </div>
     </div>
 
     <script>
-        function toggleTheme() { document.body.classList.toggle('light-mode'); }
-        let currentSize = 14; 
+        /* Sincronia */
+        window.addEventListener('message', function(event) {
+            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+        });
+        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+
+        /* Fonte */
+        let currentSize = 19;
         function changeFontSize(amount) {
             currentSize += amount;
-            if(currentSize < 14) currentSize = 14; 
-            if(currentSize > 32) currentSize = 32;
-            document.documentElement.style.setProperty('--reading-size', currentSize + 'px');
+            if (currentSize < 14) currentSize = 14; 
+            if (currentSize > 26) currentSize = 26;
+            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
         }
 
-        let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
-        
-        function changeSpeed(amount) {
-            speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 2.5) speechRate = 2.5;
-            document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x';
-            if(isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); setTimeout(() => { isChangingState = false; speakChunk(); }, 50); }
-        }
-
+        /* TTS */
+        let isSpeaking = false;
         function toggleSpeech() {
-            const btn = document.getElementById('btn-speak');
             if (isSpeaking) {
-                isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; 
-                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
-                btn.classList.remove('active');
+                window.speechSynthesis.cancel();
+                isSpeaking = false;
+                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
+                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
             } else {
-                prepareQueue();
-                if(speechQueue.length > 0) {
-                    isSpeaking = true; btn.classList.add('active');
-                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>';
-                    speakChunk();
-                }
+                const text = document.getElementById('content-area').innerText;
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                utterance.rate = 1.1;
+                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
+                window.speechSynthesis.speak(utterance);
+                isSpeaking = true;
+                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
             }
         }
-
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box, .loop-step'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
-        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
-
-        function speakChunk() {
-            if (!isSpeaking) return;
-            if (currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; toggleSpeech(); return; }
-            const element = speechQueue[currentSpeechIndex];
-            clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"});
-            const utterance = new SpeechSynthesisUtterance(element.innerText); utterance.lang = 'pt-BR'; utterance.rate = speechRate;
-            utterance.onend = function() { if (isSpeaking && !isChangingState) { currentSpeechIndex++; speakChunk(); } if(isChangingState) isChangingState = false; };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        document.getElementById('content-area').addEventListener('click', function(e) {
-            const target = e.target.closest('p, h1, h2, h3, .box, td, li, .loop-step');
-            if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
-        });
-        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
     </script>
 </body>
 </html>
-
