@@ -267,7 +267,7 @@
         window.addEventListener('message', function(event) {
             const data = event.data;
             
-            // 1. Controle de Tema
+            // 1. Controle de Tema (Sincronia Imediata)
             if (data.type === 'theme') {
                 if (data.mode === 'light') {
                     document.body.classList.add('light-mode');
@@ -276,24 +276,35 @@
                 }
             }
 
-            // 2. Controle de TTS (Voz)
-            if (data.type === 'tts-toggle') {
-                toggleSpeech();
-            }
-            if (data.type === 'tts-rate') {
-                updateSpeechRate(data.value);
-            }
+            // 2. Controle de TTS
+            if (data.type === 'tts-toggle') toggleSpeech();
+            if (data.type === 'tts-rate') updateSpeechRate(data.value);
         });
 
-        /* --- ENGINE TTS SINCRONIZADA --- */
+        /* --- ENGINE TTS AVANÇADA (FATOR X) --- */
         let speechQueue = [];
         let currentIndex = 0;
         let isSpeaking = false;
         let speechRate = 1.0;
         let synthesis = window.speechSynthesis;
         let utterance = null;
+        let selectedVoice = null;
 
-        // Prepara a fila de leitura baseada na classe .speakable
+        // Seleção Inteligente de Voz (PT-BR)
+        function loadVoices() {
+            const voices = synthesis.getVoices();
+            // Prioriza Google, depois Microsoft, depois qualquer pt-BR
+            selectedVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) ||
+                            voices.find(v => v.lang === 'pt-BR' && v.name.includes('Microsoft')) ||
+                            voices.find(v => v.lang === 'pt-BR');
+        }
+        
+        // Garante carregamento assincrono de vozes
+        if (synthesis.onvoiceschanged !== undefined) {
+            synthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
         function prepareQueue() {
             const elements = document.querySelectorAll('.speakable');
             speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
@@ -303,13 +314,11 @@
             if (speechQueue.length === 0) prepareQueue();
 
             if (isSpeaking) {
-                // Pausar/Parar
                 synthesis.cancel();
                 isSpeaking = false;
                 clearHighlights();
                 reportStatus(false);
             } else {
-                // Iniciar/Retomar
                 isSpeaking = true;
                 reportStatus(true);
                 speakNext();
@@ -319,7 +328,7 @@
         function updateSpeechRate(rate) {
             speechRate = rate;
             if (isSpeaking) {
-                // Reinicia o trecho atual com nova velocidade
+                // Reinicia frase atual com nova velocidade
                 synthesis.cancel();
                 speakNext();
             }
@@ -338,17 +347,17 @@
             const element = speechQueue[currentIndex];
             const text = element.innerText;
 
-            // Visual: Scroll e Highlight
             clearHighlights();
             element.classList.add('reading-highlight');
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            // Áudio
             utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'pt-BR';
             utterance.rate = speechRate;
             
-            // Tratamento de fim e erro
+            // Aplica a voz selecionada
+            if (selectedVoice) utterance.voice = selectedVoice;
+            
             utterance.onend = function() {
                 if (isSpeaking) {
                     currentIndex++;
@@ -358,7 +367,7 @@
             
             utterance.onerror = function() {
                 if (isSpeaking) {
-                    currentIndex++;
+                    currentIndex++; // Pula erro e continua
                     speakNext();
                 }
             };
@@ -370,12 +379,11 @@
             document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
         }
 
-        // Informa ao Index se está tocando ou não
         function reportStatus(playing) {
             window.parent.postMessage({ type: 'tts-status', isPlaying: playing }, '*');
         }
 
-        // Clique para ler parágrafo específico
+        // Clique para ler
         document.getElementById('content-area').addEventListener('click', function(e) {
             const target = e.target.closest('.speakable');
             if (target) {
@@ -391,7 +399,6 @@
             }
         });
 
-        // Limpeza ao sair
         window.onbeforeunload = function() {
             synthesis.cancel();
         };
