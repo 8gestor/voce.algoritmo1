@@ -1,320 +1,427 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Bibliografia Comentada: O Cânone Subversivo. As obras essenciais para entender a vigilância, a filosofia da tecnologia e a resistência digital.">
-    <title>Bibliografia - O Cânone Subversivo</title>
-    <style>
-        /* CSS ENGINE v5.2 (Library Theme) */
-        :root { --base-font-size: 18px; --transition: 0.3s ease; }
-        :root[data-theme="dark"] { --bg-color: #0c0c0c; --text-main: #d4d4d4; --text-muted: #737373; --accent: #f59e0b; --border: rgba(255, 255, 255, 0.1); --card-bg: #171717; --module-title: #f59e0b; }
-        :root[data-theme="sepia"] { --bg-color: #f4ecd8; --text-main: #4a3b2a; --text-muted: #8d745e; --accent: #b45309; --border: rgba(91, 70, 54, 0.2); --card-bg: #eaddcf; --module-title: #92400e; }
-        :root[data-theme="light"] { --bg-color: #f3f4f6; --text-main: #1f2937; --text-muted: #6b7280; --accent: #0284c7; --border: rgba(0, 0, 0, 0.1); --card-bg: #ffffff; --module-title: #0369a1; }
-        
-        html { font-size: var(--base-font-size); scroll-behavior: smooth; }
-        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Georgia', serif; line-height: 1.6; margin: 0; padding: 60px 20px; }
-        
-        .container { max-width: 800px; margin: 0 auto; }
-        h1 { font-family: 'Segoe UI', sans-serif; font-size: 2.2rem; text-align: center; border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 60px; text-transform: uppercase; letter-spacing: 2px; }
-        
-        /* Modules */
-        .module { margin-bottom: 60px; }
-        .module-header { font-family: 'Segoe UI', sans-serif; font-size: 1.5rem; color: var(--module-title); border-left: 4px solid var(--module-title); padding-left: 15px; margin-bottom: 30px; font-weight: bold; text-transform: uppercase; }
-        
-        /* Book Card */
-        .book-card { display: grid; grid-template-columns: 180px 1fr; gap: 30px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 25px; margin-bottom: 25px; transition: transform 0.2s, box-shadow 0.2s; }
-        .book-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--accent); }
-        
-        .book-meta { font-family: 'Segoe UI', sans-serif; border-right: 1px dashed var(--border); padding-right: 20px; display: flex; flex-direction: column; justify-content: center; text-align: right; }
-        .author { font-weight: bold; color: var(--text-main); font-size: 0.95rem; margin-bottom: 5px; }
-        .year { color: var(--text-muted); font-size: 0.85rem; font-family: 'Consolas', monospace; }
-        .tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
-        .tag { font-size: 0.7rem; background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; color: var(--text-muted); border: 1px solid var(--border); }
-        
-        .book-content { display: flex; flex-direction: column; justify-content: center; }
-        .title { font-size: 1.2rem; font-weight: bold; color: var(--text-main); margin-bottom: 10px; font-style: italic; }
-        .commentary { font-size: 0.95rem; color: var(--text-muted); text-align: justify; }
-        .key-concept { display: block; margin-top: 10px; font-size: 0.85rem; color: var(--accent); font-weight: bold; font-family: 'Segoe UI', sans-serif; }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Bibliografia: Firmware Update. A base teórica completa do sistema, organizada como módulos de conhecimento para download mental.">
+    <title>Bibliografia // Firmware</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-        @media (max-width: 650px) {
-            .book-card { grid-template-columns: 1fr; gap: 10px; text-align: left; }
-            .book-meta { border-right: none; border-bottom: 1px dashed var(--border); padding-right: 0; padding-bottom: 10px; text-align: left; justify-content: flex-start; }
-            .tags { justify-content: flex-start; }
+    <style>
+        :root {
+            /* --- THEME: ARCHIVE (Amber & Slate) --- */
+            --bg-app: #0f172a;        
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            /* ALMA: ARQUIVO (Âmbar) & DADOS (Azul) */
+            --arch-amber: #f59e0b;
+            --data-blue: #3b82f6;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            
+            --amber-dim: rgba(245, 158, 11, 0.1);
+            --amber-glow: 0 0 20px rgba(245, 158, 11, 0.15);
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 16px;
+            --line-height: 1.6;
+            
+            --transition: all 0.3s ease;
         }
+
+        body.light-mode {
+            --bg-app: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --card-bg: #ffffff;
+            --arch-amber: #d97706;
+            --data-blue: #2563eb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: var(--transition);
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
+
+        .reader-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+
+        /* HEADER */
+        header { 
+            margin-bottom: 60px; border-bottom: 2px solid var(--arch-amber); 
+            padding-bottom: 30px; position: relative;
+        }
+        
+        h1 {
+            font-family: var(--font-tech); font-size: 2.2rem; color: var(--text-primary); 
+            text-transform: uppercase; margin-bottom: 15px; letter-spacing: -1px;
+        }
+        
+        .sys-status {
+            font-family: var(--font-tech); font-size: 0.8rem; color: var(--arch-amber);
+            display: flex; gap: 15px; text-transform: uppercase;
+        }
+
+        /* SECTION DIVIDERS */
+        .section-title {
+            font-family: var(--font-tech); font-size: 1.2rem; color: var(--data-blue);
+            margin: 60px 0 30px 0; display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .section-title::before { content: '///'; color: var(--arch-amber); opacity: 0.7; }
+
+        /* BIBLIO GRID */
+        .biblio-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;
+        }
+
+        .book-card {
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 8px; padding: 25px; position: relative; overflow: hidden;
+            transition: transform 0.3s, border-color 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .book-card:hover { transform: translateY(-5px); border-color: var(--arch-amber); box-shadow: var(--amber-glow); }
+
+        .book-header { margin-bottom: 15px; border-bottom: 1px dashed var(--border-color); padding-bottom: 10px; }
+        .book-author { font-family: var(--font-tech); font-size: 0.8rem; color: var(--arch-amber); text-transform: uppercase; font-weight: bold; }
+        .book-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-top: 5px; line-height: 1.3; }
+        
+        .book-insight { 
+            font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 20px; 
+            flex-grow: 1; font-style: italic; border-left: 2px solid var(--border-color); padding-left: 10px;
+        }
+
+        .book-footer {
+            margin-top: auto; display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--font-tech); font-size: 0.7rem;
+        }
+        
+        .chapter-tag {
+            background: rgba(59, 130, 246, 0.1); color: var(--data-blue);
+            padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* DOWNLOAD METAPHOR */
+        .download-btn {
+            background: transparent; border: 1px solid var(--text-secondary); color: var(--text-secondary);
+            padding: 5px 10px; border-radius: 4px; cursor: default; transition: all 0.2s;
+        }
+        .download-btn:hover { border-color: var(--arch-amber); color: var(--arch-amber); }
+
+        /* INTRO TEXT */
+        .intro-text {
+            font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 40px; text-align: justify;
+            border-left: 4px solid var(--arch-amber); padding-left: 20px;
+        }
+
+        @media (max-width: 700px) { .biblio-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>O Cânone Subversivo<br><span style="font-size:0.6em; opacity:0.6; font-weight:normal;">Bibliografia Comentada</span></h1>
 
-        <div class="module">
-            <div class="module-header">Módulo I: A Estrutura do Controle</div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Shoshana ZUBOFF</div>
-                    <div class="year">2019</div>
-                    <div class="tags"><span class="tag">Economia</span><span class="tag">Vigilância</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">A Era do Capitalismo de Vigilância</div>
-                    <div class="commentary">A obra fundamental. Zuboff detalha como a experiência humana foi unilateralmente reivindicada como matéria-prima gratuita para tradução em dados comportamentais. Essencial para entender que você não é o cliente, nem o produto; você é a carcaça de onde se extrai a predição.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Excedente Comportamental</span>
-                </div>
+    <div class="reader-container">
+        <header>
+            <h1>BIBLIOGRAFIA // FIRMWARE</h1>
+            <div class="sys-status">
+                <span>STATUS: ARCHIVE_OPEN</span>
+                <span>SOURCES: VERIFIED</span>
+                <span>ENCRYPTION: NONE</span>
             </div>
+        </header>
 
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Yanis VAROUFAKIS</div>
-                    <div class="year">2023</div>
-                    <div class="tags"><span class="tag">Economia</span><span class="tag">Política</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">Tecnofeudalismo</div>
-                    <div class="commentary">A tese de que o capitalismo morreu e foi substituído por algo pior: um sistema feudal onde pagamos renda (com nossa atenção e dados) para senhores da nuvem apenas para ter o direito de existir e comerciar digitalmente.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Capital de Nuvem</span>
-                </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Byung-Chul HAN</div>
-                    <div class="year">2010 / 2014</div>
-                    <div class="tags"><span class="tag">Filosofia</span><span class="tag">Psicologia</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">Sociedade do Cansaço / Psicopolítica</div>
-                    <div class="commentary">Han disseca a transição do regime disciplinar (Foucault) para o regime do desempenho. Ele explica por que nos sentimos tão exaustos: nós nos tornamos carrascos de nós mesmos, explorando nossa própria psique em busca de uma "otimização" inalcançável.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Violência Neuronal</span>
-                </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Cathy O'NEIL</div>
-                    <div class="year">2016</div>
-                    <div class="tags"><span class="tag">Matemática</span><span class="tag">Desigualdade</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">Algoritmos de Destruição em Massa</div>
-                    <div class="commentary">Uma ex-analista de Wall Street revela como modelos matemáticos opacos aumentam a desigualdade social, punindo os pobres e premiando os ricos sob um manto de "neutralidade matemática". Fundamental para o capítulo sobre pontuação e crédito social.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Opacidade e Escala</span>
-                </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Frank PASQUALE</div>
-                    <div class="year">2015</div>
-                    <div class="tags"><span class="tag">Direito</span><span class="tag">Algoritmos</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">The Black Box Society</div>
-                    <div class="commentary">Pasquale expõe como algoritmos secretos de reputação, busca e finanças governam nossas vidas sem *due process* (devido processo legal). Essencial para entender a "Justiça Algorítmica".</div>
-                    <span class="key-concept">🔑 Conceito Chave: Sociedade da Caixa Preta</span>
-                </div>
-            </div>
+        <div class="intro-text speakable">
+            <p>Este não é um arquivo morto. As obras listadas abaixo são os pacotes de atualização para o seu sistema operacional mental. Elas contêm o código-fonte dos conceitos que exploramos. Ler estes livros é instalar o firewall definitivo contra a manipulação.</p>
         </div>
 
-        <div class="module">
-            <div class="module-header">Módulo II: O Corpo e a Mente</div>
-
+        <div class="section-title">Módulo 01: O Núcleo do Sistema</div>
+        <div class="biblio-grid">
+            
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Miguel NICOLELIS</div>
-                    <div class="year">2011 / 2020</div>
-                    <div class="tags"><span class="tag">Neurociência</span><span class="tag">Futuro</span></div>
+                <div class="book-header">
+                    <div class="book-author">ZUBOFF, Shoshana</div>
+                    <div class="book-title">A Era do Capitalismo de Vigilância</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">Muito Além do Nosso Eu / O Verdadeiro Criador de Tudo</div>
-                    <div class="commentary">Nicolelis, pioneiro das interfaces cérebro-máquina, alerta para o "brain-net" e a necessidade de proteger a integridade neural. Ele argumenta que o cérebro não é computável (não é uma máquina de Turing), defendendo a singularidade biológica contra o reducionismo digital.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Cérebro não-computável</span>
+                <div class="book-insight">
+                    "A obra seminal que definiu o inimigo. Explica como a experiência humana foi transformada em 'excedente comportamental' gratuito para predição de mercado."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 01, 03</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Nita FARAHANY</div>
-                    <div class="year">2023</div>
-                    <div class="tags"><span class="tag">Neuroética</span><span class="tag">Direito</span></div>
+                <div class="book-header">
+                    <div class="book-author">FISHER, Mark</div>
+                    <div class="book-title">Capitalist Realism</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">The Battle for Your Brain</div>
-                    <div class="commentary">A obra definitiva sobre a nova fronteira da vigilância: a mente. Farahany detalha como a neurotecnologia de consumo (fones com EEG) ameaça a privacidade mental e defende a criação urgente de "neuro-direitos".</div>
-                    <span class="key-concept">🔑 Conceito Chave: Liberdade Cognitiva</span>
+                <div class="book-insight">
+                    "Define a paralisia da imaginação moderna. A ideia de que é mais fácil imaginar o fim do mundo do que o fim do capitalismo é o bloqueio que precisamos quebrar."
                 </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Guy STANDING</div>
-                    <div class="year">2011</div>
-                    <div class="tags"><span class="tag">Sociologia</span><span class="tag">Trabalho</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">O Precariado: A Nova Classe Perigosa</div>
-                    <div class="commentary">Define a classe social da era dos aplicativos: trabalhadores sem identidade ocupacional, sem segurança e sem narrativa de futuro, vivendo à mercê de algoritmos de plataforma (Uberização).</div>
-                    <span class="key-concept">🔑 Conceito Chave: Insegurança Crônica</span>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 13</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Jonathan CRARY</div>
-                    <div class="year">2013</div>
-                    <div class="tags"><span class="tag">Cultura</span><span class="tag">Tempo</span></div>
+                <div class="book-header">
+                    <div class="book-author">MBEMBE, Achille</div>
+                    <div class="book-title">Necropolítica</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">24/7: Late Capitalism and the Ends of Sleep</div>
-                    <div class="commentary">Crary argumenta que o sono é a última barreira natural contra o capitalismo. Em um mundo 24/7, a inatividade é um ato de resistência biológica contra a demanda incessante de atenção e consumo.</div>
-                    <span class="key-concept">🔑 Conceito Chave: O Sono como Resistência</span>
+                <div class="book-insight">
+                    "A base teórica para entendermos como o algoritmo não apenas vigia, mas decide quem é descartável. A gestão da morte como política de estado e dados."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 04</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">BAUDRILLARD, Jean</div>
+                    <div class="book-title">Simulacros e Simulação</div>
+                </div>
+                <div class="book-insight">
+                    "A profecia da Internet Morta. Quando o mapa (a representação digital) se torna mais real que o território (a realidade física), vivemos no deserto do real."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 08</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
         </div>
 
-        <div class="module">
-            <div class="module-header">Módulo III: A Matéria e a Filosofia</div>
+        <div class="section-title">Módulo 02: A Máquina (Infraestrutura)</div>
+        <div class="biblio-grid">
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Kate CRAWFORD</div>
-                    <div class="year">2021</div>
-                    <div class="tags"><span class="tag">Geopolítica</span><span class="tag">Ecologia</span></div>
+                <div class="book-header">
+                    <div class="book-author">CRAWFORD, Kate</div>
+                    <div class="book-title">Atlas of AI</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">Atlas of AI</div>
-                    <div class="commentary">Crawford aterra a "nuvem" na realidade física. Ela mapeia os custos materiais da IA: a mineração predatória, o consumo de água, o trabalho precarizado e o impacto geológico. Desmistifica a ideia de uma tecnologia etérea.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Extração Material</span>
+                <div class="book-insight">
+                    "Desmascara a 'nuvem'. Mapeia a extração mineral, o trabalho escravo e o custo energético real por trás de cada clique."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 09</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Jussi PARIKKA</div>
-                    <div class="year">2015</div>
-                    <div class="tags"><span class="tag">Mídia</span><span class="tag">Geologia</span></div>
+                <div class="book-header">
+                    <div class="book-author">PARIKKA, Jussi</div>
+                    <div class="book-title">A Geology of Media</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">A Geology of Media</div>
-                    <div class="commentary">Argumenta que a mídia digital deve ser entendida através da química e da geologia. Nossos dispositivos são "pedras organizadas" que retornam à terra como lixo tóxico. O "tempo profundo" da Terra encontra o "tempo real" da rede.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Tempo Profundo da Mídia</span>
+                <div class="book-insight">
+                    "Introduz o conceito de 'Antrobsceno'. A mídia digital é geológica. Nossos gadgets são o futuro lixo tóxico da crosta terrestre."
                 </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Jean BAUDRILLARD</div>
-                    <div class="year">1981</div>
-                    <div class="tags"><span class="tag">Filosofia</span><span class="tag">Simulação</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">Simulacros e Simulação</div>
-                    <div class="commentary">A profecia do mundo atual. Baudrillard previu a substituição do real por signos do real (o mapa precede o território). Na era da IA generativa e da Internet Morta, vivemos no "deserto do real" descrito por ele.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Hiper-realidade</span>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 09</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Ron EGLASH</div>
-                    <div class="year">1999</div>
-                    <div class="tags"><span class="tag">Matemática</span><span class="tag">Antropologia</span></div>
+                <div class="book-header">
+                    <div class="book-author">VAROUFAKIS, Yanis</div>
+                    <div class="book-title">Technofeudalism: What Killed Capitalism</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">African Fractals</div>
-                    <div class="commentary">Desafia a narrativa de que a computação é uma invenção puramente ocidental/linear. Eglash mostra como sociedades africanas usavam geometria fractal complexa em arquitetura e arte muito antes de Mandelbrot, oferecendo uma base para a "Afro-computação".</div>
-                    <span class="key-concept">🔑 Conceito Chave: Computação Indígena</span>
+                <div class="book-insight">
+                    "A morte do lucro e a ascensão da renda. Explica como nos tornamos 'servos de nuvem' trabalhando de graça para os senhores feudais digitais (Big Tech)."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 12</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">DOCTOROW, Cory</div>
+                    <div class="book-title">Chokepoint Capitalism</div>
+                </div>
+                <div class="book-insight">
+                    "Define a 'Enshittification' (Merdificação). Como as plataformas criam gargalos para sugar valor de criadores e usuários até a destruição do serviço."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 12</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
         </div>
 
-        <div class="module">
-            <div class="module-header">Módulo IV: Manuais de Retomada</div>
+        <div class="section-title">Módulo 03: A Psique (Controle Mental)</div>
+        <div class="biblio-grid">
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Brunton & Nissenbaum</div>
-                    <div class="year">2015</div>
-                    <div class="tags"><span class="tag">Prática</span><span class="tag">Ofuscação</span></div>
+                <div class="book-header">
+                    <div class="book-author">BERARDI, Franco "Bifo"</div>
+                    <div class="book-title">Precarious Rhapsody</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">Obfuscation: A User's Guide</div>
-                    <div class="commentary">Quando a transparência é uma armadilha, a ofuscação é a defesa. Este livro fornece a base ética e prática para o uso de ruído, dados falsos e ferramentas de confusão (como AdNauseam) para proteger a privacidade sem sair da rede.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Ofuscação</span>
+                <div class="book-insight">
+                    "O conceito de Semiocapitalismo. O colapso mental não é um erro, é o resultado da exploração direta do sistema nervoso pelo capital."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 07</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Donna HARAWAY</div>
-                    <div class="year">1985</div>
-                    <div class="tags"><span class="tag">Feminismo</span><span class="tag">Pós-humanismo</span></div>
+                <div class="book-header">
+                    <div class="book-author">SCHÜLL, Natasha Dow</div>
+                    <div class="book-title">Addiction by Design</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">A Cyborg Manifesto</div>
-                    <div class="commentary">Um texto seminal que recusa a nostalgia da "natureza pura". Haraway nos ensina que a saída não é rejeitar a tecnologia, mas abraçar nossa condição híbrida (ciborgue) para subverter as estruturas de poder patriarcais e capitalistas.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Hibridez e Afinidade</span>
+                <div class="book-insight">
+                    "A 'Zona da Máquina'. Como o design de jogos de azar foi transplantado para as redes sociais para induzir um estado de transe dissociativo."
                 </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Luciano FLORIDI</div>
-                    <div class="year">2015</div>
-                    <div class="tags"><span class="tag">Ética</span><span class="tag">Digital</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">The Onlife Manifesto</div>
-                    <div class="commentary">Floridi argumenta que a distinção entre online e offline acabou. Precisamos de uma nova ética para a existência "Onlife", focada no florescimento humano dentro de uma infosfera que nos envolve como um estuário.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Onlife</span>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 02</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Ursula K. LE GUIN</div>
-                    <div class="year">Vários</div>
-                    <div class="tags"><span class="tag">Ficção</span><span class="tag">Utopia</span></div>
+                <div class="book-header">
+                    <div class="book-author">EUBANKS, Virginia</div>
+                    <div class="book-title">Automating Inequality</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">Discursos e Ensaios</div>
-                    <div class="commentary">Le Guin nos lembra que o capitalismo não é uma lei da física, mas uma escolha. A ficção especulativa e a imaginação radical são ferramentas políticas necessárias para visualizar mundos onde a tecnologia serve à comunidade (Solarpunk).</div>
-                    <span class="key-concept">🔑 Conceito Chave: Imaginação Radical</span>
+                <div class="book-insight">
+                    "O 'Albergue Digital'. Como a tecnologia é usada para vigiar, punir e excluir os pobres sob o pretexto de eficiência burocrática."
                 </div>
-            </div>
-
-            <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Cal NEWPORT</div>
-                    <div class="year">2019</div>
-                    <div class="tags"><span class="tag">Prática</span><span class="tag">Hábitos</span></div>
-                </div>
-                <div class="book-content">
-                    <div class="title">Digital Minimalism</div>
-                    <div class="commentary">O guia prático para a "Cidadania Onlife". Newport oferece estratégias concretas para usar a tecnologia com intencionalidade, em vez de ser usado por ela. Menos teoria, mais ação.</div>
-                    <span class="key-concept">🔑 Conceito Chave: Intencionalidade</span>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 04, 06</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
 
             <div class="book-card">
-                <div class="book-meta">
-                    <div class="author">Sherry TURKLE</div>
-                    <div class="year">2015</div>
-                    <div class="tags"><span class="tag">Psicologia</span><span class="tag">Comunicação</span></div>
+                <div class="book-header">
+                    <div class="book-author">FARAHANY, Nita</div>
+                    <div class="book-title">The Battle for Your Brain</div>
                 </div>
-                <div class="book-content">
-                    <div class="title">Reclaiming Conversation</div>
-                    <div class="commentary">Turkle defende o retorno da conversa face a face, não mediada, como o antídoto para a solidão digital. A tecnologia deve servir à empatia, não substituí-la.</div>
-                    <span class="key-concept">🔑 Conceito Chave: A Cura pela Conversa</span>
+                <div class="book-insight">
+                    "A defesa da Liberdade Cognitiva. Um mapa dos riscos da neurotecnologia e a necessidade urgente de novos direitos mentais."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 10</span>
+                    <button class="download-btn">⇩ LOAD</button>
                 </div>
             </div>
+
         </div>
 
+        <div class="section-title">Módulo 04: Protocolos de Defesa</div>
+        <div class="biblio-grid">
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">WATSON, Julia</div>
+                    <div class="book-title">Lo-TEK: Design by Radical Indigenism</div>
+                </div>
+                <div class="book-insight">
+                    "Tecnologia não é só silício. Um compêndio de infraestruturas ancestrais baseadas na natureza que apontam o caminho para o Solarpunk."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 13</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">ILLICH, Ivan</div>
+                    <div class="book-title">Tools for Conviviality</div>
+                </div>
+                <div class="book-insight">
+                    "A distinção vital entre ferramentas que usamos (conviviais) e ferramentas que nos usam (industriais). A base para a retomada da autonomia."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 11</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">NEWPORT, Cal</div>
+                    <div class="book-title">Digital Minimalism</div>
+                </div>
+                <div class="book-insight">
+                    "Manual tático para a atenção plena. Não é sobre viver sem tecnologia, mas sobre usá-la com intencionalidade radical."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 11</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
+            <div class="book-card">
+                <div class="book-header">
+                    <div class="book-author">PASQUALE, Frank</div>
+                    <div class="book-title">The Black Box Society</div>
+                </div>
+                <div class="book-insight">
+                    "Como os algoritmos secretos de score controlam dinheiro e informação. A luta pela transparência algorítmica."
+                </div>
+                <div class="book-footer">
+                    <span class="chapter-tag">REF: CAP 06</span>
+                    <button class="download-btn">⇩ LOAD</button>
+                </div>
+            </div>
+
+        </div>
     </div>
-    
+
     <script>
-        function setTheme(theme) { document.documentElement.setAttribute('data-theme', theme); }
+        /* --- INFRAESTRUTURA FATOR X --- */
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            if (data.type === 'theme') document.body.classList.toggle('light-mode', data.mode === 'light');
+            if (data.type === 'font-resize') document.documentElement.style.setProperty('--base-size', (16 * data.value) + 'px');
+            if (data.type === 'tts-toggle') toggleSpeech();
+            if (data.type === 'tts-rate') updateSpeechRate(data.value);
+        });
+
+        /* --- ENGINE TTS --- */
+        let speechQueue = [], currentIndex = 0, isSpeaking = false, speechRate = 1.0, synthesis = window.speechSynthesis;
+        
+        function toggleSpeech() {
+            if (speechQueue.length === 0) {
+                const elements = document.querySelectorAll('.speakable');
+                speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
+            }
+            if (isSpeaking) { synthesis.cancel(); isSpeaking = false; } 
+            else { isSpeaking = true; speakNext(); }
+        }
+
+        function speakNext() {
+            if (!isSpeaking || currentIndex >= speechQueue.length) { isSpeaking = false; return; }
+            const element = speechQueue[currentIndex];
+            const utterance = new SpeechSynthesisUtterance(element.innerText);
+            utterance.lang = 'pt-BR'; utterance.rate = speechRate;
+            utterance.onend = () => { if(isSpeaking) { currentIndex++; speakNext(); } };
+            synthesis.speak(utterance);
+        }
+
+        function updateSpeechRate(rate) { speechRate = rate; if(isSpeaking) { synthesis.cancel(); speakNext(); } }
     </script>
 </body>
 </html>
