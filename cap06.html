@@ -2,235 +2,421 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Capítulo 06: O Tribunal Algorítmico. Como scores de crédito, justiça preditiva e fusão de dados criam um sistema de julgamento perpétuo.">
+    <meta name="keywords" content="Crédito Social, Score, COMPAS, Justiça Preditiva, Frank Pasquale, Cathy O'Neil, Digital Redlining, Marginalização Algorítmica, Vigilância">
     <title>Capítulo 06 // O Tribunal Algorítmico</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- FÓRMULA X GLOBAIS --- */
-            --bg-app: #050505; --bg-panel: rgba(20, 20, 23, 0.98); 
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-primary: #ededed; --text-secondary: #888888;
-            --accent: #3b82f6; --accent-bio: #10b981; --accent-warn: #d946ef; --accent-alert: #ef4444;
-            --score-high: #10b981; --score-mid: #eab308; --score-low: #ef4444;
-            --radius: 8px;
-            --font-ui: 'Inter', sans-serif; --font-tech: 'JetBrains Mono', monospace;
-            --transition: all 0.2s ease; --blur: blur(12px);
-            --reading-size: 14px; 
+            /* --- DESIGN SYSTEM FATOR X (Theme: Judgment & Gold) --- */
+            --bg-app: #050505;        
+            --text-primary: #e5e5e5;
+            --text-secondary: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            /* ALMA DO CAPÍTULO: JUSTIÇA (Dourado/Âmbar) & PUNIÇÃO (Vermelho) */
+            --judge-gold: #fbbf24;    /* Ouro da Balança */
+            --judge-dim: rgba(251, 191, 36, 0.08);
+            --risk-red: #ef4444;      /* Vermelho Risco */
+            --safe-green: #10b981;
+            
+            --font-ui: 'Inter', sans-serif;
+            --font-tech: 'JetBrains Mono', monospace;
+            --base-size: 19px; /* Controlado pelo Index */
+            --line-height: 1.8;
+            
+            --transition: all 0.3s ease;
         }
 
         body.light-mode {
-            --bg-app: #f2f2f7; --bg-panel: rgba(255, 255, 255, 0.98); 
-            --border-color: rgba(0, 0, 0, 0.08);
-            --text-primary: #1c1c1e; --text-secondary: #6c6c70;
-            --accent: #007aff; --accent-bio: #16a34a; --accent-warn: #af52de;
+            --bg-app: #f2f2f7;
+            --text-primary: #1c1c1e;
+            --text-secondary: #4b5563;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --judge-gold: #d97706;
+            --judge-dim: rgba(217, 119, 6, 0.08);
+            --risk-red: #dc2626;
+            --safe-green: #059669;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-app); color: var(--text-primary); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
-        /* HUD CLEAN */
-        .reading-hud { height: 60px; flex-shrink: 0; background: var(--bg-panel); backdrop-filter: var(--blur); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; gap: 8px; z-index: 100; padding: 0 15px; }
-        .hud-btn { width: 40px; height: 40px; flex-shrink: 0; background: transparent; border: 1px solid transparent; color: var(--text-secondary); border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; justify-content: center; font-family: var(--font-tech); font-weight: 500; font-size: 14px; transition: var(--transition); }
-        .hud-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); border-color: var(--border-color); }
-        .hud-btn.active { color: var(--text-primary); border-color: var(--border-color); background: rgba(255,255,255,0.05); }
-        .hud-divider { width: 1px; height: 18px; background: var(--border-color); margin: 0 2px; }
-        .speed-indicator { font-family: var(--font-tech); font-size: 12px; color: var(--text-secondary); min-width: 35px; text-align: center; letter-spacing: -0.5px; }
-        @media (max-width: 600px) { .reading-hud { padding: 0 5px; gap: 2px; justify-content: space-between; } .hud-btn { width: 38px; height: 38px; } .hud-divider { display: none; } }
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: var(--font-ui);
+            font-size: var(--base-size);
+            line-height: var(--line-height);
+            transition: var(--transition);
+            overflow-x: hidden;
+            padding-bottom: 100px;
+        }
 
-        /* CONTENT */
-        .content-scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px 20px 100px 20px; scroll-behavior: smooth; }
-        .book-container { max-width: 750px; margin: 0 auto; font-size: var(--reading-size); line-height: 1.8; }
-        h1 { font-family: var(--font-tech); font-size: 2.2em; text-transform: uppercase; letter-spacing: 2px; color: var(--text-primary); border-bottom: 2px solid var(--accent); padding-bottom: 20px; margin-bottom: 40px; text-align: center; }
-        h2 { font-family: var(--font-tech); font-size: 1.5em; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-top: 3em; margin-bottom: 1em; display: flex; align-items: center; gap: 10px; }
+        /* --- CONTAINER DE LEITURA --- */
+        .reader-container {
+            width: 100%;
+            max-width: 720px; 
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        p {
+            margin-bottom: 2em; 
+            text-align: justify; 
+            hyphens: auto; 
+            letter-spacing: -0.01em;
+            transition: color 0.3s;
+        }
+
+        strong { color: var(--text-primary); font-weight: 700; }
+
+        /* --- TIPOGRAFIA TECH --- */
+        .chapter-meta {
+            font-family: var(--font-tech); font-size: 0.75rem; color: var(--judge-gold);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
+            border-left: 2px solid var(--judge-gold); padding-left: 10px;
+        }
+
+        h1 {
+            font-family: var(--font-tech); font-size: 2.2rem; line-height: 1.2;
+            text-transform: uppercase; margin-bottom: 50px; 
+            color: var(--text-primary); letter-spacing: -1px;
+            border-bottom: 1px solid var(--judge-gold); padding-bottom: 20px;
+        }
+
+        h2 {
+            font-family: var(--font-tech); font-size: 1.4rem; color: var(--judge-gold);
+            margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+        }
         h2::before { content: '//'; opacity: 0.5; }
-        h3 { font-family: var(--font-ui); font-size: 1.2em; font-weight: 600; color: var(--accent-warn); margin-top: 2em; text-transform: uppercase; }
-        p { margin-bottom: 1.5em; text-align: justify; color: var(--text-primary); opacity: 0.95; transition: opacity 0.2s; } p:hover { opacity: 1; }
-        li { margin-bottom: 0.8em; color: var(--text-primary); opacity: 0.9; }
-        .chapter-meta { text-align: center; font-family: var(--font-tech); font-size: 0.8em; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; }
 
-        /* BOXES */
-        .box { border-radius: var(--radius); padding: 25px; margin: 3em 0; font-size: 0.95em; position: relative; }
-        .thesis-box { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.3); border-left: 4px solid var(--accent); }
-        .antithesis-box { background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-bio); position: relative; }
-        .antithesis-tag { position: absolute; top: -12px; right: 20px; background: var(--bg-app); color: var(--accent-bio); border: 1px solid var(--accent-bio); padding: 2px 10px; font-weight: bold; font-family: var(--font-tech); text-transform: uppercase; font-size: 0.7rem; }
-        .deep-dive-box { border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color); padding: 30px 0; }
-        .action-box { background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%); border: 1px solid var(--accent-bio); text-align: center; }
-        .action-title { color: var(--accent-bio); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
-
-        /* SCORE DASHBOARD */
-        .score-container { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: var(--radius); padding: 30px; margin: 3em 0; text-align: center; position: relative; overflow: hidden; font-family: var(--font-tech); }
-        .score-circle {
-            width: 140px; height: 140px; border-radius: 50%; border: 6px solid var(--border-color);
-            margin: 0 auto 20px auto; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            position: relative; transition: border-color 0.5s ease, color 0.5s ease;
+        h3 {
+            font-family: var(--font-ui); font-size: 1.15em; font-weight: 600;
+            color: var(--risk-red); margin-top: 2.5em; margin-bottom: 1em;
+            text-transform: uppercase; letter-spacing: 1px;
+            border-left: 3px solid var(--judge-dim); padding-left: 15px;
         }
-        .score-value { font-size: 2.5rem; font-weight: bold; }
-        .score-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-secondary); margin-top: 5px; }
+
+        /* --- WIDGETS --- */
+        .box { padding: 30px; border-radius: 8px; margin: 3em 0; border: 1px solid var(--border-color); background: rgba(255,255,255,0.02); }
         
-        .events-log { text-align: left; font-size: 0.75rem; margin-top: 20px; border-top: 1px dashed var(--border-color); padding-top: 15px; min-height: 100px; }
-        .log-item { display: flex; justify-content: space-between; margin-bottom: 8px; opacity: 0; animation: fadeIn 0.5s forwards; }
-        .log-negative { color: var(--accent-alert); }
-        .log-positive { color: var(--accent-bio); }
+        .thesis-box {
+            background: var(--judge-dim);
+            border-left: 4px solid var(--judge-gold);
+            text-align: justify;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .thesis-header { color: var(--judge-gold); font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; display: block; margin-bottom: 15px; font-size: 0.8rem; letter-spacing: 1px; }
 
-        /* TABLE */
-        .visual-table-container { border: 1px solid var(--border-color); border-radius: var(--radius); overflow: hidden; margin: 3em 0; }
-        .visual-header { background: rgba(255,255,255,0.05); padding: 12px; font-family: var(--font-tech); font-size: 0.8em; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-primary); }
+        .deep-dive-box {
+            border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
+            border-left: none; border-right: none; border-radius: 0;
+            background: rgba(255,255,255,0.01);
+        }
 
-        .reading-highlight { background: rgba(59, 130, 246, 0.15); border-radius: var(--radius); box-shadow: 0 0 20px rgba(59, 130, 246, 0.1); color: #fff; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        /* VISUAL: PYRAMID OF SCORES */
+        .score-stack-container {
+            display: flex; flex-direction: column; gap: 5px; margin: 3em 0; align-items: center;
+        }
+        .score-layer {
+            width: 100%; padding: 15px; text-align: center; border-radius: 4px;
+            font-family: var(--font-tech); font-size: 0.8rem; color: #fff;
+            position: relative; transition: transform 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .score-layer:hover { transform: scale(1.03); z-index: 10; border-color: var(--judge-gold); }
+        
+        .sl-4 { width: 40%; background: var(--risk-red); opacity: 1; } /* Topo */
+        .sl-3 { width: 60%; background: #b45309; opacity: 0.9; }
+        .sl-2 { width: 80%; background: #d97706; opacity: 0.8; }
+        .sl-1 { width: 100%; background: #f59e0b; opacity: 0.7; } /* Base */
+        
+        .layer-label { font-weight: bold; display: block; text-transform: uppercase; letter-spacing: 1px; }
+        .layer-detail { font-size: 0.7em; opacity: 0.9; display: block; margin-top: 4px; }
+
+        /* SCORE SIMULATOR */
+        .score-sim {
+            background: var(--bg-app); border: 1px solid var(--border-color);
+            padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px;
+        }
+        .score-val { font-size: 3rem; font-weight: bold; color: var(--safe-green); font-family: var(--font-tech); }
+        .score-status { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-secondary); }
+
+        /* Comparação Grid */
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 3em 0; }
+        .comp-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color); padding: 25px; border-radius: 8px;
+            transition: transform 0.2s;
+        }
+        .comp-card:hover { transform: translateY(-5px); border-color: var(--judge-gold); }
+        .comp-title { 
+            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
+            display: block; margin-bottom: 15px; font-size: 0.8rem;
+        }
+        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
+
+        /* Action Box */
+        .action-box {
+            border: 1px dashed var(--judge-gold); background: linear-gradient(180deg, var(--judge-dim), transparent);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 12px;
+            position: relative; overflow: hidden;
+        }
+        .action-header { 
+            font-family: var(--font-tech); color: var(--judge-gold); font-weight: bold; font-size: 1.1rem;
+            margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* --- SINCRONIA DE LEITURA (FATOR X) --- */
+        .reading-highlight { 
+            background: var(--judge-dim); 
+            color: var(--text-primary); 
+            border-left: 4px solid var(--judge-gold);
+            padding-left: 15px;
+            margin-left: -19px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 700px) {
+            .reader-container { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="reading-hud">
-        <button class="hud-btn" onclick="toggleTheme()" title="Tema">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-        <div class="hud-divider"></div>
-        <button class="hud-btn" onclick="changeFontSize(-1)" title="Diminuir Fonte">A-</button>
-        <button class="hud-btn" onclick="changeFontSize(1)" title="Aumentar Fonte">A+</button>
-        <div class="hud-divider"></div>
-        <button class="hud-btn" onclick="changeSpeed(-0.25)" title="Lento">«</button>
-        <span class="speed-indicator" id="speed-val">1.0x</span>
-        <button class="hud-btn" onclick="changeSpeed(0.25)" title="Rápido">»</button>
-        <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()" title="Narrar">
-            <svg id="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-        </button>
-    </div>
+    <div class="reader-container" id="content-area">
+        <span class="chapter-meta">PARTE II: O CORPO E O TERRITÓRIO | CAPÍTULO 06</span>
+        
+        <h1 class="speakable">O Tribunal Algorítmico:<br>A Sentença Silenciosa</h1>
 
-    <div class="content-scroll-area" id="content-area">
-        <div class="book-container">
-            <div class="chapter-meta">Parte II: O Corpo e o Território | Capítulo 06</div>
-            <h1>O Tribunal Algorítmico</h1>
+        <p class="speakable">No capítulo anterior, vimos como a cidade captura seus dados. Agora, veremos o que é feito com eles. Você não está apenas sendo observado; você está sendo julgado. E diferentemente dos tribunais humanos, onde existe o direito de defesa, o contraditório e a presunção de inocência, no <strong>Tribunal Algorítmico</strong> a sentença é instantânea, silenciosa e, muitas vezes, irrevogável.</p>
+        
+        <p class="speakable">Aceitamos passivamente que nosso valor financeiro seja medido por um "Score de Crédito". Mas a fronteira foi rompida. Hoje, governos e corporações fundem dados para criar um "Score de Cidadania" invisível. Sua reputação deixou de ser uma qualidade social fluida (o que seus vizinhos pensam de você) para se tornar uma moeda digital rígida e punitiva.</p>
 
-            <p>No capítulo anterior, vimos como o "Eu Inferido" é construído. Agora, veremos o que é feito com ele. Você não está apenas sendo observado; você está sendo julgado. E diferentemente dos tribunais humanos, onde existe o direito de defesa, o contraditório e a presunção de inocência, no Tribunal Algorítmico a sentença é instantânea, silenciosa e, muitas vezes, irrevogável.</p>
-            
-            <p>Nós aceitamos passivamente que nosso valor financeiro seja medido por um "Score de Crédito". Mas a fronteira foi rompida. Hoje, a tecnologia permite medir seu "Score Moral", seu "Score de Cidadão" e seu "Score de Empregabilidade". Sua reputação deixou de ser uma qualidade social fluida para se tornar uma moeda digital rígida.</p>
+        <div class="box thesis-box speakable">
+            <span class="thesis-header">// A Sociedade da Caixa Preta</span>
+            "Como define o jurista <strong>Frank Pasquale</strong> em <em>The Black Box Society</em>, somos governados por autoridades que não podemos ver, baseadas em leis que não podemos ler. Se o seu score cai, o juro aumenta, a vaga de emprego some e o seguro de saúde nega a cobertura. O sistema não diz o porquê. A opacidade é a arma: ela gera uma ansiedade disciplinar onde passamos a evitar qualquer comportamento que <em>talvez</em> desagrade a máquina."
+        </div>
 
-            <div class="box deep-dive-box">
-                <h3>Fator X: Vidas Desperdiçadas</h3>
-                <p>O sociólogo <strong>Zygmunt Bauman</strong>, em <em>Vidas Desperdiçadas</em>, alertou que a modernidade produz "humanos supérfluos" — aqueles que não têm utilidade para o mercado. O algoritmo é a ferramenta perfeita para essa triagem. Ele não odeia você; ele apenas classifica você como "ineficiente". Se seu padrão de dados sugere que você é um consumidor ruim ou um cidadão problemático, você é deletado digitalmente. Não é uma execução física, é uma morte social: o cartão não passa, a catraca não abre, o visto é negado.</p>
+        <h2 class="speakable">Engenharia de Reputação: Como o Score é Fabricado</h2>
+
+        <p class="speakable">Seu score não é um número único; é uma pirâmide de inferências. Dados de fontes díspares são comprados e cruzados em "Data Brokers" (como a Serasa Experian ou Acxiom) para criar um perfil de risco holístico. Veja como as camadas se empilham:</p>
+
+        <div class="score-stack-container speakable">
+            <div class="score-layer sl-4">
+                <span class="layer-label">4. PREDITIVO (O Futuro)</span>
+                <span class="layer-detail">Probabilidade de crime, doença futura, gravidez. (IA/Inferência)</span>
             </div>
-
-            <h2>A Tese: Do Crédito ao Caráter</h2>
-
-            <p>A China implementou o "Sistema de Crédito Social", onde comprar álcool, jogar videogame demais ou atravessar fora da faixa reduz sua pontuação, impedindo o acesso a trens de alta velocidade ou empréstimos. O Ocidente olhou com horror, chamando isso de distopia.</p>
-            
-            <p>Mas nós vivemos na mesma realidade, apenas privatizada. Empresas como a <em>PatronScan</em> permitem que bares banam clientes "problemáticos" (cujos dados são compartilhados entre estabelecimentos). Seguradoras usam seus dados de condução (via telemetria) para aumentar sua apólice. O Airbnb pode banir você permanentemente por um comportamento "arriscado" inferido por IA.</p>
-
-            <div class="box thesis-box">
-                <strong style="color: var(--accent); text-transform: uppercase; font-family: var(--font-tech);">// A Presunção de Risco:</strong><br><br>
-                "No Direito, você é inocente até que se prove o contrário. No Big Data, você é um risco até que seu Score prove o contrário. A lógica inverteu o ônus da prova. Você precisa performar obediência (pagar em dia, andar devagar, postar conteúdo 'seguro') para destravar seus direitos básicos."
+            <div class="score-layer sl-3">
+                <span class="layer-label">3. BIOLÓGICO/SAÚDE</span>
+                <span class="layer-detail">Histórico médico, Wearables, Compras de Farmácia.</span>
             </div>
+            <div class="score-layer sl-2">
+                <span class="layer-label">2. COMPORTAMENTAL</span>
+                <span class="layer-detail">Nota do Uber, Histórico de Navegação, Redes Sociais.</span>
+            </div>
+            <div class="score-layer sl-1">
+                <span class="layer-label">1. FINANCEIRO/CÍVICO</span>
+                <span class="layer-detail">Dívidas, Impostos, Multas, Processos Judiciais.</span>
+            </div>
+        </div>
 
-            <h2>O Painel de Julgamento</h2>
-            
-            <p>Como funciona esse julgamento em tempo real? Imagine que cada micro-ação do seu dia impacta sua viabilidade social. O painel abaixo simula como o "Eu Inferido" (Capítulo 3) é convertido em punição ou recompensa.</p>
+        <p class="speakable">Essas camadas não operam isoladas. Uma falha na camada comportamental (muitas corridas de Uber canceladas ou avaliações ruins) pode sinalizar "impulsividade", baixando seu score financeiro ou aumentando o prêmio do seu seguro de carro. Tudo está conectado.</p>
 
-            <div class="score-container">
-                <span style="display:block; margin-bottom:20px; font-weight:bold; color:var(--highlight); letter-spacing:1px;">⚖️ SIMULAÇÃO DE SCORE SOCIAL</span>
-                <div class="score-circle" id="score-circle">
-                    <span class="score-value" id="score-val">750</span>
-                    <span class="score-label">BOM CIDADÃO</span>
+        <h2 class="speakable">Marginalização Automática: O Crime de Ser Pobre</h2>
+
+        <p class="speakable">O sistema odeia anomalias. Para o algoritmo, a falta de dados é tão perigosa quanto dados ruins. Pessoas em situação de rua, imigrantes sem documentos ou idosos desconectados são classificados como "High Risk" (Alto Risco) simplesmente por não gerarem fluxo de dados padronizado.</p>
+        
+        <p class="speakable">Isso cria o <strong>Digital Redlining</strong>. Se você mora em um CEP "de risco", o algoritmo assume que você compartilhará o destino estatístico dos seus vizinhos. O sistema nega crédito e oportunidades preventivamente. Mendigos e doentes crônicos são julgados automaticamente como "falhas de sistema" a serem contidas, não cidadãos a serem ajudados. A miséria é convertida em uma pontuação baixa, justificando a exclusão sem a necessidade de intervenção humana.</p>
+
+        <h2 class="speakable">O Cerco de Segurança: A Fusão Público-Privada</h2>
+
+        <p class="speakable">O objetivo final dessa pontuação não é apenas comercial, é policial. Empresas e governos compartilham esses dados para produzir "segurança".</p>
+        <p class="speakable">A Amazon (através das câmeras Ring) compartilha imagens de varandas privadas com a polícia sem mandado. Bancos compartilham padrões de gastos "suspeitos" com agências de inteligência. Se você compra fertilizante e depois uma panela de pressão, seu "Score de Terrorismo" sobe. O mercado vigia para lucrar; o Estado usa o lucro do mercado para vigiar.</p>
+
+        <h2 class="speakable">A Morte da Jurisprudência Humana</h2>
+
+        <p class="speakable">O passo final é a substituição do juiz. Softwares como o <strong>COMPAS</strong> (nos EUA) já recomendam sentenças baseadas no "risco de reincidência" do réu. O problema? O software aprendeu com dados históricos racistas.</p>
+
+        <div class="comparison-grid">
+            <div class="comp-card" style="border-left: 2px solid var(--safe-green);">
+                <span class="comp-title" style="color:var(--safe-green)">JUSTIÇA HUMANA (Analógica)</span>
+                <div class="comp-content speakable">
+                    Baseada na interpretação, no contexto e na possibilidade de misericórdia. O juiz pode olhar para um réu que roubou pão e ver fome, não crime. Permite a exceção e o perdão.
                 </div>
-                <div class="events-log" id="events-log">
-                    <div class="log-item" style="color:var(--text-secondary)">Sistema de Julgamento Iniciado...</div>
+            </div>
+            <div class="comp-card" style="border-left: 2px solid var(--risk-red);">
+                <span class="comp-title" style="color:var(--risk-red)">JUSTIÇA ALGORÍTMICA (Digital)</span>
+                <div class="comp-content speakable">
+                    Baseada em correlações estatísticas rígidas. Cria uma <strong>"Jurisprudência Petrificada"</strong>: o futuro é condenado a repetir as punições do passado. Elimina a intuição e o "erro" humano que, às vezes, é a única porta para a justiça real.
                 </div>
             </div>
+        </div>
 
-            <div class="box deep-dive-box">
-                <h3>A Sociedade da Caixa Preta</h3>
-                <p>O jurista <strong>Frank Pasquale</strong> chama isso de "Black Box Society". O problema não é apenas que somos julgados, mas que não sabemos a lei. Por que seu score caiu 30 pontos hoje? Foi o atraso na conta? Foi o bairro onde você passou com o GPS ligado? Foi a busca que você fez sobre "sintomas de depressão"? O algoritmo não explica. Ele apenas pune. A punição sem explicação gera uma ansiedade disciplinar: passamos a evitar qualquer comportamento que <em>talvez</em> seja malvisto pela máquina.</p>
-            </div>
+        <p class="speakable">Estamos criando um "inconsciente coletivo" de jurisprudência digital que desafia a criatividade. O advogado humano tenta argumentar a exceção; o algoritmo esmaga a exceção para manter a média. A digitalização dos processos não traz agilidade; traz a estagnação moral.</p>
 
-            <h2>Antítese: O Direito ao Esquecimento</h2>
+        <h2 class="speakable">Síntese: Litigância Algorítmica e Adaptação</h2>
 
-            <p>O cérebro humano evoluiu para esquecer. O esquecimento é o que permite o perdão, a reinvenção e a mudança. Se lembrássemos de cada erro que nossos amigos cometeram há 10 anos, nenhuma relação sobreviveria. Mas a internet tem "memória perfeita".</p>
-            
-            <p>Viktor Mayer-Schönberger, em <em>Delete</em>, argumenta que precisamos reintroduzir o "esquecimento" no design da tecnologia. Dados deveriam ter data de validade. Um erro cometido na juventude (uma foto, um post, uma dívida) não deveria assombrar um adulto para sempre. O Tribunal Algorítmico, contudo, é eterno. Ele condena você ao seu passado.</p>
+        <p class="speakable">Não há como "sair" do sistema de crédito ou do sistema judiciário. A rota de fuga é a <strong>Otimização Consciente</strong> e o Posicionamento Tático.</p>
+        
+        <p class="speakable">Precisamos aprender a "falar" com o algoritmo. Isso significa gerenciar ativamente os sinais que emitimos. Se você vai pedir um empréstimo, limpe suas redes sociais. Se você vai contratar um seguro, use o wearable apenas quando estiver saudável. Não é hipocrisia; é sobrevivência em território hostil.</p>
+        
+        <p class="speakable">Mais do que isso, devemos exigir o <strong>"Direito à Explicação"</strong>. Se um algoritmo nega algo a você, a lei (como a LGPD no Brasil e GDPR na Europa) garante o direito de saber <em>como</em> a decisão foi tomada. Use isso. Travancar o sistema com pedidos de explicação é uma forma de protesto que força o custo da vigilância a subir.</p>
 
-            <div class="box antithesis-box">
-                <span class="antithesis-tag">O Contraponto Humano</span>
-                <p><strong>Identidade Narrativa vs. Estocástica</strong></p>
-                <p>O filósofo Paul Ricoeur falava da "Identidade Narrativa": eu sou a história que conto e reconstruo sobre mim mesmo. Eu posso mudar. Eu posso me arrepender.</p>
-                <p>O algoritmo impõe uma "Identidade Estocástica": eu sou a média estatística dos meus comportamentos passados. Para a máquina, a mudança é uma anomalia, não uma evolução. Reivindicar nossa humanidade é reivindicar o direito de ser inconsistente com nosso próprio histórico.</p>
-            </div>
-
-            <div class="visual-table-container">
-                <div class="visual-header">🏛️ DOIS MODELOS DE JUSTIÇA</div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td style="color:var(--accent);"><strong>Justiça Humana</strong></td>
-                            <td>Contextual, Falível, Permite Perdão/Reabilitação.</td>
-                        </tr>
-                        <tr>
-                            <td style="color:var(--accent-warn);"><strong>Justiça Algorítmica</strong></td>
-                            <td>Absoluta, Opaca, Cumulativa (O passado condena para sempre).</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Síntese: Tornando-se Ilegível</h2>
-
-            <p>Se o tribunal é injusto e o juiz é um robô secreto, a única defesa racional é não comparecer ao julgamento. Isso significa ofuscação.</p>
-            
-            <p>Não busque a perfeição do Score; isso é uma armadilha para ratos. Busque a diversificação. Não dependa de uma única plataforma para sua subsistência ou identidade. Tenha redes de segurança analógicas. Cultive reputação real (boca a boca) que nenhum algoritmo pode apagar.</p>
-
-            <div class="box action-box">
-                <div class="action-title">🔨 DESAFIO DE RETOMADA #06</div>
-                <p><strong>O Teste de Fragilidade</strong></p>
-                <p>Imagine que amanhã sua conta principal (Google/Apple/Instagram) seja banida por um "erro de algoritmo".</p>
-                <p><strong>Sua missão hoje:</strong> Identifique um ponto único de falha na sua vida digital. Você tem o telefone dos seus amigos anotado fora da nuvem? Você tem cópias dos seus documentos fora do e-mail? Crie um "bote salva-vidas" analógico. O tribunal pode fechar suas portas a qualquer momento; garanta que você tenha a chave da saída.</p>
-            </div>
-
+        <div class="box action-box speakable">
+            <span class="action-header">⚖️ DESAFIO DE RETOMADA #06</span>
+            <p><strong>A Auditoria do Score</strong></p>
+            <p>Você sabe a nota que o sistema deu para a sua vida? A ignorância é um risco.</p>
+            <p><strong>Sua missão:</strong> Acesse hoje mesmo os portais de crédito (Serasa, Boa Vista) e verifique seu Score. Mas vá além: acesse a área de "Cadastro Positivo" e veja o histórico detalhado. Se houver erros, conteste. Se houver dados antigos que deveriam ter caducado, exija a remoção.</p>
+            <p>Trate seu rastro de dados como um jardim que precisa ser podado constantemente. Se você não cuidar da sua reputação digital, o algoritmo vai definir quem você é — e ele nunca será generoso.</p>
         </div>
     </div>
 
     <script>
-        // --- ENGINE FÓRMULA X ---
-        function toggleTheme() { document.documentElement.setAttribute('data-theme', document.body.classList.toggle('light-mode') ? 'light' : 'dark'); }
-        let currentSize = 14; 
-        function changeFontSize(amount) { currentSize += amount; if(currentSize < 14) currentSize = 14; if(currentSize > 32) currentSize = 32; document.documentElement.style.setProperty('--reading-size', currentSize + 'px'); }
-        
-        let speechRate = 1.0, isSpeaking = false, speechQueue = [], currentSpeechIndex = 0, isChangingState = false;
-        function changeSpeed(amount) { speechRate += amount; if(speechRate < 0.5) speechRate = 0.5; if(speechRate > 2.5) speechRate = 2.5; document.getElementById('speed-val').innerText = speechRate.toFixed(1) + 'x'; if(isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } }
-        
-        function toggleSpeech() { const btn = document.getElementById('btn-speak'); if (isSpeaking) { isChangingState = true; window.speechSynthesis.cancel(); isSpeaking = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>'; btn.classList.remove('active'); } else { prepareQueue(); if(speechQueue.length > 0) { isSpeaking = true; btn.classList.add('active'); btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; speakChunk(); } } }
-        
-        function prepareQueue() { const container = document.querySelector('.book-container'); const elements = container.querySelectorAll('p, h1, h2, h3, li, td, .box, .score-container'); speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0); }
-        function clearHighlights() { document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight')); }
-        function speakChunk() { if (!isSpeaking) return; if (currentSpeechIndex >= speechQueue.length) { isSpeaking = false; currentSpeechIndex = 0; toggleSpeech(); return; } const element = speechQueue[currentSpeechIndex]; clearHighlights(); element.classList.add('reading-highlight'); element.scrollIntoView({behavior: "smooth", block: "center"}); const utterance = new SpeechSynthesisUtterance(element.innerText); utterance.lang = 'pt-BR'; utterance.rate = speechRate; utterance.onend = function() { if (isSpeaking && !isChangingState) { currentSpeechIndex++; speakChunk(); } if(isChangingState) isChangingState = false; }; window.speechSynthesis.speak(utterance); }
-        document.getElementById('content-area').addEventListener('click', function(e) { const target = e.target.closest('p, h1, h2, h3, .box, td, li'); if (target) { prepareQueue(); let index = speechQueue.indexOf(target); if (index !== -1) { isChangingState = true; window.speechSynthesis.cancel(); currentSpeechIndex = index; isSpeaking = true; document.getElementById('btn-speak').classList.add('active'); document.getElementById('btn-speak').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>'; setTimeout(() => { isChangingState = false; speakChunk(); }, 50); } } });
-        window.onbeforeunload = function() { window.speechSynthesis.cancel(); };
+        /* --- COMUNICAÇÃO COM A MATRIZ (INDEX) --- */
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            
+            // 1. Controle de Tema
+            if (data.type === 'theme') {
+                if (data.mode === 'light') document.body.classList.add('light-mode');
+                else document.body.classList.remove('light-mode');
+            }
 
-        // SCORE SIMULATION
-        let currentScore = 750;
-        const events = [{txt:"Pagamento em dia",val:5,type:"pos"},{txt:"Local de risco",val:-15,type:"neg"},{txt:"Interação radical",val:-10,type:"neg"},{txt:"Exercício físico",val:2,type:"pos"},{txt:"Atraso fatura",val:-25,type:"neg"},{txt:"Doação caridade",val:10,type:"pos"},{txt:"Tela excessiva",val:-8,type:"neg"}];
-        function updateScoreColor(score) { const circle = document.getElementById('score-circle'); let colorVar = '--text-secondary'; if(score >= 700) colorVar='--score-high'; else if(score >= 500) colorVar='--score-mid'; else colorVar='--score-low'; circle.style.borderColor = `var(${colorVar})`; circle.style.color = `var(${colorVar})`; }
-        function runSimulation() {
-            const logContainer = document.getElementById('events-log');
-            const evt = events[Math.floor(Math.random() * events.length)];
-            currentScore += evt.val; if(currentScore > 1000) currentScore=1000; if(currentScore < 0) currentScore=0;
-            document.getElementById('score-val').innerText = currentScore;
-            updateScoreColor(currentScore);
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-item ${evt.type === 'pos' ? 'log-positive' : 'log-negative'}`;
-            logEntry.innerHTML = `<span>${evt.txt}</span> <span>${evt.val > 0 ? '+' : ''}${evt.val}</span>`;
-            logEntry.style.display = 'flex'; logEntry.style.justifyContent = 'space-between'; logEntry.style.marginBottom = '5px';
-            if(evt.type === 'pos') logEntry.style.color = 'var(--score-high)'; else logEntry.style.color = 'var(--score-low)';
-            logContainer.insertBefore(logEntry, logContainer.firstChild);
-            if(logContainer.children.length > 4) logContainer.lastChild.remove();
-            setTimeout(runSimulation, 2500);
+            // 2. Controle de Fonte
+            if (data.type === 'font-resize') {
+                const newSize = 19 * data.value;
+                document.documentElement.style.setProperty('--base-size', newSize + 'px');
+            }
+
+            // 3. Controle de TTS
+            if (data.type === 'tts-toggle') toggleSpeech();
+            if (data.type === 'tts-rate') updateSpeechRate(data.value);
+        });
+
+        /* --- ENGINE TTS AVANÇADA (FATOR X) --- */
+        let speechQueue = [];
+        let currentIndex = 0;
+        let isSpeaking = false;
+        let speechRate = 1.0;
+        let synthesis = window.speechSynthesis;
+        let utterance = null;
+        let selectedVoice = null;
+
+        function loadVoices() {
+            const voices = synthesis.getVoices();
+            selectedVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) ||
+                            voices.find(v => v.lang === 'pt-BR' && v.name.includes('Microsoft')) ||
+                            voices.find(v => v.lang === 'pt-BR');
         }
-        setTimeout(runSimulation, 1000);
+        
+        if (synthesis.onvoiceschanged !== undefined) {
+            synthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function prepareQueue() {
+            const elements = document.querySelectorAll('.speakable');
+            speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
+        }
+
+        function toggleSpeech() {
+            if (speechQueue.length === 0) prepareQueue();
+
+            if (isSpeaking) {
+                synthesis.cancel();
+                isSpeaking = false;
+                clearHighlights();
+                reportStatus(false);
+            } else {
+                isSpeaking = true;
+                reportStatus(true);
+                speakNext();
+            }
+        }
+
+        function updateSpeechRate(rate) {
+            speechRate = rate;
+            if (isSpeaking) {
+                synthesis.cancel();
+                speakNext();
+            }
+        }
+
+        function speakNext() {
+            if (!isSpeaking) return;
+            if (currentIndex >= speechQueue.length) {
+                isSpeaking = false;
+                currentIndex = 0;
+                clearHighlights();
+                reportStatus(false);
+                return;
+            }
+
+            const element = speechQueue[currentIndex];
+            const text = element.innerText;
+
+            clearHighlights();
+            element.classList.add('reading-highlight');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            utterance.rate = speechRate;
+            
+            if (selectedVoice) utterance.voice = selectedVoice;
+            
+            utterance.onend = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+            
+            utterance.onerror = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+
+            synthesis.speak(utterance);
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+        }
+
+        function reportStatus(playing) {
+            window.parent.postMessage({ type: 'tts-status', isPlaying: playing }, '*');
+        }
+
+        document.getElementById('content-area').addEventListener('click', function(e) {
+            const target = e.target.closest('.speakable');
+            if (target) {
+                if (speechQueue.length === 0) prepareQueue();
+                const index = speechQueue.indexOf(target);
+                if (index !== -1) {
+                    synthesis.cancel();
+                    currentIndex = index;
+                    isSpeaking = true;
+                    reportStatus(true);
+                    speakNext();
+                }
+            }
+        });
+
+        window.onbeforeunload = function() {
+            synthesis.cancel();
+        };
     </script>
 </body>
 </html>
-
