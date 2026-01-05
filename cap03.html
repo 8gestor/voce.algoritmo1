@@ -3,35 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Capítulo 03: O Eu Inferido. A Matriz de Extração detalhada, o modelo OCEAN e como auditar o seu Data Double via LGPD.">
+    <meta name="description" content="Capítulo 03: O Eu Inferido. A Matriz de Extração detalhada, Open Finance, Biometria Comportamental e a defesa com Warden App.">
+    <meta name="keywords" content="Data Double, Open Finance, Biometria Comportamental, Warden App, Uber Preço Dinâmico, Shadow Profile, Pupilometria, Vigilância Financeira, iFood Algoritmo, Shopee Gamificação">
     <title>Capítulo 03 // O Eu Inferido</title>
     
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1605342980481793');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
-    /></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- DESIGN SYSTEM FATOR 1 --- */
+            /* --- DESIGN SYSTEM FATOR X (Theme: Data Matrix) --- */
             --bg-app: #050505;        
             --text-primary: #e5e5e5;
             --text-secondary: #9ca3af;
             --border-color: rgba(255, 255, 255, 0.12);
             
-            /* ALMA DO CAPÍTULO: DADOS & MATRIZ (Ciano/Verde) */
+            /* ALMA DO CAPÍTULO: DADOS (Ciano) & BIOLÓGICO (Verde Matrix) */
             --accent: #00f3ff;        /* Ciano Tech */
             --accent-dim: rgba(0, 243, 255, 0.08);
             --bio-green: #39ff14;     /* Verde Matrix */
@@ -39,8 +25,10 @@
             
             --font-ui: 'Inter', sans-serif;
             --font-tech: 'JetBrains Mono', monospace;
-            --base-size: 19px;
+            --base-size: 19px; /* Controlado pelo Index */
             --line-height: 1.8;
+            
+            --transition: all 0.3s ease;
         }
 
         body.light-mode {
@@ -61,16 +49,17 @@
             font-family: var(--font-ui);
             font-size: var(--base-size);
             line-height: var(--line-height);
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: var(--transition);
             overflow-x: hidden;
+            padding-bottom: 100px;
         }
 
-        /* --- MARGENS OTIMIZADAS --- */
+        /* --- CONTAINER DE LEITURA --- */
         .reader-container {
             width: 100%;
-            max-width: 640px; 
+            max-width: 720px; /* Ligeiramente maior para tabelas */
             margin: 0 auto;
-            padding: 40px 24px 120px 24px;
+            padding: 60px 24px;
         }
 
         p {
@@ -78,29 +67,12 @@
             text-align: justify; 
             hyphens: auto; 
             letter-spacing: -0.01em;
+            transition: color 0.3s;
         }
 
         strong { color: var(--text-primary); font-weight: 700; }
 
-        /* HUD */
-        .chapter-hud {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(var(--bg-app), 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .hud-btn {
-            background: transparent; border: 1px solid var(--border-color);
-            color: var(--text-secondary); border-radius: 6px;
-            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
-            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
-        }
-        .hud-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
-        .hud-ctrls { display: flex; gap: 8px; }
-
-        /* TIPOGRAFIA TECH */
+        /* --- TIPOGRAFIA TECH --- */
         .chapter-meta {
             font-family: var(--font-tech); font-size: 0.75rem; color: var(--accent);
             text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
@@ -108,26 +80,27 @@
         }
 
         h1 {
-            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            font-family: var(--font-tech); font-size: 2.2rem; line-height: 1.2;
             text-transform: uppercase; margin-bottom: 50px; 
             color: var(--text-primary); letter-spacing: -1px;
+            border-bottom: 1px solid var(--accent); padding-bottom: 20px;
         }
 
         h2 {
-            font-family: var(--font-tech); font-size: 1.3rem; color: var(--accent);
+            font-family: var(--font-tech); font-size: 1.4rem; color: var(--accent);
             margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
             border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
         }
         h2::before { content: '//'; opacity: 0.5; }
 
         h3 {
-            font-family: var(--font-ui); font-size: 1.1em; font-weight: 600;
+            font-family: var(--font-ui); font-size: 1.15em; font-weight: 600;
             color: var(--bio-green); margin-top: 2.5em; margin-bottom: 1em;
             text-transform: uppercase; letter-spacing: 1px;
+            border-left: 3px solid var(--accent-dim); padding-left: 15px;
         }
 
-        /* WIDGETS E GRÁFICOS JUSTIFICADOS */
-        
+        /* --- WIDGETS --- */
         .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
         
         .thesis-box {
@@ -140,9 +113,10 @@
         .deep-dive-box {
             border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
             border-left: none; border-right: none; border-radius: 0;
+            background: rgba(255,255,255,0.01);
         }
 
-        /* Widget: PRISMA DE DADOS */
+        /* Widget: PRISMA DE DADOS (Visual) */
         .prism-container {
             display: flex; flex-direction: column; align-items: center; gap: 15px;
             background: rgba(255,255,255,0.02); border: 1px solid var(--border-color);
@@ -163,84 +137,69 @@
         .bar-val { color: var(--bio-green); font-weight: bold; }
         .bar-risk { color: var(--alert); font-weight: bold; }
 
-        /* Widget: DASHBOARD DETALHADO (NOVO) */
+        /* Widget: DASHBOARD DETALHADO (TABELA MASSIVA) */
+        .matrix-table-container { overflow-x: auto; margin: 3em 0; border: 1px solid var(--border-color); border-radius: 8px; }
         .matrix-table {
-            width: 100%; border-collapse: collapse; font-family: var(--font-tech); font-size: 0.75rem;
-            margin: 3em 0; border: 1px solid var(--border-color);
+            width: 100%; border-collapse: collapse; font-family: var(--font-tech); font-size: 0.8rem; min-width: 600px;
         }
         .matrix-table th { 
-            text-align: left; padding: 12px; background: rgba(255,255,255,0.05); 
+            text-align: left; padding: 15px; background: rgba(0, 243, 255, 0.05); 
             color: var(--accent); border-bottom: 2px solid var(--border-color);
+            text-transform: uppercase; letter-spacing: 1px;
         }
         .matrix-table td { 
-            padding: 12px; border-bottom: 1px solid var(--border-color); 
+            padding: 15px; border-bottom: 1px solid var(--border-color); 
             color: var(--text-secondary); vertical-align: top;
         }
         .matrix-table tr:last-child td { border-bottom: none; }
-        .detail-highlight { color: var(--text-primary); font-weight: bold; display: block; margin-bottom: 4px; }
-
-        /* Comparação Grid */
-        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
-        .comp-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
-            transition: transform 0.2s;
+        .detail-highlight { color: var(--text-primary); font-weight: bold; display: block; margin-bottom: 6px; }
+        .tech-tag {
+            display: inline-block; font-size: 0.7rem; padding: 2px 6px; 
+            background: rgba(255,255,255,0.05); border-radius: 4px; 
+            margin-right: 4px; margin-bottom: 4px; border: 1px solid var(--border-color);
         }
-        .comp-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .comp-title { 
-            font-family: var(--font-tech); font-weight: bold; text-transform: uppercase; 
-            display: block; margin-bottom: 10px; font-size: 0.8rem;
-        }
-        .comp-content { font-size: 0.9rem; text-align: justify; color: var(--text-secondary); line-height: 1.6; }
 
         /* Action Box */
         .action-box {
-            border: 1px dashed var(--accent); background: rgba(var(--bg-app), 0.5);
-            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+            border: 1px dashed var(--accent); background: linear-gradient(180deg, var(--accent-dim), transparent);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 12px;
+            position: relative; overflow: hidden;
         }
         .action-header { 
-            font-family: var(--font-tech); color: var(--accent); font-weight: bold; 
+            font-family: var(--font-tech); color: var(--accent); font-weight: bold; font-size: 1.1rem;
             margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .reading-highlight { background: var(--accent-dim); color: var(--text-primary); border-radius: 2px; }
-
-        @media (min-width: 600px) {
-            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        /* --- SINCRONIA DE LEITURA (FATOR X) --- */
+        .reading-highlight { 
+            background: var(--accent-dim); 
+            color: var(--text-primary); 
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+            margin-left: -19px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 20px var(--accent-dim);
+            transition: all 0.3s ease;
         }
 
-        @media (max-width: 600px) {
-            .reader-container { padding: 30px 20px 100px 20px; }
-            h1 { font-size: 1.7rem; }
-            .matrix-table { display: block; overflow-x: auto; } /* Scroll na tabela */
-            .chapter-hud { padding: 10px 15px; }
-            .hud-btn span { display: none; }
+        @media (max-width: 700px) {
+            .reader-container { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="chapter-hud">
-        <div class="hud-ctrls">
-            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
-            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
-        </div>
-        <div class="hud-ctrls">
-            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
-                ▶ <span>OUVIR</span>
-            </button>
-        </div>
-    </div>
-
     <div class="reader-container" id="content-area">
         <span class="chapter-meta">PARTE I: A MENTE | CAPÍTULO 03</span>
-        <h1>O Eu Inferido vs.<br>Soberania de Dados</h1>
-
-        <p>Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Talvez um produto para bebê antes de você anunciar a gravidez, ou um remédio para depressão antes de você admitir que está triste. Isso não é telepatia. É inferência estatística de alta precisão.</p>
         
-        <p>Você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, composta por bilhões de fragmentos de dados. Para o algoritmo, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e muito mais lucrativa para vender. O "Eu Biológico" é apenas o hospedeiro que gera os dados para o "Eu Inferido".</p>
+        <h1 class="speakable">O Eu Inferido vs.<br>Soberania de Dados</h1>
 
-        <div class="prism-container">
+        <p class="speakable">Você já sentiu que os anúncios que aparecem para você sabem de algo que você ainda não contou a ninguém? Talvez um produto para bebê antes de você anunciar a gravidez, ou um antidepressivo antes de você admitir que está triste. Isso não é telepatia, nem coincidência. É inferência estatística de alta precisão baseada em sensores que você carrega voluntariamente.</p>
+        
+        <p class="speakable">Você está interagindo com o seu <strong>Eu Inferido</strong> (ou <em>Data Double</em>). Ele é uma sombra digital, uma construção matemática composta por bilhões de fragmentos de dados. Para o algoritmo da Amazon, do banco ou da seguradora, essa sombra é mais real do que você. Ela é mais fácil de processar, mais barata de armazenar e infinitamente mais lucrativa para vender. O "Eu Biológico" é apenas o hospedeiro inconveniente que gera os dados para o "Eu Inferido".</p>
+
+        <div class="prism-container speakable">
             <div class="prism-stage">
                 <span>VOCÊ (Caótico)</span>
                 <span style="opacity:0.5;">Filtro de Extração</span>
@@ -253,121 +212,255 @@
             </div>
         </div>
 
-        <div class="box deep-dive-box">
-            <h3>Psicometria e o Modelo OCEAN</h3>
-            <p>O sistema não quer apenas saber "o que" você compra, mas "quem" você é. Para isso, utiliza o modelo <strong>OCEAN (Big Five)</strong>: Abertura, Conscienciosidade, Extroversão, Amabilidade e Neuroticismo.</p>
-            <p>Seus likes no Facebook não são aleatórios. Eles alimentam uma matriz que determina, por exemplo, que você tem "Alto Neuroticismo" (ansiedade). Com esse dado, a IA não te vende apenas um produto; ela te vende um alívio para a ansiedade que ela sabe que você sente, no momento exato em que você está mais vulnerável (madrugada de domingo).</p>
+        <h2 class="speakable">A Armadilha das Letras Miúdas</h2>
+
+        <p class="speakable">Por anos, nos disseram que a privacidade acabou porque "nós damos nossos dados em troca de serviços grátis". Essa é uma meia verdade perigosa. Nós não "damos" consentimento; ele é extraído de nós. O design jurídico das políticas de privacidade (Clickwrap Agreements) é propositalmente feito para ser ilegível. É uma ficção legal para transferir a responsabilidade moral da empresa para o usuário.</p>
+        
+        <p class="speakable">O problema real não é o dado que você sabe que deu (seu nome, e-mail), mas o <strong>Excedente Comportamental</strong>: dados que foram capturados sem que você sequer soubesse que eram possíveis de serem medidos.</p>
+
+        <h2 class="speakable">Dossiê: Matriz de Extração Profunda</h2>
+
+        <p class="speakable">Abaixo, apresentamos a anatomia técnica do que o seu smartphone e aplicativos estão realmente medindo enquanto você lê este texto. A profundidade da invasão vai muito além do GPS:</p>
+
+        <div class="matrix-table-container speakable">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th width="30%">SENSOR / FONTE</th>
+                        <th width="40%">O QUE É INFERIDO (A Verdade Oculta)</th>
+                        <th width="30%">APLICAÇÃO (O Golpe)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="detail-highlight">Câmera Frontal (Selfie)</span>
+                            <span class="tech-tag">Pupilometria</span> <span class="tech-tag">Micro-expressões</span>
+                        </td>
+                        <td>
+                            A dilatação da pupila indica carga cognitiva (esforço mental) e excitação emocional involuntária. O algoritmo sabe quando você está confuso, excitado ou mentindo antes de você.
+                        </td>
+                        <td>Testes A/B de anúncios em tempo real. Ajuste de preços baseado na sua reação emocional ao ver o valor.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="detail-highlight">Giroscópio & Acelerômetro</span>
+                            <span class="tech-tag">Biometria Comportamental</span>
+                        </td>
+                        <td>
+                            Detecta o tremor das mãos (ansiedade, abstinência, início de Parkinson). Identifica se você está andando, correndo ou deitado bêbado às 3 da manhã.
+                        </td>
+                        <td>Uber/99 usam o nível de bateria e movimento para identificar desespero e ativar o "preço dinâmico" máximo.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="detail-highlight">Cadência de Digitação</span>
+                            <span class="tech-tag">Keystroke Dynamics</span>
+                        </td>
+                        <td>
+                            A velocidade e o ritmo com que você digita são uma impressão digital única. Revelam fadiga, estresse e até alterações na química cerebral (uso de substâncias).
+                        </td>
+                        <td>Bancos usam para "score de fraude". Redes sociais usam para medir o impacto emocional de um post.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="detail-highlight">Microfone (Passivo)</span>
+                            <span class="tech-tag">Análise Espectral</span>
+                        </td>
+                        <td>
+                            Não grava apenas palavras ("Alexa"), mas o tom de voz e o ruído de fundo (trânsito, TV, briga doméstica). Identifica o contexto social.
+                        </td>
+                        <td>Perfilamento de classe social e estabilidade familiar para seguradoras e crédito.</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="detail-highlight">Sensores Ambientais</span>
+                            <span class="tech-tag">Barômetro</span> <span class="tech-tag">Luxímetro</span>
+                        </td>
+                        <td>
+                            Sabe se você está num ambiente fechado (shopping) ou aberto. Sabe em qual andar de um prédio você está (pressão atmosférica).
+                        </td>
+                        <td>Geolocalização vertical (Z-axis) para saber exatamente qual loja você visitou dentro de um shopping.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <h2>A Matriz de Extração Detalhada</h2>
+        <h2 class="speakable">O Panóptico do Open Finance</h2>
 
-        <p>Muitos acham que a privacidade acabou porque "nós damos nossos dados". Isso é uma meia verdade. O problema real é o <strong>Excedente Comportamental</strong>: dados que você nunca deu, mas que foram inferidos ou capturados sem consentimento. Veja abaixo a dissecação técnica do que realmente ocorre:</p>
-
-        <table class="matrix-table">
-            <thead>
-                <tr>
-                    <th width="30%">DADO BRUTO (O que você faz)</th>
-                    <th width="40%">INFERÊNCIA (O que eles sabem)</th>
-                    <th width="30%">APLICAÇÃO (O impacto)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><span class="detail-highlight">Cadastral e Shadow Profiles</span><br>Nome, CPF, Agenda de Contatos.</td>
-                    <td>Sua rede social completa, mesmo que você não tenha conta na plataforma (via agenda de amigos).</td>
-                    <td>Mapeamento de relações e influência social.</td>
-                </tr>
-                <tr>
-                    <td><span class="detail-highlight">Micro-Comportamento</span><br>Velocidade do scroll, pressão do toque, hesitação do mouse.</td>
-                    <td>Estado emocional atual (ansiedade, tédio, embriaguez). Sinais precoces de Parkinson.</td>
-                    <td>Engenharia de vício personalizada e gatilhos de compra por impulso.</td>
-                </tr>
-                <tr>
-                    <td><span class="detail-highlight">Geolocalização Passiva</span><br>GPS, Wi-Fi Handshake, Bluetooth.</td>
-                    <td>Onde você dorme (casa), onde trabalha, com quem dorme (cruzamento de celulares).</td>
-                    <td>Predição de rotina e "cerco digital" (Geofencing).</td>
-                </tr>
-                <tr>
-                    <td><span class="detail-highlight">Biometria e Voz</span><br>FaceID, Comandos de Voz.</td>
-                    <td>Estado de saúde, humor pela entonação, reações subconscientes.</td>
-                    <td><strong>Identidade Imutável.</strong> Se vazar, você não pode trocar seu rosto.</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>A Falácia da Ofuscação</h2>
-
-        <p>Antigamente, sugeria-se "confundir o algoritmo" fazendo buscas aleatórias (Data Poisoning). Embora seja um ato poético de resistência, tecnicamente é uma batalha perdida. As IAs modernas são excelentes em filtrar ruído (Noise Reduction). Elas sabem distinguir seu padrão orgânico do seu padrão de "sabotagem".</p>
+        <p class="speakable">O sistema bancário vende o <strong>Open Finance</strong> como "liberdade" e "portabilidade". Na prática, é a construção do Panóptico Financeiro definitivo. Antes, o seu banco sabia o que você gastava no cartão dele. Agora, ao conectar todas as suas contas, investimentos e seguros, cria-se um perfil holístico da sua vida.</p>
         
-        <p>A solução não pode ser apenas tática (esconder-se); ela precisa ser <strong>Estrutural e Política</strong>.</p>
+        <p class="speakable">O algoritmo não vê apenas "gastos"; ele vê moralidade. Se você gasta muito em bares, tabacarias ou apostas (Bets), seu "Score de Vida" cai. Isso pode aumentar o preço do seu plano de saúde (cruzamento de dados financeiros com risco biológico) ou negar uma vaga de emprego. O Open Finance transforma seu extrato bancário em um atestado de antecedentes comportamentais.</p>
 
-        <div class="comparison-grid">
-            <div class="comp-card" style="border-left: 2px solid var(--text-secondary);">
-                <span class="comp-title" style="color:var(--text-secondary)">MODELO ATUAL (Extração)</span>
-                <div class="comp-content">
-                    Os dados residem nos servidores das empresas. Você é um "usuário" com permissão precária de acesso. A empresa lucra com a opacidade.
-                </div>
-            </div>
-            <div class="comp-card" style="border-left: 2px solid var(--accent);">
-                <span class="comp-title" style="color:var(--accent)">MODELO SOLID (Soberania)</span>
-                <div class="comp-content">
-                    Proposto por Tim Berners-Lee. Seus dados residem em um "Pod" pessoal (cofre). Você concede acesso temporário a apps específicos e revoga quando quiser.
-                </div>
-            </div>
+        <h2 class="speakable">Estudo de Caso: A Exploração Algorítmica</h2>
+
+        <p class="speakable">As Big Techs usam esses dados para explorar vulnerabilidades biológicas:</p>
+
+        <div class="box deep-dive-box speakable">
+            <h3 style="margin-top:0;">1. Uber e 99: O Preço do Desespero</h3>
+            <p>Estudos revelaram que aplicativos de transporte monitoram o nível da sua bateria. Se sua bateria está em 5% e é tarde da noite, o algoritmo infere "desespero". A probabilidade de você aceitar um preço dinâmico abusivo (3x ou 4x o valor) é estatisticamente calculada. O preço não é baseado na demanda, é baseado na sua vulnerabilidade.</p>
+
+            <h3>2. iFood: Engenharia da Fome</h3>
+            <p>O aplicativo não vende comida; vende dopamina. Ele aprende seus horários de "fraqueza" (domingo à noite, dias chuvosos) e envia notificações com fotos de alimentos ricos em gordura e açúcar. Ele cruza dados de localização e gastos anteriores para saber exatamente quanto você está disposto a pagar para aliviar sua ansiedade com carboidratos.</p>
+
+            <h3>3. Shopee e Shein: Gamificação do Impulso</h3>
+            <p>Essas plataformas usam "Dark Patterns" (Padrões Sombrios) de design. Contagens regressivas falsas, roletas de prêmios e moedas virtuais não são diversão; são táticas de cassino para manter seu cérebro no circuito de recompensa variável, impedindo o pensamento racional sobre a necessidade da compra.</p>
         </div>
 
-        <h2>Vigiando o Vigilante: A Retomada Legal</h2>
+        <h2 class="speakable">Contra-Medidas: Vigiando o Vigilante</h2>
 
-        <p>Enquanto a tecnologia "Solid" ainda engatinha, temos uma arma poderosa e subutilizada: a Lei. A LGPD (Brasil) e a GDPR (Europa) garantem o <strong>Direito de Acesso</strong>.</p>
+        <p class="speakable">A solução não pode ser apenas tática (esconder-se); ela precisa ser estrutural. Mas enquanto a revolução não vem, temos ferramentas de guerrilha.</p>
         
-        <p>As empresas apostam na sua preguiça. Elas escondem o que sabem porque acreditam que você nunca vai perguntar. O ato mais revolucionário que você pode fazer hoje não é deletar sua conta, mas exigir ver o que eles têm sobre você. Isso inverte a dinâmica de poder: você passa de objeto observado para auditor do sistema.</p>
+        <p class="speakable">Ferramentas como o <strong>Warden App</strong> (e outros auditores de privacidade) permitem que você veja o invisível. Ao instalar um analisador de pacotes, você descobre que seu aplicativo de lanterna está enviando dados para servidores na China ou na Rússia. Ver o tráfego de dados saindo do seu celular é o primeiro passo para entender a magnitude do roubo.</p>
+        
+        <p class="speakable">Além disso, devemos apoiar iniciativas como o projeto <strong>SOLID</strong> de Tim Berners-Lee, que propõe que os dados fiquem em "Pods" pessoais do usuário, e não nos servidores das empresas. Você concede acesso temporário, e não a posse eterna.</p>
 
-        <div class="box action-box">
-            <span class="action-header">📜 DESAFIO DE RETOMADA #03</span>
+        <div class="box action-box speakable">
+            <span class="action-header">🔍 DESAFIO DE RETOMADA #03</span>
             <p><strong>A Auditoria Radical (DSAR)</strong></p>
             <p>Não tente apenas se esconder. Olhe o monstro nos olhos.</p>
-            <p><strong>Sua missão hoje:</strong> Entre nas configurações de privacidade do Google ("Google Takeout") ou do Instagram ("Baixar suas informações") e solicite o download completo dos seus dados. Quando o arquivo chegar, abra-o. Veja o histórico de localização, as buscas de 2015, os áudios gravados.</p>
-            <p>Essa experiência visceral de ver o seu "Eu Inferido" em uma planilha é o combustível necessário para mudar seu comportamento e exigir soberania.</p>
+            <p><strong>Sua missão hoje:</strong> Entre nas configurações de privacidade do Google ("Google Takeout") ou do Instagram ("Baixar suas informações") e solicite o download completo dos seus dados. Quando o arquivo chegar, abra-o.</p>
+            <p>Veja o histórico de localização onde o Google sabe onde você dormiu nos últimos 5 anos. Veja os áudios que você pensou que não foram gravados. Essa experiência visceral de ver o seu "Eu Inferido" em uma planilha é o combustível necessário para mudar seu comportamento e exigir soberania.</p>
         </div>
     </div>
 
     <script>
-        /* Sincronia */
+        /* --- COMUNICAÇÃO COM A MATRIZ (INDEX) --- */
         window.addEventListener('message', function(event) {
-            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+            const data = event.data;
+            
+            // 1. Controle de Tema
+            if (data.type === 'theme') {
+                if (data.mode === 'light') document.body.classList.add('light-mode');
+                else document.body.classList.remove('light-mode');
+            }
+
+            // 2. Controle de Fonte
+            if (data.type === 'font-resize') {
+                const newSize = 19 * data.value;
+                document.documentElement.style.setProperty('--base-size', newSize + 'px');
+            }
+
+            // 3. Controle de TTS
+            if (data.type === 'tts-toggle') toggleSpeech();
+            if (data.type === 'tts-rate') updateSpeechRate(data.value);
         });
-        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
-            document.body.classList.add('light-mode');
-        }
 
-        /* Fonte */
-        let currentSize = 19;
-        function changeFontSize(amount) {
-            currentSize += amount;
-            if (currentSize < 14) currentSize = 14; 
-            if (currentSize > 26) currentSize = 26;
-            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
-        }
-
-        /* TTS */
+        /* --- ENGINE TTS AVANÇADA (FATOR X) --- */
+        let speechQueue = [];
+        let currentIndex = 0;
         let isSpeaking = false;
+        let speechRate = 1.0;
+        let synthesis = window.speechSynthesis;
+        let utterance = null;
+        let selectedVoice = null;
+
+        function loadVoices() {
+            const voices = synthesis.getVoices();
+            selectedVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) ||
+                            voices.find(v => v.lang === 'pt-BR' && v.name.includes('Microsoft')) ||
+                            voices.find(v => v.lang === 'pt-BR');
+        }
+        
+        if (synthesis.onvoiceschanged !== undefined) {
+            synthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function prepareQueue() {
+            const elements = document.querySelectorAll('.speakable');
+            speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
+        }
+
         function toggleSpeech() {
+            if (speechQueue.length === 0) prepareQueue();
+
             if (isSpeaking) {
-                window.speechSynthesis.cancel();
+                synthesis.cancel();
                 isSpeaking = false;
-                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
-                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+                clearHighlights();
+                reportStatus(false);
             } else {
-                const text = document.getElementById('content-area').innerText;
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'pt-BR';
-                utterance.rate = 1.1;
-                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
-                window.speechSynthesis.speak(utterance);
                 isSpeaking = true;
-                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
+                reportStatus(true);
+                speakNext();
             }
         }
+
+        function updateSpeechRate(rate) {
+            speechRate = rate;
+            if (isSpeaking) {
+                synthesis.cancel();
+                speakNext();
+            }
+        }
+
+        function speakNext() {
+            if (!isSpeaking) return;
+            if (currentIndex >= speechQueue.length) {
+                isSpeaking = false;
+                currentIndex = 0;
+                clearHighlights();
+                reportStatus(false);
+                return;
+            }
+
+            const element = speechQueue[currentIndex];
+            const text = element.innerText;
+
+            clearHighlights();
+            element.classList.add('reading-highlight');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            utterance.rate = speechRate;
+            
+            if (selectedVoice) utterance.voice = selectedVoice;
+            
+            utterance.onend = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+            
+            utterance.onerror = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+
+            synthesis.speak(utterance);
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+        }
+
+        function reportStatus(playing) {
+            window.parent.postMessage({ type: 'tts-status', isPlaying: playing }, '*');
+        }
+
+        document.getElementById('content-area').addEventListener('click', function(e) {
+            const target = e.target.closest('.speakable');
+            if (target) {
+                if (speechQueue.length === 0) prepareQueue();
+                const index = speechQueue.indexOf(target);
+                if (index !== -1) {
+                    synthesis.cancel();
+                    currentIndex = index;
+                    isSpeaking = true;
+                    reportStatus(true);
+                    speakNext();
+                }
+            }
+        });
+
+        window.onbeforeunload = function() {
+            synthesis.cancel();
+        };
     </script>
 </body>
 </html>
