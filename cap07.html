@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Capítulo 07: O Patrão Invisível. Bossware, Time Off Task, Semiocapitalismo e a luta pelo Direito à Desconexão.">
-    <meta name="keywords" content="Bossware, Time Off Task, Amazon TOT, Semiocapitalismo, Franco Berardi, Ghost Work, Mary L. Gray, Direito à Desconexão, Taylorismo Digital, Vigilância no Trabalho">
+    <meta name="description" content="Capítulo 07: O Patrão Invisível. Bossware, caso Wells Fargo/Bradesco, Deslocamento de Tarefas (Acemoglu) e Direito à Desconexão.">
+    <meta name="keywords" content="Bossware, Wells Fargo, MPT Brasil, Daron Acemoglu, Task Displacement, Direito à Desconexão, Lei Rider, Vigilância Bancária, Franco Berardi">
     <title>Capítulo 07 // O Patrão Invisível</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
             --text-secondary: #9ca3af;
             --border-color: rgba(255, 255, 255, 0.12);
             
-            /* ALMA DO CAPÍTULO: SISTEMA NERVOSO (Roxo) & ALERTAS (Amarelo) */
+            /* ALMA DO CAPÍTULO: SISTEMA NERVOSO (Roxo) & ALERTAS (Amarelo/Laranja) */
             --nerve-purple: #8b5cf6;  /* Roxo Psíquico */
             --nerve-dim: rgba(139, 92, 246, 0.08);
             --nerve-glow: 0 0 20px rgba(139, 92, 246, 0.2);
@@ -146,6 +146,17 @@
 
         @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.8; } 100% { opacity: 1; } }
 
+        /* GRID DE LEIS GLOBAIS */
+        .law-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 2em 0; }
+        .law-card { 
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+            padding: 20px; border-radius: 8px; transition: transform 0.2s;
+        }
+        .law-card:hover { border-color: var(--nerve-purple); transform: translateY(-3px); }
+        .law-country { font-family: var(--font-tech); font-size: 0.7rem; color: var(--system-alert); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .law-name { font-weight: bold; color: var(--text-primary); margin-bottom: 8px; display: block; }
+        .law-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+
         /* Action Box */
         .action-box {
             border: 1px dashed var(--system-alert); background: linear-gradient(180deg, rgba(245, 158, 11, 0.05), transparent);
@@ -172,6 +183,7 @@
         @media (max-width: 700px) {
             .reader-container { padding: 40px 20px; }
             h1 { font-size: 1.8rem; }
+            .law-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -186,18 +198,20 @@
         
         <p class="speakable">Se você sentiu uma pontada de culpa só de imaginar essa cena, o algoritmo já está rodando dentro de você. O <strong>Patrão Invisível</strong> não precisa mais de chicote, nem de cartão de ponto físico. Ele vive na sua consciência, sussurrando que cada segundo não monetizado é um erro de sistema.</p>
 
-        <p class="speakable">Não estamos mais no modelo clássico de exploração industrial. Entramos na era do <strong>Taylorismo Digital</strong>, onde a eficiência não é medida por peças produzidas, mas pela captura total da atenção e do sistema nervoso do trabalhador.</p>
-
         <div class="box thesis-box speakable">
-            <span class="thesis-header">// Semiocapitalismo e o Colapso Nervoso</span>
-            "O filósofo italiano <strong>Franco 'Bifo' Berardi</strong> define nosso momento como <strong>Semiocapitalismo</strong>. O capital não explora mais apenas os músculos (fábrica), mas a nossa capacidade linguística, criativa e emocional. A mais-valia é extraída do nosso sistema nervoso. O resultado não é o cansaço muscular, mas a 'superestimulação nervosa', que leva ao pânico, à depressão e ao que chamamos superficialmente de Burnout. O Burnout não é cansaço; é o curto-circuito da alma."
+            <span class="thesis-header">// Semiocapitalismo: O Colapso Nervoso</span>
+            "O filósofo italiano <strong>Franco 'Bifo' Berardi</strong> define nosso momento como <strong>Semiocapitalismo</strong>. O capital não explora mais apenas os músculos (fábrica), mas a nossa capacidade linguística, criativa e emocional. A mais-valia é extraída diretamente do sistema nervoso. O resultado não é o cansaço muscular que um banho resolve, mas a 'superestimulação nervosa', que leva ao pânico, à depressão e ao que chamamos superficialmente de Burnout. O Burnout não é cansaço; é o curto-circuito da alma."
         </div>
 
-        <h2 class="speakable">Bossware: A Vigilância no Home Office</h2>
+        <h2 class="speakable">O Olho do Banco: Bossware e a Vigilância no Teclado</h2>
 
         <p class="speakable">Com a migração para o trabalho remoto, as empresas não confiaram na autonomia de seus funcionários. Elas instalaram o panóptico dentro de seus quartos. Softwares de monitoramento, conhecidos como <strong>Bossware</strong> (como <em>Hubstaff</em>, <em>Teramind</em> e <em>Time Doctor</em>), operam com uma premissa algorítmica brutal: se você não está clicando, você não está trabalhando.</p>
 
-        <p class="speakable">Essas ferramentas usam <em>Keylogging</em> (registro de cada tecla digitada), capturas de tela aleatórias a cada 10 minutos e até rastreamento ocular via webcam. Elas criam um "Score de Produtividade" baseado na atividade constante. O problema? O trabalho intelectual exige pausa. Exige olhar para o teto para conectar ideias. Mas para o Bossware, o "pensar" é indistinguível do "vagabundear". O algoritmo pune a reflexão e premia a atividade frenética e vazia.</p>
+        <div class="box deep-dive-box speakable">
+            <h3 style="margin-top:0;">O Caso Wells Fargo e a Realidade Brasileira</h3>
+            <p>Em 2024, o gigante bancário americano <strong>Wells Fargo</strong> demitiu mais de uma dúzia de funcionários após uma investigação revelar o uso de "mouse jigglers" (dispositivos que simulam o movimento do mouse). A mensagem foi clara: o banco não mede a entrega (resultado), mas a <em>simulação</em> de presença digital.</p>
+            <p>No Brasil, a situação espelha essa distopia. O <strong>Ministério Público do Trabalho (MPT)</strong> abriu inquéritos para investigar grandes instituições financeiras (como o Itaú) por práticas de "assédio moral digital". Denúncias apontam para o uso de softwares que monitoram o tempo de ociosidade do teclado e exigem que a webcam permaneça ligada, criando um clima de terror onde o trabalhador tem medo até de ir ao banheiro.</p>
+        </div>
 
         <div class="task-manager-container speakable">
             <div class="tm-header">
@@ -214,7 +228,7 @@
                     <div class="tm-bar-track"><div class="tm-bar-fill fill-ram">94%</div></div>
                 </div>
                 <div class="tm-row">
-                    <span class="tm-label">Rede (Notificações)</span>
+                    <span class="tm-label">Rede (Slack/Teams)</span>
                     <div class="tm-bar-track"><div class="tm-bar-fill fill-net">100%</div></div>
                 </div>
             </div>
@@ -223,32 +237,51 @@
             </div>
         </div>
 
-        <h2 class="speakable">A Amazonificação: O Corpo como Gargalo</h2>
+        <h2 class="speakable">A Grande Substituição: Deslocamento de Tarefas</h2>
 
-        <p class="speakable">No chão de fábrica da logística moderna, a desumanização atinge seu ápice. A Amazon utiliza um algoritmo chamado <strong>TOT (Time Off Task)</strong>. Se um funcionário para de escanear pacotes por mais de 3 minutos (para ir ao banheiro ou beber água), o sistema começa a contar "tempo fora da tarefa". Acumule minutos suficientes e o sistema gera uma demissão automática, sem intervenção de um gerente humano.</p>
+        <p class="speakable">Não é apenas vigilância; é substituição. Os economistas <strong>Daron Acemoglu</strong> (MIT) e <strong>Pascual Restrepo</strong> (Boston University) cunharam o termo <strong>"Task Displacement"</strong> (Deslocamento de Tarefas).</p>
         
-        <p class="speakable">Aqui, o corpo biológico é visto como um "gargalo de eficiência". O algoritmo não entende fadiga, bexigas cheias ou dores nas costas. Ele impõe um ritmo maquínico a um organismo de carne e osso. É a gestão por estresse algorítmico.</p>
+        <p class="speakable">Diferente da Revolução Industrial, onde máquinas tornaram o homem mais produtivo, a IA atual muitas vezes cria o que eles chamam de <strong>"So-so Automation"</strong> (Automação Medíocre). Ela é "boa o suficiente" para substituir o humano (reduzindo custos trabalhistas), mas não boa o suficiente para aumentar a produtividade real da economia. O resultado é a destruição de empregos de classe média sem a criação proporcional de novas funções, empurrando a massa para o subemprego digital (Ghost Work).</p>
 
-        <h2 class="speakable">Ghost Work: Os Humanos por Trás da Mágica</h2>
+        <h2 class="speakable">O Escudo Legislativo: O Mundo Reage</h2>
 
-        <p class="speakable">Por trás da "Inteligência Artificial" que parece mágica, existe uma classe invisível de trabalhadores. A antropóloga <strong>Mary L. Gray</strong> e o pesquisador <strong>Siddharth Suri</strong> chamam isso de <strong>Ghost Work</strong> (Trabalho Fantasma).</p>
+        <p class="speakable">Diante da invasão tecnológica, governos estão sendo forçados a atualizar leis trabalhistas do século XX para a realidade algorítmica do século XXI. A luta agora é pelo controle do tempo:</p>
+
+        <div class="law-grid speakable">
+            <div class="law-card">
+                <span class="law-country">FRANÇA & AUSTRÁLIA</span>
+                <span class="law-name">Direito à Desconexão</span>
+                <span class="law-desc">Leis que tornam ilegal punir funcionários por ignorarem e-mails ou mensagens fora do horário de expediente. É o reconhecimento legal de que o cérebro precisa desligar.</span>
+            </div>
+            <div class="law-card">
+                <span class="law-country">ESPANHA</span>
+                <span class="law-name">Lei Rider (2021)</span>
+                <span class="law-desc">Pioneira, presume que entregadores de aplicativos são empregados e não "parceiros", obrigando as plataformas a revelarem os algoritmos que distribuem as tarefas.</span>
+            </div>
+            <div class="law-card">
+                <span class="law-country">PORTUGAL</span>
+                <span class="law-name">Dever de Abstenção</span>
+                <span class="law-desc">Proíbe o empregador de contatar o trabalhador no período de descanso, salvo força maior, sob pena de multa pesada.</span>
+            </div>
+            <div class="law-card">
+                <span class="law-country">BRASIL</span>
+                <span class="law-name">Em Disputa (MPT)</span>
+                <span class="law-desc">Ainda sem lei específica de desconexão robusta, a defesa se dá via jurisprudência do MPT sobre "Teleassédio" e controle telemático abusivo.</span>
+            </div>
+        </div>
+
+        <h2 class="speakable">Síntese: Soberania Laboral e Governança</h2>
+
+        <p class="speakable">Não podemos "hackear" o trabalho para sempre com simuladores de mouse. A verdadeira saída é estrutural. Precisamos passar da insurgência individual para a <strong>Soberania Laboral Participativa</strong>.</p>
         
-        <p class="speakable">Para que o ChatGPT não seja racista ou o Facebook não mostre vídeos de decapitação, milhares de trabalhadores no Quênia, Filipinas e Índia passam o dia moderando conteúdo traumático por menos de 2 dólares a hora. Eles são o filtro humano, o "firewall de carne" que absorve o lixo tóxico da internet para que a experiência do usuário no Norte Global seja limpa. A IA não é autônoma; ela é alimentada por uma linha de montagem global de precariado cognitivo.</p>
-
-        <h2 class="speakable">Síntese: Do Medo à Governança</h2>
-
-        <p class="speakable">Não podemos "hackear" o trabalho para sempre com simuladores de mouse ou truques técnicos. A verdadeira saída é política e estrutural. Precisamos passar da insurgência individual para a <strong>Soberania Laboral</strong>.</p>
-        
-        <p class="speakable">Isso começa com o <strong>Direito à Desconexão</strong>. Países como França e Portugal já legislaram que é ilegal para o patrão contatar o funcionário fora do horário. Isso não é "regalia", é higiene mental básica. Precisamos entender que nossa atenção e nosso sistema nervoso são recursos finitos, e sua extração ilimitada é insustentável.</p>
-        
-        <p class="speakable">A tecnologia deve servir para reduzir a carga de trabalho, não para intensificá-la. Devemos exigir transparência sobre <em>quais</em> métricas estão sendo usadas para nos julgar. Se um algoritmo decide sua demissão ou sua produtividade, você tem o direito ético e legal de auditar a lógica desse algoritmo.</p>
+        <p class="speakable">A tecnologia deve servir para reduzir a carga de trabalho, não para intensificá-la. O caminho é exigir <strong>Transparência Algorítmica</strong>: se um software mede sua produtividade, você tem o direito de ver o código e as métricas. Se um algoritmo define sua demissão, ele deve ser auditável. Não somos contra a tecnologia, somos contra a opacidade que a transforma em arma.</p>
 
         <div class="box action-box speakable">
             <span class="action-header">⚖️ DESAFIO DE RETOMADA #07</span>
             <p><strong>O Protocolo de Limites (The Firewall)</strong></p>
             <p>Se você não definir as fronteiras, o algoritmo ocupará todo o território.</p>
-            <p><strong>Sua missão:</strong> Estabeleça um "Contrato de Disponibilidade" consigo mesmo e, se possível, comunique-o. Defina uma hora exata para o "Shutdown" digital. Após esse horário, nenhuma notificação de trabalho entra. Remova o e-mail corporativo do celular pessoal.</p>
-            <p>Não é preguiça; é a preservação da ferramenta mais valiosa que você tem: sua sanidade. Trate seu tempo de descanso com a mesma seriedade e rigidez que o sistema trata o seu tempo de trabalho.</p>
+            <p><strong>Sua missão:</strong> Estabeleça um "Contrato de Disponibilidade" consigo mesmo. Defina uma hora exata para o "Shutdown" digital. Após esse horário, ative o modo "Não Perturbe" ou remova o e-mail corporativo do celular pessoal.</p>
+            <p>Não é preguiça; é a preservação da ferramenta mais valiosa que você tem: sua sanidade. Trate seu tempo de descanso com a mesma seriedade contratual que o sistema trata o seu tempo de trabalho.</p>
         </div>
     </div>
 
