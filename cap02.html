@@ -3,29 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Capítulo 02: O Sequestro da Atenção. A neurociência do vício em dopamina, os Loops de Skinner e a engenharia de fricção como defesa.">
+    <meta name="description" content="Capítulo 02: O Sequestro da Atenção. A neurociência do vício em dopamina, Pavlov, Skinner e a hipnose digital de massa.">
+    <meta name="keywords" content="Dopamina, Skinner Box, Loren Brichter, Pull-to-Refresh, Hipnose Digital, Natasha Dow Schüll, Neuromarketing, Vício em Celular, Flow vs Transe">
     <title>Capítulo 02 // O Sequestro da Atenção</title>
     
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1605342980481793');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1605342980481793&ev=PageView&noscript=1"
-    /></noscript>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* --- DESIGN SYSTEM FATOR 1 --- */
+            /* --- DESIGN SYSTEM FATOR X (Theme: Addiction/Flow) --- */
             --bg-app: #050505;        
             --text-primary: #e5e5e5;
             --text-secondary: #9ca3af;
@@ -39,8 +25,10 @@
             
             --font-ui: 'Inter', sans-serif;
             --font-tech: 'JetBrains Mono', monospace;
-            --base-size: 19px;
+            --base-size: 19px; /* Controlado pelo Index */
             --line-height: 1.8;
+            
+            --transition: all 0.3s ease;
         }
 
         body.light-mode {
@@ -62,16 +50,17 @@
             font-family: var(--font-ui);
             font-size: var(--base-size);
             line-height: var(--line-height);
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: var(--transition);
             overflow-x: hidden;
+            padding-bottom: 100px;
         }
 
-        /* --- MARGENS OTIMIZADAS --- */
+        /* --- CONTAINER DE LEITURA --- */
         .reader-container {
             width: 100%;
-            max-width: 640px; 
+            max-width: 680px; 
             margin: 0 auto;
-            padding: 40px 24px 120px 24px;
+            padding: 60px 24px;
         }
 
         p {
@@ -79,29 +68,12 @@
             text-align: justify; 
             hyphens: auto; 
             letter-spacing: -0.01em;
+            transition: color 0.3s;
         }
 
         strong { color: var(--text-primary); font-weight: 700; }
 
-        /* HUD */
-        .chapter-hud {
-            position: sticky; top: 0; z-index: 100;
-            background: rgba(var(--bg-app), 0.95);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 24px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .hud-btn {
-            background: transparent; border: 1px solid var(--border-color);
-            color: var(--text-secondary); border-radius: 6px;
-            padding: 6px 12px; font-family: var(--font-tech); font-size: 0.75rem;
-            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
-        }
-        .hud-btn:hover { border-color: var(--dopamine); color: var(--dopamine); background: var(--dim-dopamine); }
-        .hud-ctrls { display: flex; gap: 8px; }
-
-        /* TIPOGRAFIA TECH */
+        /* --- TIPOGRAFIA TECH --- */
         .chapter-meta {
             font-family: var(--font-tech); font-size: 0.75rem; color: var(--dopamine);
             text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; display: block;
@@ -109,26 +81,27 @@
         }
 
         h1 {
-            font-family: var(--font-tech); font-size: 2rem; line-height: 1.2;
+            font-family: var(--font-tech); font-size: 2.2rem; line-height: 1.2;
             text-transform: uppercase; margin-bottom: 50px; 
             color: var(--text-primary); letter-spacing: -1px;
+            border-bottom: 1px solid var(--dopamine); padding-bottom: 20px;
         }
 
         h2 {
-            font-family: var(--font-tech); font-size: 1.3rem; color: var(--flow);
+            font-family: var(--font-tech); font-size: 1.4rem; color: var(--flow);
             margin-top: 4em; margin-bottom: 1.5em; display: flex; align-items: center; gap: 10px;
             border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
         }
         h2::before { content: '//'; opacity: 0.5; }
 
         h3 {
-            font-family: var(--font-ui); font-size: 1.1em; font-weight: 600;
+            font-family: var(--font-ui); font-size: 1.15em; font-weight: 600;
             color: var(--dopamine); margin-top: 2.5em; margin-bottom: 1em;
             text-transform: uppercase; letter-spacing: 1px;
+            border-left: 3px solid var(--dim-dopamine); padding-left: 15px;
         }
 
-        /* WIDGETS E GRÁFICOS JUSTIFICADOS */
-        
+        /* --- WIDGETS --- */
         .box { padding: 25px; border-radius: 6px; margin: 3em 0; border: 1px solid var(--border-color); }
         
         .thesis-box {
@@ -141,6 +114,7 @@
         .deep-dive-box {
             border-top: 1px dashed var(--border-color); border-bottom: 1px dashed var(--border-color);
             border-left: none; border-right: none; border-radius: 0;
+            background: rgba(255,255,255,0.01);
         }
 
         /* Widget: Loop de Skinner (Diagrama) */
@@ -182,8 +156,8 @@
             background: var(--bg-app); padding: 5px 10px; border: 1px solid var(--flow); border-radius: 4px;
         }
 
-        /* Comparação Grid (Substitui Tabela) */
-        .comparison-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin: 3em 0; }
+        /* Comparação Grid */
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 3em 0; }
         .comp-card {
             background: rgba(255,255,255,0.02);
             border: 1px solid var(--border-color); padding: 20px; border-radius: 6px;
@@ -198,84 +172,91 @@
 
         /* Action Box */
         .action-box {
-            border: 1px dashed var(--flow); background: rgba(var(--bg-app), 0.5);
-            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 8px;
+            border: 1px dashed var(--flow); background: linear-gradient(180deg, var(--dim-flow), transparent);
+            text-align: center; padding: 40px 30px; margin-top: 80px; border-radius: 12px;
+            position: relative; overflow: hidden;
         }
         .action-header { 
-            font-family: var(--font-tech); color: var(--flow); font-weight: bold; 
+            font-family: var(--font-tech); color: var(--flow); font-weight: bold; font-size: 1.1rem;
             margin-bottom: 15px; display: block; text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .reading-highlight { background: var(--dim-dopamine); color: var(--text-primary); border-radius: 2px; }
-
-        @media (min-width: 600px) {
-            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        /* --- SINCRONIA DE LEITURA (FATOR X) --- */
+        .reading-highlight { 
+            background: var(--dim-dopamine); 
+            color: var(--text-primary); 
+            border-left: 4px solid var(--dopamine);
+            padding-left: 15px;
+            margin-left: -19px;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 20px var(--dim-dopamine);
+            transition: all 0.3s ease;
         }
 
-        @media (max-width: 600px) {
-            .reader-container { padding: 30px 20px 100px 20px; }
-            h1 { font-size: 1.7rem; }
+        @media (max-width: 700px) {
+            .reader-container { padding: 40px 20px; }
+            h1 { font-size: 1.8rem; }
             .skinner-widget { gap: 5px; }
             .loop-row { flex-direction: column; align-items: center; }
             .loop-step { width: 100%; }
             .loop-arrow { transform: rotate(90deg); margin: 5px 0; }
-            .chapter-hud { padding: 10px 15px; }
-            .hud-btn span { display: none; }
+            .comparison-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="chapter-hud">
-        <div class="hud-ctrls">
-            <button class="hud-btn" onclick="changeFontSize(-1)">A-</button>
-            <button class="hud-btn" onclick="changeFontSize(1)">A+</button>
-        </div>
-        <div class="hud-ctrls">
-            <button class="hud-btn" id="btn-speak" onclick="toggleSpeech()">
-                ▶ <span>OUVIR</span>
-            </button>
-        </div>
-    </div>
-
     <div class="reader-container" id="content-area">
         <span class="chapter-meta">PARTE I: A MENTE | CAPÍTULO 02</span>
-        <h1>Dopamina vs.<br>Sincronia</h1>
-
-        <p>Você desbloqueia a tela. O polegar desliza para baixo, arrastando o feed como quem puxa a alavanca de um caça-níqueis em Las Vegas. Há uma fração de segundo de suspensão proposital — a tela carrega, o ícone gira — e então: <em>bingo</em>. Uma nova foto, uma nova manchete, três curtidas vermelhas brilhantes.</p>
         
-        <p>Se nada novo aparece, você sente uma pontada sutil de decepção e puxa a alavanca de novo. Se algo aparece, você sente um alívio momentâneo, seguido imediatamente pela necessidade de mais. Isso não é uma "escolha". Isso é um reflexo condicionado que foi implantado em você.</p>
+        <h1 class="speakable">O Sequestro da Atenção:<br>Neuroquímica e Hipnose</h1>
+
+        <p class="speakable">Você desbloqueia a tela. O polegar desliza para baixo, arrastando o feed como quem puxa a alavanca de um caça-níqueis em Las Vegas. Há uma fração de segundo de suspensão proposital — a tela carrega, o ícone gira — e então: <em>bingo</em>. Uma nova foto, uma nova manchete, três curtidas vermelhas brilhantes.</p>
         
-        <p>Esse ciclo não é acidental. Você não é "viciado em celular" por falta de força de vontade. Você está lutando contra um exército de psicólogos comportamentais e engenheiros de dados que sequestraram o sistema de aprendizado mais primitivo do seu cérebro para transformá-lo em lucro. Eles hackearam seu sistema de recompensa.</p>
+        <p class="speakable">Essa mecânica tem um inventor. Em 2009, <strong>Loren Brichter</strong> criou o gesto "Pull-to-Refresh" (Puxar para Atualizar) para seu aplicativo Tweetie. Brichter não tinha intenções malignas; ele queria apenas uma interação ergonômica. Contudo, o que ele criou acidentalmente foi o gatilho perfeito para o vício digital: uma ação física simples que gera uma recompensa imediata e imprevisível. O Vale do Silício percebeu o poder disso e o integrou em tudo. Hoje, não estamos apenas interagindo com softwares; estamos operando a maior máquina de caça-níqueis da história da humanidade.</p>
 
-        <h2>A Neurociência do "Querer" (Wanting)</h2>
+        <p class="speakable">Se nada novo aparece, você sente uma pontada sutil de decepção e puxa a alavanca de novo. Se algo aparece, você sente um alívio momentâneo, seguido imediatamente pela necessidade de mais. Isso não é uma "escolha". Isso é um reflexo condicionado que foi implantado em você através de décadas de pesquisa em <strong>Engenharia Comportamental</strong>.</p>
 
-        <p>Para entender a profundidade desse sequestro, precisamos distinguir dois sistemas cerebrais que muitas vezes confundimos: o sistema de <strong>Querer (Dopamina)</strong> e o sistema de <strong>Gostar (Opioides)</strong>. O neurocientista Kent Berridge provou que eles são circuitos separados.</p>
-        
-        <p>A dopamina não gera prazer; ela gera a <em>antecipação</em> do prazer. Ela é a molécula da busca, da caça, da inquietação. Quando você rola o feed, você não está sentindo prazer; você está em um estado de busca perpétua. O algoritmo sabe disso. Ele nunca te dá a satisfação completa (o "Gostar"), ele apenas te alimenta com promessas de que a próxima rolagem trará algo melhor (o "Querer"). Você se torna um rato correndo numa roda, movido não pela alegria, mas pela ansiedade da falta.</p>
+        <h2 class="speakable">Behaviorismo Armado: De Pavlov a Skinner</h2>
 
-        <div class="skinner-widget">
-            <span class="skinner-header">DIAGRAMA: O LOOP DE COMPULSÃO</span>
+        <p class="speakable">Para entender como sua mente foi capturada, precisamos revisitar os laboratórios de psicologia do século XX. O smartphone moderno é a fusão perfeita de duas escolas do Behaviorismo:</p>
+
+        <p class="speakable">Primeiro, temos <strong>Ivan Pavlov</strong> e o Condicionamento Clássico. Pavlov tocava um sino antes de alimentar seus cães. Com o tempo, os cães salivavam apenas ao ouvir o sino. No seu bolso, o som da notificação é o sino de Pavlov. Ele dispara uma descarga de cortisol (alerta) e dopamina (busca) antes mesmo de você ver a mensagem. Seu corpo reage fisiologicamente a um som digital.</p>
+
+        <p class="speakable">Segundo, e mais perverso, temos <strong>B.F. Skinner</strong> e o Condicionamento Operante. Skinner colocava pombos em caixas onde eles precisavam bicar um botão para receber comida. Ele descobriu algo aterrorizante: se a comida viesse <em>sempre</em>, o pombo ficava entediado. Mas se a comida viesse de forma <strong>aleatória</strong> (Recompensa Variável Intermitente), o pombo entrava em um estado de obsessão maníaca, bicando o botão até a exaustão.</p>
+
+        <div class="skinner-widget speakable">
+            <span class="skinner-header">DIAGRAMA: O LOOP DE COMPULSÃO (SKINNER BOX)</span>
             <div class="loop-row">
-                <div class="loop-step">1. GATILHO<br>(Notificação Visual)</div>
+                <div class="loop-step">1. GATILHO<br>(Notificação ou Tédio)</div>
                 <div class="loop-arrow">→</div>
-                <div class="loop-step">2. AÇÃO<br>(Pull-to-Refresh)</div>
+                <div class="loop-step">2. AÇÃO<br>(Pull-to-Refresh / Scroll)</div>
                 <div class="loop-arrow">→</div>
-                <div class="loop-step step-reward">3. RECOMPENSA<br>(Variável/Incerta)</div>
+                <div class="loop-step step-reward">3. RECOMPENSA<br>(Variável e Incerta)</div>
             </div>
         </div>
 
-        <p>O conceito chave aqui é a <strong>Recompensa Variável Intermitente</strong>, descoberta por B.F. Skinner. Se a recompensa fosse garantida, você ficaria entediado. Se ela nunca viesse, você desistiria. Mas se ela vem de forma aleatória, o cérebro entra em modo de obsessão máxima. O "Refresh" é a alavanca do cassino.</p>
+        <h2 class="speakable">A Neurociência do "Erro de Predição"</h2>
 
-        <div class="box thesis-box">
-            <span class="thesis-header">// Tática de Defesa: Engenharia de Fricção e Grayscale</span>
-            <p>O Vale do Silício projeta interfaces "sem fricção" (frictionless) para que você aja sem pensar. Cores vibrantes (vermelho nas notificações) são gatilhos evolutivos de "fruta madura" ou "sangue/perigo".</p>
-            <p><strong>A Tática Real:</strong> Injete fricção no sistema. Use o modo <strong>"Grayscale" (Escala de Cinza)</strong> nas configurações de acessibilidade do seu celular. Ao remover a cor, você remove a "saliência" do estímulo. O Instagram em preto e branco perde seu poder químico. O cérebro deixa de ver a tela como um objeto de desejo e passa a vê-la como uma ferramenta utilitária e sem graça. É o equivalente digital a transformar um bolo de chocolate em um bloco de cimento.</p>
+        <p class="speakable">Por que a incerteza é tão viciante? A resposta está no <strong>Sistema Dopaminérgico</strong>. Ao contrário do que a cultura pop ensina, a dopamina não é a molécula do "prazer". O neurocientista Kent Berridge provou que existem dois circuitos distintos: o circuito do <strong>Querer</strong> (*Wanting*) e o circuito do <strong>Gostar</strong> (*Liking*).</p>
+        
+        <p class="speakable">A dopamina governa o "Querer". Ela é o combustível da busca, da caça, da antecipação. Quando você vê uma notificação, seu cérebro calcula um <strong>Erro de Predição de Recompensa</strong>. Se você não sabe o que vai encontrar (uma mensagem de amor ou um spam?), a dopamina explode para motivá-lo a descobrir. O algoritmo maximiza esse erro de predição. Ele nunca te satisfaz plenamente (o que ativaria o sistema opioide de "Gostar" e te faria parar); ele te mantém em um estado de fome perpétua, buscando a próxima micro-dose de validação.</p>
+
+        <h2 class="speakable">Hipnose Digital e o Transe da Máquina</h2>
+
+        <p class="speakable">Existe um estado mental específico que as plataformas induzem, muito semelhante aos estados de transe estudados na hipnose clínica. A antropóloga <strong>Natasha Dow Schüll</strong>, em seu estudo sobre viciados em jogos de azar (*Addiction by Design*), chama isso de <strong>"The Machine Zone"</strong> (A Zona da Máquina).</p>
+
+        <p class="speakable">Na hipnose, induz-se o transe através da fixação da atenção e da repetição, o que rebaixa o "Fator Crítico" (a parte da mente que julga e questiona). O "Scroll Infinito" faz exatamente isso. O movimento repetitivo do dedo e o fluxo visual contínuo induzem um estado de <strong>dissociação leve</strong>. Você perde a noção do tempo, do corpo e do ambiente. Sua atenção crítica é desligada, tornando sua mente subconsciente altamente sugestionável a anúncios e ideologias inseridas no feed.</p>
+
+        <div class="box thesis-box speakable">
+            <span class="thesis-header">// A Defesa: Engenharia de Fricção</span>
+            <p>O Vale do Silício projeta interfaces "sem fricção" (*frictionless*) para que você aja sem pensar, deslizando direto para o transe. Cores vibrantes (vermelho nas notificações) são gatilhos evolutivos de perigo ou alimento.</p>
+            <p><strong>A Tática Real:</strong> Injete fricção no sistema. Use o modo <strong>"Grayscale" (Escala de Cinza)</strong> nas configurações de acessibilidade do seu celular. Ao remover a cor, você remove a "saliência" do estímulo. O Instagram em preto e branco perde seu poder químico. O cérebro deixa de ver a tela como um objeto de desejo e passa a vê-la como uma ferramenta utilitária fria e sem graça. Quebre o encanto visual.</p>
         </div>
 
-        <div class="box deep-dive-box">
+        <div class="box deep-dive-box speakable">
             <h3>Fator X: A Colonização do Sono e o Flow</h3>
-            <p>O teórico Jonathan Crary, em <em>24/7</em>, argumenta que o capitalismo moderno busca eliminar a última barreira para o consumo: o sono. O loop de Skinner serve a esse propósito: manter a mente em um estado de "vigília zumbi", onde não estamos nem descansando nem focados.</p>
+            <p>O teórico Jonathan Crary, em <em>24/7</em>, argumenta que o capitalismo moderno busca eliminar a última barreira biológica para o consumo: o sono. O loop de Skinner serve a esse propósito: manter a mente em um estado de "vigília zumbi".</p>
             <p>A antítese biológica para esse estado fragmentado é o <strong>Flow (Estado de Fluxo)</strong>. O Flow ocorre quando a dificuldade do desafio encontra o nível da sua habilidade. É o oposto do scroll passivo. Enquanto o scroll gera ansiedade (muito estímulo, nenhuma ação), o Flow gera êxtase através da ação focada.</p>
             
             <div class="flow-chart">
@@ -286,40 +267,38 @@
             </div>
         </div>
 
-        <div class="box deep-dive-box">
-            <h3>O Custo Oculto: O Assassinato do Tédio</h3>
-            <p>Existe um sistema crucial que nos conecta a nós mesmos: a <strong>Rede de Modo Padrão (DMN)</strong>. Essa rede só é ativada quando <em>não</em> estamos focados em nada específico — sonhando acordados, encarando o teto.</p>
-            <p>O "tédio" não é um vazio; é o momento de processamento em background do cérebro. É onde a memória de longo prazo é consolidada e onde a criatividade nasce. O uso constante do smartphone está aniquilando a DMN. Sempre que sentimos um segundo de tédio (no elevador, no banheiro), sacamos o celular para preencher o vazio. Ao fazer isso, impedimos o processamento interno. Estamos criando uma geração incapaz de autoconexão, dependente de estímulo externo para sentir que existe.</p>
-        </div>
+        <h3 class="speakable">O Custo Oculto: O Assassinato do Tédio</h3>
+        <p class="speakable">Existe um sistema crucial que nos conecta a nós mesmos: a <strong>Rede de Modo Padrão (DMN)</strong>. Essa rede neural só é ativada quando <em>não</em> estamos focados em nada específico — sonhando acordados, encarando o teto, permitindo que a mente vagueie.</p>
+        <p class="speakable">O "tédio" não é um vazio; é o momento de processamento em background do cérebro. É onde a memória de longo prazo é consolidada e onde a criatividade nasce. O uso constante do smartphone está aniquilando a DMN. Sempre que sentimos um segundo de tédio, sacamos o celular. Ao fazer isso, impedimos o processamento interno. Estamos criando uma geração incapaz de autoconexão, dependente de estímulo externo para sentir que existe.</p>
 
-        <h2>Antítese: Brainets e Sincronia</h2>
+        <h2 class="speakable">Antítese: Brainets e Sincronia</h2>
 
-        <p>Se a dopamina é a moeda do vício individual e isolacionista, a evolução nos dotou de uma tecnologia muito mais poderosa: a <strong>Sincronia</strong>.</p>
+        <p class="speakable">Se a dopamina é a moeda do vício individual e isolacionista, a evolução nos dotou de uma tecnologia muito mais poderosa: a <strong>Sincronia</strong>.</p>
         
-        <p>Retomamos aqui o trabalho de Miguel Nicolelis. Em seus laboratórios, ele conectou cérebros a <em>outros cérebros</em>, criando <strong>Brainets</strong>. Ele provou que quando cérebros se sincronizam para resolver uma tarefa (seja numa conversa profunda, num coro musical ou num jogo cooperativo), eles entram em ressonância. A atividade neural se alinha. Isso libera um coquetel de <strong>Ocitocina</strong> e endorfinas, que gera confiança, pertencimento e calma.</p>
+        <p class="speakable">Retomamos aqui o trabalho de Miguel Nicolelis. Em seus laboratórios, ele conectou cérebros a <em>outros cérebros</em>, criando <strong>Brainets</strong>. Ele provou que quando cérebros se sincronizam para resolver uma tarefa (seja numa conversa profunda, num coro musical ou num jogo cooperativo), eles entram em ressonância. A atividade neural se alinha. Isso libera um coquetel de <strong>Ocitocina</strong> e endorfinas, que gera confiança, pertencimento e calma. É o oposto polar da ansiedade dopaminérgica do feed.</p>
 
         <div class="comparison-grid">
             <div class="comp-card" style="border-left: 2px solid var(--dopamine);">
-                <span class="comp-title" style="color:var(--dopamine)">HIPERATENÇÃO (Modo Rede Social)</span>
-                <div class="comp-content">
-                    Focos múltiplos e curtos (clips de 15s). Busca constante de novidade. Estimula o circuito de "Wanting". Gera agilidade reativa, mas causa ansiedade crônica e fragmentação do Eu.
+                <span class="comp-title" style="color:var(--dopamine)">HIPERATENÇÃO (Modo Transe)</span>
+                <div class="comp-content speakable">
+                    Focos múltiplos e curtos (clips de 15s). Busca constante de novidade (*Reward Prediction Error*). Gera agilidade reativa, mas causa ansiedade crônica e fragmentação do Eu. Baseada no "Querer".
                 </div>
             </div>
             <div class="comp-card" style="border-left: 2px solid var(--flow);">
-                <span class="comp-title" style="color:var(--flow)">ATENÇÃO PROFUNDA (Modo Brainet)</span>
-                <div class="comp-content">
-                    Foco único e longo. Inibição de estímulos externos. Estimula a Sincronia Neural. Gera compreensão complexa, empatia real e consolidação de memória.
+                <span class="comp-title" style="color:var(--flow)">ATENÇÃO PROFUNDA (Modo Flow)</span>
+                <div class="comp-content speakable">
+                    Foco único e longo. Inibição de estímulos externos. Estimula a Sincronia Neural e a Rede de Modo Padrão. Gera compreensão complexa e consolidação de memória. Baseada no "Ser".
                 </div>
             </div>
         </div>
 
-        <h2>Síntese: Escolhendo sua Química</h2>
+        <h2 class="speakable">Síntese: Escolhendo sua Química</h2>
 
-        <p>A "Versão de Você" criada pelos algoritmos é um drogado em dopamina. O modelo matemático deles pressupõe que você sempre escolherá o prazer imediato em vez da construção lenta. Eles apostam na sua fragilidade biológica.</p>
+        <p class="speakable">A "Versão de Você" criada pelos algoritmos é um drogado em dopamina. O modelo matemático deles pressupõe que você sempre escolherá o prazer imediato em vez da construção lenta. Eles apostam na sua fragilidade biológica.</p>
         
-        <p>A resistência é trocar o <em>feed</em> (alimentação passiva) pelo <em>flow</em> (fluxo ativo). A tecnologia pode ser usada para sincronia, mas exige intenção deliberada. Jogos cooperativos, chamadas de vídeo focadas (sem multitarefa) e escrita colaborativa são formas digitais de Brainets. A diferença não está na tela, mas na intenção: você está usando a máquina para se isolar em um loop de recompensa ou para se conectar em uma rede de inteligência?</p>
+        <p class="speakable">A resistência é trocar o <em>feed</em> (alimentação passiva) pelo <em>flow</em> (fluxo ativo). A tecnologia pode ser usada para sincronia, mas exige intenção deliberada. A diferença não está na tela, mas na intenção: você está usando a máquina para se isolar em um loop de recompensa ou para se conectar em uma rede de inteligência?</p>
 
-        <div class="box action-box">
+        <div class="action-box speakable">
             <span class="action-header">⚡ DESAFIO DE RETOMADA #02</span>
             <p><strong>O Protocolo do Olhar (Eye Contact Protocol)</strong></p>
             <p>A sincronia neural começa pelos olhos. Estudos mostram que o contato visual prolongado é o gatilho mais rápido para alinhar atividades cerebrais entre dois humanos.</p>
@@ -328,42 +307,143 @@
     </div>
 
     <script>
-        /* Sincronia */
+        /* --- COMUNICAÇÃO COM A MATRIZ (INDEX) --- */
         window.addEventListener('message', function(event) {
-            if (event.data === 'toggleTheme') document.body.classList.toggle('light-mode');
+            const data = event.data;
+            
+            // 1. Controle de Tema
+            if (data.type === 'theme') {
+                if (data.mode === 'light') document.body.classList.add('light-mode');
+                else document.body.classList.remove('light-mode');
+            }
+
+            // 2. Controle de Fonte
+            if (data.type === 'font-resize') {
+                const newSize = 19 * data.value;
+                document.documentElement.style.setProperty('--base-size', newSize + 'px');
+            }
+
+            // 3. Controle de TTS
+            if (data.type === 'tts-toggle') toggleSpeech();
+            if (data.type === 'tts-rate') updateSpeechRate(data.value);
         });
-        if (window.parent && window.parent.document.body.classList.contains('light-mode')) {
-            document.body.classList.add('light-mode');
-        }
 
-        /* Fonte */
-        let currentSize = 19;
-        function changeFontSize(amount) {
-            currentSize += amount;
-            if (currentSize < 14) currentSize = 14; 
-            if (currentSize > 26) currentSize = 26;
-            document.documentElement.style.setProperty('--base-size', currentSize + 'px');
-        }
-
-        /* TTS */
+        /* --- ENGINE TTS AVANÇADA (FATOR X) --- */
+        let speechQueue = [];
+        let currentIndex = 0;
         let isSpeaking = false;
+        let speechRate = 1.0;
+        let synthesis = window.speechSynthesis;
+        let utterance = null;
+        let selectedVoice = null;
+
+        // Seleção Inteligente de Voz (PT-BR)
+        function loadVoices() {
+            const voices = synthesis.getVoices();
+            selectedVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Google')) ||
+                            voices.find(v => v.lang === 'pt-BR' && v.name.includes('Microsoft')) ||
+                            voices.find(v => v.lang === 'pt-BR');
+        }
+        
+        if (synthesis.onvoiceschanged !== undefined) {
+            synthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+
+        function prepareQueue() {
+            const elements = document.querySelectorAll('.speakable');
+            speechQueue = Array.from(elements).filter(el => el.innerText.trim().length > 0);
+        }
+
         function toggleSpeech() {
+            if (speechQueue.length === 0) prepareQueue();
+
             if (isSpeaking) {
-                window.speechSynthesis.cancel();
+                synthesis.cancel();
                 isSpeaking = false;
-                document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>';
-                document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+                clearHighlights();
+                reportStatus(false);
             } else {
-                const text = document.getElementById('content-area').innerText;
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'pt-BR';
-                utterance.rate = 1.1;
-                utterance.onend = () => { isSpeaking = false; document.getElementById('btn-speak').innerHTML = '▶ <span>OUVIR</span>'; };
-                window.speechSynthesis.speak(utterance);
                 isSpeaking = true;
-                document.getElementById('btn-speak').innerHTML = '⏹ <span>PARAR</span>';
+                reportStatus(true);
+                speakNext();
             }
         }
+
+        function updateSpeechRate(rate) {
+            speechRate = rate;
+            if (isSpeaking) {
+                synthesis.cancel();
+                speakNext();
+            }
+        }
+
+        function speakNext() {
+            if (!isSpeaking) return;
+            if (currentIndex >= speechQueue.length) {
+                isSpeaking = false;
+                currentIndex = 0;
+                clearHighlights();
+                reportStatus(false);
+                return;
+            }
+
+            const element = speechQueue[currentIndex];
+            const text = element.innerText;
+
+            clearHighlights();
+            element.classList.add('reading-highlight');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR';
+            utterance.rate = speechRate;
+            
+            if (selectedVoice) utterance.voice = selectedVoice;
+            
+            utterance.onend = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+            
+            utterance.onerror = function() {
+                if (isSpeaking) {
+                    currentIndex++;
+                    speakNext();
+                }
+            };
+
+            synthesis.speak(utterance);
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.reading-highlight').forEach(el => el.classList.remove('reading-highlight'));
+        }
+
+        function reportStatus(playing) {
+            window.parent.postMessage({ type: 'tts-status', isPlaying: playing }, '*');
+        }
+
+        document.getElementById('content-area').addEventListener('click', function(e) {
+            const target = e.target.closest('.speakable');
+            if (target) {
+                if (speechQueue.length === 0) prepareQueue();
+                const index = speechQueue.indexOf(target);
+                if (index !== -1) {
+                    synthesis.cancel();
+                    currentIndex = index;
+                    isSpeaking = true;
+                    reportStatus(true);
+                    speakNext();
+                }
+            }
+        });
+
+        window.onbeforeunload = function() {
+            synthesis.cancel();
+        };
     </script>
 </body>
 </html>
